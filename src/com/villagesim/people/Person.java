@@ -3,11 +3,14 @@ package com.villagesim.people;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.villagesim.Const;
 import com.villagesim.interfaces.Drawable;
 import com.villagesim.interfaces.Updateable;
+import com.villagesim.sensors.SensorHelper;
 
 public class Person implements Drawable, Updateable {
 
@@ -18,6 +21,9 @@ public class Person implements Drawable, Updateable {
 	private double nutrition_decline_rate;
 	private double aqua_decline_rate;
 	private double lifetime_days = 0;
+	private List<Double> sensorInputs;
+	
+	// Constants
 	private final double MAX_NUTRITION_POINTS = 1000;
 	private final double MAX_AQUA_POINTS = 1000;
 	private final double NUTRITION_DECLINE_TIME_S = 18114400; // Assumption, death after 3 weeks without food
@@ -35,6 +41,13 @@ public class Person implements Drawable, Updateable {
 		nutrition_decline_rate = MAX_NUTRITION_POINTS/NUTRITION_DECLINE_TIME_S;
 		aqua_decline_rate = MAX_AQUA_POINTS/AQUA_DECLINE_TIME_S;
 		coordinate = generateCoordinate();
+		
+		// Init default list
+		sensorInputs = new ArrayList<Double>();
+		for(int i = 0; i < SensorHelper.SENSOR_INPUTS; i++)
+		{
+			sensorInputs.add(0.0);
+		}
 	}
 	
 	public boolean isAlive()
@@ -99,8 +112,12 @@ public class Person implements Drawable, Updateable {
 	public void update(int seconds) {
 		
 		updateLifeStatus(seconds);
-		updateSensorReadings();
 		takeAction();
+	}
+	
+	public void updateSensorReadings(List<Double> sensorInputs)
+	{
+		this.sensorInputs = sensorInputs;
 	}
 	
 	private int takeAction() {
@@ -113,11 +130,6 @@ public class Person implements Drawable, Updateable {
 		nutrition -= nutrition_decline_rate*seconds;
 		aqua -= aqua_decline_rate*seconds;
 		lifetime_days += seconds/SECONDS_PER_DAY;
-	}
-	
-	private void updateSensorReadings() {
-		// TODO Auto-generated method stub
-		
 	}
 
 

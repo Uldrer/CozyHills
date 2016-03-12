@@ -5,6 +5,8 @@ import java.awt.geom.Point2D;
 import com.villagesim.areas.Area;
 
 public final class SensorHelper {
+	
+	public static int SENSOR_INPUTS = 12;
 
 	public static double computeDistanceToArea(Point2D coordinate, Area area)
 	{

@@ -48,6 +48,7 @@ public class SensorUpdater {
 		List<Double> sensorInputs = new ArrayList<Double>();
 		
 		// The order of these inputs should not be altered lightly when weights have been produced to the ANN
+		// If more are added change in SensoreHelper.SENSOR_INPUTS
 		
 		// #1 Distance to nearest drinking water
 		sensorInputs.add(getDistanceToNearestDrinkingWater(person));
@@ -84,6 +85,9 @@ public class SensorUpdater {
 		
 		// #12 Amount of nutrition in nearest fishing ground
 		sensorInputs.add(getAmountOfNutritionInNearestFishingGround(person));
+		
+		// Set new sensor inputs
+		person.updateSensorReadings(sensorInputs);
 		
 	}
 	
