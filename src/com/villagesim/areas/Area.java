@@ -59,9 +59,38 @@ public abstract class Area implements Drawable, Updateable {
 		this.resourceSet = resourceSet;
 	}
 	
+	public boolean containsResource(Class<? extends Resource> resourceClass)
+	{
+		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
+		{
+			Resource item = i.next();
+			
+			if(item.getClass().equals(resourceClass.getClass()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public double getSize()
 	{
 		return width*height;
+	}
+	
+	public Point2D getCoordinate()
+	{
+		return coordinate;
+	}
+	
+	public int getWidth()
+	{
+		return width;
+	}
+	
+	public int getHeight()
+	{
+		return height;
 	}
 	
 	private Point2D generateCoordinate()

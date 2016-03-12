@@ -69,6 +69,11 @@ public class Person implements Drawable, Updateable {
 		bbg.fillOval((int)(coordinate.getX()+0.5), (int)(coordinate.getY()+0.5), PERSON_SIZE, PERSON_SIZE);
 	}
 	
+	public Point2D getCoordinate()
+	{
+		return coordinate;
+	}
+	
 	private Point2D generateCoordinate()
 	{
 		Point2D coord = new Point2D.Double();

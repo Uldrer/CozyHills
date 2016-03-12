@@ -8,6 +8,7 @@ import com.villagesim.areas.Wood;
 import com.villagesim.interfaces.Drawable;
 import com.villagesim.interfaces.Updateable;
 import com.villagesim.people.Person;
+import com.villagesim.sensors.SensorUpdater;
 
 public class VillageSimulator 
 {
@@ -17,16 +18,20 @@ public class VillageSimulator
 	private final int FOOD_AREAS = 40;
 	private final int POPULATION = 100;
 	private final int TIME_STEP = 60;
+	private SensorUpdater sensorUpdater;
 	
 	public VillageSimulator()
 	{
 		// Setup state
 		setupState();
 		
+		sensorUpdater = new SensorUpdater(objectSet);
+		
 	}
 
 	public void update() 
 	{
+		sensorUpdater.updateSensorReadingsAll();
 		for(Iterator<Object> i = objectSet.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();

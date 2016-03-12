@@ -2,7 +2,7 @@ package com.villagesim.actions;
 
 public enum AdvancedAction implements ActionInterface{
 	
-	// Food gathering, add more when needed
+	// Gathering, add more when needed
 	WATER("Gather water", BasicAction.GATHER),
 	FISH("Fish", BasicAction.GATHER),
 	BERRIES("Gather berries", BasicAction.GATHER),
