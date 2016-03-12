@@ -4,7 +4,7 @@ package com.villagesim.actions;
 public enum BasicAction implements ActionInterface{
 	EAT("Eat", 1),
 	DRINK("Drink", 2),
-	GATHER_FOOD("Gather food", 3),
+	GATHER("Gather", 3),
 	MOVE("Move", 4),
 	WORK("Work", 5),
 	SLEEP("Sleep", 6),
