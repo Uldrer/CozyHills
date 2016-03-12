@@ -35,7 +35,11 @@ public class SensorUpdater {
 		    if(item instanceof Person)
 		    {
 		    	Person person = ((Person) item);
-		    	updateSensorReadings(person);
+		    	
+		    	if(person.isAlive())
+		    	{
+		    		updateSensorReadings(person);
+		    	}
 		    }
 		}
 	}
