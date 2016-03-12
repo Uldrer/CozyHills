@@ -22,6 +22,7 @@ public class Person implements Drawable, Updateable {
 	private double aqua_decline_rate;
 	private double lifetime_days = 0;
 	private List<Double> sensorInputs;
+	private boolean logDeath = true;
 	
 	// Constants
 	private final double MAX_NUTRITION_POINTS = 1000;
@@ -78,6 +79,11 @@ public class Person implements Drawable, Updateable {
 		else
 		{
 			bbg.setColor(Color.RED);
+			if(logDeath)
+			{
+				System.out.println("Person id: " + id + " died of " + ((aqua <= 0) ? "dehydration" : "starvation") + " after " + lifetime_days + " days.");
+				logDeath = false;
+			}
 		}
 		bbg.fillOval((int)(coordinate.getX()+0.5), (int)(coordinate.getY()+0.5), PERSON_SIZE, PERSON_SIZE);
 	}
@@ -111,12 +117,16 @@ public class Person implements Drawable, Updateable {
 	@Override
 	public void update(int seconds) {
 		
+		if(!isAlive()) return;
+		
 		updateLifeStatus(seconds);
 		takeAction();
 	}
 	
 	public void updateSensorReadings(List<Double> sensorInputs)
 	{
+		if(!isAlive()) return;
+		
 		this.sensorInputs = sensorInputs;
 	}
 	
