@@ -8,8 +8,10 @@ import java.util.List;
 import java.util.Random;
 
 import com.villagesim.Const;
+import com.villagesim.actions.BasicAction;
 import com.villagesim.interfaces.Drawable;
 import com.villagesim.interfaces.Updateable;
+import com.villagesim.optimizer.ArtificialNeuralNetwork;
 import com.villagesim.sensors.SensorHelper;
 
 public class Person implements Drawable, Updateable {
@@ -23,6 +25,7 @@ public class Person implements Drawable, Updateable {
 	private double lifetime_days = 0;
 	private List<Double> sensorInputs;
 	private boolean logDeath = true;
+	private ArtificialNeuralNetwork neuralNetwork;
 	
 	// Constants
 	private final double MAX_NUTRITION_POINTS = 1000;
@@ -31,6 +34,7 @@ public class Person implements Drawable, Updateable {
 	private final double AQUA_DECLINE_TIME_S = 259200; // Assumption, death after 3 days without water
 	private final double SECONDS_PER_DAY = 86400;
 	private final int PERSON_SIZE = 3;
+	private final int ACTION_SIZE = BasicAction.values().length;
 	
 	private static int id_counter = 0;
 	
@@ -49,6 +53,8 @@ public class Person implements Drawable, Updateable {
 		{
 			sensorInputs.add(0.0);
 		}
+		
+		neuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[] {ACTION_SIZE}, 1 );
 	}
 	
 	public boolean isAlive()
@@ -131,8 +137,34 @@ public class Person implements Drawable, Updateable {
 	}
 	
 	private int takeAction() {
-		// TODO Auto-generated method stub
+
+		// Send sensor inputs into ANN and let it decide which action to take
+		double[] inputs = new double[sensorInputs.size()];
+		for (int i = 0; i < inputs.length; i++) {
+			inputs[i] = sensorInputs.get(i);
+		}
+		
+		// TODO get weights and thresholds from training sessions
+		double [][][] weigths = neuralNetwork.initiateRandomWeights();
+		double [][] thresholds = neuralNetwork.inititateNullThresholds();
+		
+		double[][] outputNetwork = neuralNetwork.computePatternNetwork(inputs, weigths, thresholds);
+		int actionIndex = determineAction(outputNetwork);
+		
+		
 		return 0;
+	}
+	
+	private int determineAction(double[][] network)
+	{
+		int outputLayer = network.length - 1;
+        int outputs = network[outputLayer].length;
+        
+        // With only one output
+        double value = network[outputLayer][0];
+        
+        return (int)value;
+        	
 	}
 	
 	private void updateLifeStatus(int seconds) {
