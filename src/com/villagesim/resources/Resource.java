@@ -61,6 +61,7 @@ public abstract class Resource implements Updateable {
 	@Override
 	public void update(int seconds) 
 	{
+		// TODO add minor random element here
 		this.amount -= seconds*decreaseRate;
 		this.amount += seconds*increaseRate;
 	}
