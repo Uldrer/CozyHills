@@ -22,7 +22,7 @@ public abstract class Resource implements Updateable {
 	// Normal constructor
 	public Resource(String name, double amount, double weightPerAmount, double nutritionPerAmount, double waterPerAmount)
 	{
-		System.out.println("Constructing resource");
+		System.out.println("Constructing resource " + name);
 		this.name = name;
 		this.amount = amount;
 		this.weightPerAmount = weightPerAmount;
@@ -33,7 +33,7 @@ public abstract class Resource implements Updateable {
 	// Non edible and non drinkable
 	public Resource(String name, double amount, double weightPerAmount)
 	{
-		System.out.println("Constructing resource");
+		System.out.println("Constructing resource " + name);
 		this.name = name;
 		this.amount = amount;
 		this.weightPerAmount = weightPerAmount;
