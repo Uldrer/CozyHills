@@ -1,6 +1,7 @@
 package com.villagesim.resources;
 
 import java.awt.Color;
+import java.awt.Graphics;
 
 import com.villagesim.interfaces.Drawable;
 
@@ -56,13 +57,15 @@ public abstract class Resource implements Drawable {
 	}
 	
 	@Override
-	public void draw()
+	public void draw(Graphics bbg)
 	{
 		Color color = this.getColor();
-		// TODO Use color to draw
+		
+		bbg.setColor(color);
+		// TODO fix bbg.fillRect((int)type.xy[0], (int)type.xy[1], type.size, type.size);
 	}
 	
-	// Abstract methosd
+	// Abstract methods
 	public abstract Color getColor();
 
 	
