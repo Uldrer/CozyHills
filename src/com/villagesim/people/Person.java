@@ -10,10 +10,9 @@ import java.util.Random;
 import com.villagesim.Const;
 import com.villagesim.interfaces.Drawable;
 import com.villagesim.interfaces.Updateable;
-import com.villagesim.interfaces.Validatable;
 import com.villagesim.sensors.SensorHelper;
 
-public class Person implements Drawable, Updateable, Validatable {
+public class Person implements Drawable, Updateable {
 
 	private int id; // unique person id
 	private Point2D coordinate; // location
@@ -141,16 +140,6 @@ public class Person implements Drawable, Updateable, Validatable {
 		nutrition -= nutrition_decline_rate*seconds;
 		aqua -= aqua_decline_rate*seconds;
 		lifetime_days += seconds/SECONDS_PER_DAY;
-	}
-
-	@Override
-	public boolean isValid() {
-		return isAlive();
-	}
-
-	@Override
-	public void logInvalid() {
-		System.out.println("Removing Person with id: " + id + " from world");
 	}
 
 
