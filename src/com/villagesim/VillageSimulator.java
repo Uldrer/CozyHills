@@ -3,14 +3,11 @@ package com.villagesim;
 import java.awt.Graphics;
 import java.util.*;
 
+import com.villagesim.areas.Lake;
+import com.villagesim.areas.Wood;
 import com.villagesim.interfaces.Drawable;
 import com.villagesim.interfaces.Updateable;
 import com.villagesim.people.Person;
-import com.villagesim.resources.Berries;
-import com.villagesim.resources.Fish;
-import com.villagesim.resources.Game;
-import com.villagesim.resources.Nuts;
-import com.villagesim.resources.Water;
 
 public class VillageSimulator 
 {
@@ -67,17 +64,14 @@ public class VillageSimulator
 	private void createWater()
 	{
 		for (int i = 0; i < WATER_AREAS; i++) {
-			objectSet.add(new Water(1000));
-			objectSet.add(new Fish(500));
+			objectSet.add(new Lake(20, 20));
         }
 	}
 	
 	private void createFood()
 	{
 		for (int i = 0; i < FOOD_AREAS; i++) {
-			objectSet.add(new Game(30));
-			objectSet.add(new Berries(1000));
-			objectSet.add(new Nuts(1000));
+			objectSet.add(new Wood(20, 20));
         }
 	}
 	
