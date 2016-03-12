@@ -65,7 +65,7 @@ public abstract class Area implements Drawable, Updateable {
 		{
 			Resource item = i.next();
 			
-			if(item.getClass().equals(resourceClass.getClass()))
+			if(item.getClass().isAssignableFrom(resourceClass))
 			{
 				return true;
 			}
@@ -80,7 +80,7 @@ public abstract class Area implements Drawable, Updateable {
 		{
 			Resource item = i.next();
 			
-			if(item.getClass().equals(resourceClass.getClass()))
+			if(item.getClass().isAssignableFrom(resourceClass))
 			{
 				value += item.getAmount()*item.getAquaPerAmount();
 			}
@@ -95,7 +95,7 @@ public abstract class Area implements Drawable, Updateable {
 		{
 			Resource item = i.next();
 			
-			if(item.getClass().equals(resourceClass.getClass()))
+			if(item.getClass().isAssignableFrom(resourceClass))
 			{
 				value += item.getAmount()*item.getNutritionPerAmount();
 			}
