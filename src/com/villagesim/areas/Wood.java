@@ -18,10 +18,19 @@ public class Wood extends Area {
 	@Override
 	protected void populateResourceSet() {
 		Set<Resource> resourceSet = new HashSet<Resource>();
+		
 		// Add resources
-		resourceSet.add(new Game(getSize()/40));
-		resourceSet.add(new Nuts(getSize()));
-		resourceSet.add(new Berries(getSize()));
+		Resource game = new Game(getSize()/40);
+		game.setIncreaseRate(0.5);
+		resourceSet.add(game);
+		
+		Resource nuts = new Nuts(getSize());
+		nuts.setIncreaseRate(0.3);
+		resourceSet.add(nuts);
+		
+		Resource berries = new Berries(getSize());
+		berries.setIncreaseRate(0.7);
+		resourceSet.add(berries);
 		
 		setResourceSet(resourceSet);
 	}

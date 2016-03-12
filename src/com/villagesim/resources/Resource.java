@@ -1,11 +1,8 @@
 package com.villagesim.resources;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import com.villagesim.interfaces.Updateable;
 
-import com.villagesim.interfaces.Drawable;
-
-public abstract class Resource {
+public abstract class Resource implements Updateable {
 	
 	private String name;
 	private double amount; // One standard unit
@@ -16,6 +13,11 @@ public abstract class Resource {
 	
 	 // You can drink everything, but only some stuff contains water
 	private double waterPerAmount; // 0 - 1 (0 - 100%)
+	
+	private double decreaseRate = 0; // Decrease per second
+	private double increaseRate = 0; // Increase per second
+	
+	private final double SECONDS_PER_YEAR = 31536000;
 	
 	// Normal constructor
 	public Resource(String name, double amount, double weightPerAmount, double nutritionPerAmount, double waterPerAmount)
@@ -55,6 +57,13 @@ public abstract class Resource {
 		
 		this.amount += amount;
 	}
+	
+	@Override
+	public void update(int seconds) 
+	{
+		this.amount -= seconds*decreaseRate;
+		this.amount += seconds*increaseRate;
+	}
 
 	// Getters
 	public String getName() {
@@ -77,9 +86,29 @@ public abstract class Resource {
 		return waterPerAmount;
 	}
 	
+	public double getDecreaseRate() {
+		return decreaseRate;
+	}
+	
+	public double getIncreaseRate() {
+		return increaseRate;
+	}
+	
 	// Setters
 	public void setAmount(double amount) {
 		this.amount = amount;
+	}
+	
+	// Input decrease-rate is the amount decrease per year
+	public void setDecreaseRate(double decreaseRate) {
+		decreaseRate *= amount;
+		this.decreaseRate = decreaseRate/SECONDS_PER_YEAR;
+	}
+	
+	// Input increase-rate is the amount decrease per year
+	public void setIncreaseRate(double increaseRate) {
+		increaseRate *= amount;
+		this.increaseRate = increaseRate/SECONDS_PER_YEAR;
 	}
 	
 	

@@ -7,8 +7,9 @@ import java.util.Random;
 
 import com.villagesim.Const;
 import com.villagesim.interfaces.Drawable;
+import com.villagesim.interfaces.Updateable;
 
-public class Person implements PersonInterface, Drawable {
+public class Person implements Drawable, Updateable {
 
 	private int id; // unique person id
 	private Point2D coordinate; // location
@@ -49,31 +50,16 @@ public class Person implements PersonInterface, Drawable {
 		return lifetime_days;
 	}
 	
+	public int getId()
+	{
+		return id;
+	}
+	
 	@Override
 	public void draw(Graphics bbg) 
 	{
 		bbg.setColor(Color.BLACK);
 		bbg.fillOval((int)(coordinate.getX()+0.5), (int)(coordinate.getY()+0.5), PERSON_SIZE, PERSON_SIZE);
-	}
-
-	@Override
-	public int TakeAction() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void UpdateLifeStatus(int seconds) {
-
-		nutrition -= nutrition_decline_rate*seconds;
-		aqua -= aqua_decline_rate*seconds;
-		lifetime_days += seconds/SECONDS_PER_DAY;
-	}
-
-	@Override
-	public void UpdateSensorReadings() {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	private Point2D generateCoordinate()
@@ -86,5 +72,31 @@ public class Person implements PersonInterface, Drawable {
 		coord.setLocation(x, y);
 		return coord;
 	}
+
+	@Override
+	public void update(int seconds) {
+		
+		updateLifeStatus(seconds);
+		updateSensorReadings();
+		takeAction();
+	}
+	
+	private int takeAction() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	private void updateLifeStatus(int seconds) {
+
+		nutrition -= nutrition_decline_rate*seconds;
+		aqua -= aqua_decline_rate*seconds;
+		lifetime_days += seconds/SECONDS_PER_DAY;
+	}
+	
+	private void updateSensorReadings() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

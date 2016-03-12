@@ -1,7 +1,6 @@
 package com.villagesim.areas;
 
 import java.awt.Color;
-import java.awt.geom.Point2D;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,8 +19,14 @@ public class Lake extends Area {
 		
 		Set<Resource> resourceSet = new HashSet<Resource>();
 		// Add resources
-		resourceSet.add(new Water(getSize()));
-		resourceSet.add(new Fish(getSize()));
+		Resource water = new Water(getSize());
+		water.setIncreaseRate(0.1);
+		water.setDecreaseRate(0.1);
+		resourceSet.add(water);
+		
+		Resource fish = new Fish(getSize());
+		water.setIncreaseRate(0.5);
+		resourceSet.add(fish);
 		
 		setResourceSet(resourceSet);
 	}

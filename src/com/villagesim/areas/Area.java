@@ -4,14 +4,16 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 
 import com.villagesim.Const;
 import com.villagesim.interfaces.Drawable;
+import com.villagesim.interfaces.Updateable;
 import com.villagesim.resources.Resource;
 
-public abstract class Area implements Drawable {
+public abstract class Area implements Drawable, Updateable {
 	
 	private int width;
 	private int height;
@@ -35,6 +37,16 @@ public abstract class Area implements Drawable {
 		bbg.setColor(color);
 		bbg.fillRect((int)(coordinate.getX()+0.5), (int)(coordinate.getY()+0.5), width, height);
 		// TODO change appearance depending on content
+	}
+	
+	@Override
+	public void update(int seconds) 
+	{
+		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
+		{
+			Resource item = i.next();
+			item.update(seconds);
+		}
 	}
 	
 	protected abstract void populateResourceSet();

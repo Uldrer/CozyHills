@@ -13,7 +13,11 @@ import java.util.concurrent.ThreadLocalRandom;
  * Created by pere5 on 21/12/15.
  */
 public class GraphicsHandler extends JFrame {
-    private boolean isRunning = true;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private boolean isRunning = true;
     private int windowWidth = Const.WINDOW_WIDTH;
     private int windowHeight =  Const.WINDOW_HEIGHT;
 
