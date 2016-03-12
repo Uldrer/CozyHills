@@ -100,13 +100,13 @@ public abstract class Resource implements Updateable {
 		this.amount = amount;
 	}
 	
-	// Input decrease-rate is the amount decrease per year
+	// Input decrease-rate is the amount decrease per year in percent/100
 	public void setDecreaseRate(double decreaseRate) {
 		decreaseRate *= amount;
 		this.decreaseRate = decreaseRate/SECONDS_PER_YEAR;
 	}
 	
-	// Input increase-rate is the amount decrease per year
+	// Input increase-rate is the amount decrease per year in percent/100
 	public void setIncreaseRate(double increaseRate) {
 		increaseRate *= amount;
 		this.increaseRate = increaseRate/SECONDS_PER_YEAR;
