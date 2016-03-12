@@ -12,7 +12,7 @@ public abstract class Resource implements Updateable {
 	private double nutritionPerAmount; // 0 - 1 (0 - 100%)
 	
 	 // You can drink everything, but only some stuff contains water
-	private double waterPerAmount; // 0 - 1 (0 - 100%)
+	private double aquaPerAmount; // 0 - 1 (0 - 100%)
 	
 	private double decreaseRate = 0; // Decrease per second
 	private double increaseRate = 0; // Increase per second
@@ -20,14 +20,14 @@ public abstract class Resource implements Updateable {
 	private final double SECONDS_PER_YEAR = 31536000;
 	
 	// Normal constructor
-	public Resource(String name, double amount, double weightPerAmount, double nutritionPerAmount, double waterPerAmount)
+	public Resource(String name, double amount, double weightPerAmount, double nutritionPerAmount, double aquaPerAmount)
 	{
 		System.out.println("Constructing resource " + name);
 		this.name = name;
 		this.amount = amount;
 		this.weightPerAmount = weightPerAmount;
 		this.nutritionPerAmount = nutritionPerAmount;
-		this.waterPerAmount = waterPerAmount;
+		this.aquaPerAmount = aquaPerAmount;
 	}
 	
 	// Non edible and non drinkable
@@ -38,7 +38,7 @@ public abstract class Resource implements Updateable {
 		this.amount = amount;
 		this.weightPerAmount = weightPerAmount;
 		this.nutritionPerAmount = 0;
-		this.waterPerAmount = 0;
+		this.aquaPerAmount = 0;
 	}
 	
 	public boolean collect(double amount)
@@ -83,8 +83,8 @@ public abstract class Resource implements Updateable {
 		return nutritionPerAmount;
 	}
 
-	public double getWaterPerAmount() {
-		return waterPerAmount;
+	public double getAquaPerAmount() {
+		return aquaPerAmount;
 	}
 	
 	public double getDecreaseRate() {

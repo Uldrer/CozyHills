@@ -73,6 +73,36 @@ public abstract class Area implements Drawable, Updateable {
 		return false;
 	}
 	
+	public double getResourceAquaValue(Class<? extends Resource> resourceClass)
+	{
+		double value = 0;
+		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
+		{
+			Resource item = i.next();
+			
+			if(item.getClass().equals(resourceClass.getClass()))
+			{
+				value += item.getAmount()*item.getAquaPerAmount();
+			}
+		}
+		return value;
+	}
+	
+	public double getResourceNutritionValue(Class<? extends Resource> resourceClass)
+	{
+		double value = 0;
+		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
+		{
+			Resource item = i.next();
+			
+			if(item.getClass().equals(resourceClass.getClass()))
+			{
+				value += item.getAmount()*item.getNutritionPerAmount();
+			}
+		}
+		return value;
+	}
+	
 	public double getSize()
 	{
 		return width*height;

@@ -69,6 +69,16 @@ public class Person implements Drawable, Updateable {
 		bbg.fillOval((int)(coordinate.getX()+0.5), (int)(coordinate.getY()+0.5), PERSON_SIZE, PERSON_SIZE);
 	}
 	
+	public double getThirstValue()
+	{
+		return 1 - aqua/MAX_AQUA_POINTS;
+	}
+	
+	public double getHungerValue()
+	{
+		return 1 - nutrition/MAX_NUTRITION_POINTS;
+	}
+	
 	public Point2D getCoordinate()
 	{
 		return coordinate;
