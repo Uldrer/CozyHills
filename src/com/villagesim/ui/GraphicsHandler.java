@@ -2,6 +2,7 @@ package com.villagesim.ui;
 
 import javax.swing.*;
 
+import com.villagesim.Const;
 import com.villagesim.VillageSimulator;
 
 import java.awt.*;
@@ -13,8 +14,8 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class GraphicsHandler extends JFrame {
     private boolean isRunning = true;
-    private int windowWidth = 800;
-    private int windowHeight = 600;
+    private int windowWidth = Const.WINDOW_WIDTH;
+    private int windowHeight =  Const.WINDOW_HEIGHT;
 
     private BufferedImage backBuffer;
     private Insets insets;

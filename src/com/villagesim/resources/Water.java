@@ -6,5 +6,7 @@ public class Water extends Liquid {
 	{
 		super("Water", amount, /*weightPerAmount*/ 1, /*waterPerAmount*/ 1);
 	}
+	
+	
 
 }

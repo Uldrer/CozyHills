@@ -5,7 +5,7 @@ import java.awt.Graphics;
 
 import com.villagesim.interfaces.Drawable;
 
-public abstract class Resource implements Drawable {
+public abstract class Resource {
 	
 	private String name;
 	private double amount; // One standard unit
@@ -55,20 +55,7 @@ public abstract class Resource implements Drawable {
 		
 		this.amount += amount;
 	}
-	
-	@Override
-	public void draw(Graphics bbg)
-	{
-		Color color = this.getColor();
-		
-		bbg.setColor(color);
-		// TODO fix bbg.fillRect((int)type.xy[0], (int)type.xy[1], type.size, type.size);
-	}
-	
-	// Abstract methods
-	public abstract Color getColor();
 
-	
 	// Getters
 	public String getName() {
 		return name;
