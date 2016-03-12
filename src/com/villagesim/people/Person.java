@@ -34,10 +34,10 @@ public class Person implements Drawable, Updateable {
 		aqua = MAX_AQUA_POINTS;
 		nutrition_decline_rate = MAX_NUTRITION_POINTS/NUTRITION_DECLINE_TIME_S;
 		aqua_decline_rate = MAX_AQUA_POINTS/AQUA_DECLINE_TIME_S;
-		generateCoordinate();
+		coordinate = generateCoordinate();
 	}
 	
-	public boolean IsAlive()
+	public boolean isAlive()
 	{
 		if(nutrition <= 0) return false;
 		if(aqua <= 0) return false;
@@ -58,7 +58,14 @@ public class Person implements Drawable, Updateable {
 	@Override
 	public void draw(Graphics bbg) 
 	{
-		bbg.setColor(Color.BLACK);
+		if(isAlive())
+		{
+			bbg.setColor(Color.BLACK);
+		}
+		else
+		{
+			bbg.setColor(Color.RED);
+		}
 		bbg.fillOval((int)(coordinate.getX()+0.5), (int)(coordinate.getY()+0.5), PERSON_SIZE, PERSON_SIZE);
 	}
 	
