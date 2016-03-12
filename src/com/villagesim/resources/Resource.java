@@ -7,10 +7,14 @@ import com.villagesim.interfaces.Drawable;
 public abstract class Resource implements Drawable {
 	
 	private String name;
-	private double amount;
-	private double weightPerAmount;
-	private double nutritionPerAmount; // You can eat everything, but only some stuff is nutritious
-	private double waterPerAmount; // You can drink everything, but only some stuff contains water
+	private double amount; // One standard unit
+	private double weightPerAmount; // kg / standard unit
+	
+	// You can eat everything, but only some stuff is nutritious
+	private double nutritionPerAmount; // 0 - 1 (0 - 100%)
+	
+	 // You can drink everything, but only some stuff contains water
+	private double waterPerAmount; // 0 - 1 (0 - 100%)
 	
 	// Normal constructor
 	public Resource(String name, double amount, double weightPerAmount, double nutritionPerAmount, double waterPerAmount)
