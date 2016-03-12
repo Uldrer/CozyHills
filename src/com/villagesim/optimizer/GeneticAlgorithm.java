@@ -5,35 +5,49 @@ public class GeneticAlgorithm {
 	
     /// A random number generator.
     private static Random rand = new Random();
+    
     /// The thresholds for the network.
     private double[][] thresholds;
+    
     /// The population of weights.
     private double[][][][] population;
+    
     /// The stored current best individual of weights.
     private double[][][] bestWeights;
+    
     /// The stored values for the network of the current <see cref="bestWeights"/>. To avoid 
     /// re-computation during validation.
     private double[][][] bestNetwork;
+    
     /// The mutation probability for a weight value of an individual to mutate.
     private double mutationRate;
+    
     /// The crossover probability of two weight values changing hosts during crossover.
     private double crossoverProb;
+    
     /// The parameter that determines how likely we are to choose the better, according to fitness,
     /// of two chosen individuals during <see cref="tournamentSelect"/>.
     private double tournamentSelectParam;
+    
     /// The ratio of how much a weight can be modified during mutation. Lies within +- this value.
     private double mutateWidth;
+    
     /// The size of the population of weights to train.
     private int populationSize;
+    
     /// The number of <see cref="bestWeights"/> to insert into the population at the end of each generation
     /// to preserve some of the best individuals in the population. This is called elitism.
     private int numberOfBestToInsert;
+    
     /// The current score vector that holds the fitness values of the current population.
     private double[] score;
+    
     /// The data set to train on.
     private double[][] data;
+    
     /// The artificial neural network for which the weights are trained.
     private ArtificialNeuralNetwork network;
+    
     /// The current best fitness score. The score of <see cref="bestWeights"/>.
     private double bestScore;
 
