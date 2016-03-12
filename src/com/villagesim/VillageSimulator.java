@@ -7,6 +7,7 @@ import com.villagesim.areas.Lake;
 import com.villagesim.areas.Wood;
 import com.villagesim.interfaces.Drawable;
 import com.villagesim.interfaces.Updateable;
+import com.villagesim.interfaces.Validatable;
 import com.villagesim.people.Person;
 import com.villagesim.sensors.SensorUpdater;
 
@@ -39,7 +40,18 @@ public class VillageSimulator
 		    {
 		    	((Updateable) item).update(TIME_STEP);
 		    }
+		    
+		    // Clean out stuff that is no longer valid
+		    if(item instanceof Validatable)
+		    {
+		    	if(!((Validatable) item).isValid())
+		    	{
+		    		((Validatable) item).logInvalid();
+		    		i.remove();
+		    	}
+		    }
 		}
+		
     }
 	
 	public void drawAllObjects(Graphics bbg)
