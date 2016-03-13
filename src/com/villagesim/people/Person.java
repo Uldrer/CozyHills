@@ -11,6 +11,7 @@ import java.util.Random;
 
 import com.villagesim.Const;
 import com.villagesim.actions.ActionFactory;
+import com.villagesim.actions.ActionMediator;
 import com.villagesim.actions.BasicAction;
 import com.villagesim.helpers.ArrayIndexComparator;
 import com.villagesim.interfaces.Action;
@@ -135,7 +136,7 @@ public class Person implements Drawable, Updateable {
 		if(!isAlive()) return;
 		
 		updateLifeStatus(seconds);
-		takeAction();
+		makeActionDecision();
 	}
 	
 	public void updateSensorReadings(List<Double> sensorInputs)
@@ -159,7 +160,7 @@ public class Person implements Drawable, Updateable {
 		return aqua;
 	}
 	
-	private int takeAction() {
+	private void makeActionDecision() {
 
 		// Send sensor inputs into ANN and let it decide which action to take
 		double[] inputs = new double[sensorInputs.size()];
@@ -176,9 +177,9 @@ public class Person implements Drawable, Updateable {
 		Integer[] actionIndexList = determineAction(outputNetwork);
 		
 		Action newAction = actionFactory.getAction(actionIndexList[0]);
-		// TODO send action to queue
 		
-		return 0;
+		// TODO send action package in priority order
+		ActionMediator.addAction(newAction);
 	}
 	
 	private Integer[] determineAction(double[][] network)

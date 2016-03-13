@@ -3,6 +3,7 @@ package com.villagesim;
 import java.awt.Graphics;
 import java.util.*;
 
+import com.villagesim.actions.ActionMediator;
 import com.villagesim.areas.Lake;
 import com.villagesim.areas.Wood;
 import com.villagesim.interfaces.Drawable;
@@ -31,7 +32,10 @@ public class VillageSimulator
 
 	public void update() 
 	{
+		// Update sensors
 		sensorUpdater.updateSensorReadingsAll();
+		
+		// Update objects
 		for(Iterator<Object> i = objectSet.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
@@ -40,6 +44,10 @@ public class VillageSimulator
 		    	((Updateable) item).update(TIME_STEP);
 		    }
 		}
+		
+		// Perform actions
+		ActionMediator.executeActions();
+		
     }
 	
 	public void drawAllObjects(Graphics bbg)
