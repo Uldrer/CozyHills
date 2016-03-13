@@ -18,8 +18,14 @@ import com.villagesim.interfaces.Action;
 import com.villagesim.people.Person;
 
 public class ActionFactory {
+	private Person person;
 	
-	public Action getAction(int index, Person person)
+	public ActionFactory(Person person)
+	{
+		this.person = person;
+	}
+	
+	public Action getAction(int index)
 	{
 		List<AdvancedAction> actionList = new ArrayList<AdvancedAction>();
 		for (AdvancedAction action : AdvancedAction.values()) 
@@ -36,7 +42,7 @@ public class ActionFactory {
 			{
 				if(index == action.getIndex())
 				{
-					return createBasicAction(action, person);
+					return createBasicAction(action);
 				}
 			}
 			
@@ -47,13 +53,13 @@ public class ActionFactory {
 			actionList.sort(new AdvancedActionComparator());
 			
 			// Return first applicable action
-			createAdvancedAction(actionList.get(0), person);
+			createAdvancedAction(actionList.get(0));
 		}
 		
 		return new NullAction(person);
 	}
 	
-	private Action createAdvancedAction(AdvancedAction actionType, Person person)
+	private Action createAdvancedAction(AdvancedAction actionType)
 	{
 		Action newAction;
 		switch(actionType)
@@ -111,7 +117,7 @@ public class ActionFactory {
 		return newAction;
 	}
 	
-	private Action createBasicAction(BasicAction actionType, Person person)
+	private Action createBasicAction(BasicAction actionType)
 	{
 		Action newAction;
 		switch(actionType)

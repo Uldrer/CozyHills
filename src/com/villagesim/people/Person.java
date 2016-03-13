@@ -10,8 +10,10 @@ import java.util.List;
 import java.util.Random;
 
 import com.villagesim.Const;
+import com.villagesim.actions.ActionFactory;
 import com.villagesim.actions.BasicAction;
 import com.villagesim.helpers.ArrayIndexComparator;
+import com.villagesim.interfaces.Action;
 import com.villagesim.interfaces.Drawable;
 import com.villagesim.interfaces.Updateable;
 import com.villagesim.optimizer.ArtificialNeuralNetwork;
@@ -29,6 +31,7 @@ public class Person implements Drawable, Updateable {
 	private List<Double> sensorInputs;
 	private boolean logDeath = true;
 	private ArtificialNeuralNetwork neuralNetwork;
+	private ActionFactory actionFactory;
 	
 	// Constants
 	private final double MAX_NUTRITION_POINTS = 1000;
@@ -51,6 +54,7 @@ public class Person implements Drawable, Updateable {
 		nutrition_decline_rate = MAX_NUTRITION_POINTS/NUTRITION_DECLINE_TIME_S;
 		aqua_decline_rate = MAX_AQUA_POINTS/AQUA_DECLINE_TIME_S;
 		coordinate = generateCoordinate();
+		actionFactory = new ActionFactory(this);
 		
 		// Init default list
 		sensorInputs = new ArrayList<Double>();
@@ -171,6 +175,8 @@ public class Person implements Drawable, Updateable {
 		double[][] outputNetwork = neuralNetwork.computePatternNetwork(inputs, weigths, thresholds);
 		Integer[] actionIndexList = determineAction(outputNetwork);
 		
+		Action newAction = actionFactory.getAction(actionIndexList[0]);
+		// TODO send action to queue
 		
 		return 0;
 	}
