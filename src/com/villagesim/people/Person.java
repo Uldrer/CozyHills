@@ -225,6 +225,17 @@ public class Person implements Drawable, Updateable {
 		if(aqua > MAX_AQUA_POINTS) aqua = MAX_AQUA_POINTS;
 		return aqua_value;
 	}
+	
+	public void move(double dx, double dy)
+	{
+		int x = (int) (coordinate.getX() + dx + 0.5);
+		int y = (int) (coordinate.getY() + dy + 0.5);
+		
+		if(x > Const.WINDOW_WIDTH) x = Const.WINDOW_WIDTH;
+		if(y > Const.WINDOW_HEIGHT) y = Const.WINDOW_HEIGHT;
+		
+		coordinate.setLocation(x, y);
+	}
 
 
 }
