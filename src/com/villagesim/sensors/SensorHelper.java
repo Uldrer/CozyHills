@@ -8,6 +8,8 @@ import com.villagesim.areas.Area;
 public final class SensorHelper {
 	
 	public static int SENSOR_INPUTS = 12;
+	private static boolean max_computed = false;
+	private static double maxValue = 0;
 
 	public static double computeDistanceToArea(Point2D coordinate, Area area)
 	{
@@ -22,12 +24,29 @@ public final class SensorHelper {
 		// TODO Use squared distance to avoid square root
 		return Math.sqrt(dx * dx + dy * dy);
 	}
+
+	public static double computeNormalizedDistanceToArea(Point2D coordinate, Area area)
+	{
+		double dist = computeDistanceToArea(coordinate, area);
+		
+		return dist/computeMaxDistance();
+	}
 	
 	public static double computeMaxDistance()
 	{
-		// TODO compute only once
-		double maxDist = Const.WINDOW_WIDTH * Const.WINDOW_WIDTH + Const.WINDOW_HEIGHT * Const.WINDOW_HEIGHT;
-		return Math.sqrt(maxDist);
+		if(!max_computed)
+		{
+			double maxDist = Const.WINDOW_WIDTH * Const.WINDOW_WIDTH + Const.WINDOW_HEIGHT * Const.WINDOW_HEIGHT;
+			maxValue = Math.sqrt(maxDist);
+			max_computed = true;
+		}
+
+		return maxValue;
+	}
+	
+	public static double computeNormalizedMaxDistance()
+	{
+		return 1;
 	}
 	
 

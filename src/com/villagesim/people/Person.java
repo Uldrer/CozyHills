@@ -35,6 +35,8 @@ public class Person implements Drawable, Updateable {
 	private final double SECONDS_PER_DAY = 86400;
 	private final int PERSON_SIZE = 3;
 	private final int ACTION_SIZE = BasicAction.values().length;
+	private final int MAX_RELEVANT_NUTRITION = 1000; // TODO correlate with one year food needed for a person
+	private final int MAX_RELEVANT_AQUA = 1000; // TODO correlate with one year qater needed for a person
 	
 	private static int id_counter = 0;
 	
@@ -54,7 +56,7 @@ public class Person implements Drawable, Updateable {
 			sensorInputs.add(0.0);
 		}
 		
-		neuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[] {ACTION_SIZE}, 1 );
+		neuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, ACTION_SIZE );
 	}
 	
 	public boolean isAlive()
@@ -136,6 +138,20 @@ public class Person implements Drawable, Updateable {
 		this.sensorInputs = sensorInputs;
 	}
 	
+	public double normalizeNutrition(double nutrition)
+	{
+		nutrition = nutrition/MAX_RELEVANT_NUTRITION;
+		if(nutrition > 1) nutrition = 1;
+		return nutrition;
+	}
+	
+	public double normalizeAqua(double aqua)
+	{
+		aqua = aqua/MAX_RELEVANT_AQUA;
+		if(aqua > 1) aqua = 1;
+		return aqua;
+	}
+	
 	private int takeAction() {
 
 		// Send sensor inputs into ANN and let it decide which action to take
@@ -146,7 +162,8 @@ public class Person implements Drawable, Updateable {
 		
 		// TODO get weights and thresholds from training sessions
 		double [][][] weigths = neuralNetwork.initiateRandomWeights();
-		double [][] thresholds = neuralNetwork.inititateNullThresholds();
+		//double [][] thresholds = neuralNetwork.inititateNullThresholds();
+		double [][] thresholds = neuralNetwork.inititateRandomThresholds();
 		
 		double[][] outputNetwork = neuralNetwork.computePatternNetwork(inputs, weigths, thresholds);
 		int actionIndex = determineAction(outputNetwork);

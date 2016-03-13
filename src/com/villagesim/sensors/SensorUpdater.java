@@ -98,7 +98,7 @@ public class SensorUpdater {
 	private double getDistanceToNearestDrinkingWater(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = SensorHelper.computeMaxDistance();
+		double closestDist = SensorHelper.computeNormalizedMaxDistance();
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
@@ -108,7 +108,7 @@ public class SensorUpdater {
 		    	
 		    	if(!lake.containsResource(Water.class)) continue;
 		    	
-		    	double dist = SensorHelper.computeDistanceToArea(personCoordinate, lake);
+		    	double dist = SensorHelper.computeNormalizedDistanceToArea(personCoordinate, lake);
 		    	
 		    	if(dist < closestDist)
 		    	{
@@ -123,7 +123,7 @@ public class SensorUpdater {
 	{
 		// TODO maybe redo to building
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = SensorHelper.computeMaxDistance();
+		double closestDist = SensorHelper.computeNormalizedMaxDistance();
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
@@ -133,7 +133,7 @@ public class SensorUpdater {
 		    	
 		    	if(!storage.containsResource(Food.class)) continue;
 		    	
-		    	double dist = SensorHelper.computeDistanceToArea(personCoordinate, storage);
+		    	double dist = SensorHelper.computeNormalizedDistanceToArea(personCoordinate, storage);
 		    	
 		    	if(dist < closestDist)
 		    	{
@@ -147,7 +147,7 @@ public class SensorUpdater {
 	private double getDistanceToNearestWildFood(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = SensorHelper.computeMaxDistance();
+		double closestDist = SensorHelper.computeNormalizedMaxDistance();
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
@@ -157,7 +157,7 @@ public class SensorUpdater {
 		    	
 		    	if(!wood.containsResource(Nuts.class) && !wood.containsResource(Berries.class)) continue;
 		    	
-		    	double dist = SensorHelper.computeDistanceToArea(personCoordinate, wood);
+		    	double dist = SensorHelper.computeNormalizedDistanceToArea(personCoordinate, wood);
 		    	
 		    	if(dist < closestDist)
 		    	{
@@ -171,7 +171,7 @@ public class SensorUpdater {
 	private double getDistanceToNearestGameHerd(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = SensorHelper.computeMaxDistance();
+		double closestDist = SensorHelper.computeNormalizedMaxDistance();
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
@@ -181,7 +181,7 @@ public class SensorUpdater {
 		    	
 		    	if(!wood.containsResource(Game.class)) continue;
 		    	
-		    	double dist = SensorHelper.computeDistanceToArea(personCoordinate, wood);
+		    	double dist = SensorHelper.computeNormalizedDistanceToArea(personCoordinate, wood);
 		    	
 		    	if(dist < closestDist)
 		    	{
@@ -195,7 +195,7 @@ public class SensorUpdater {
 	private double getDistanceToNearestFishingGround(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = SensorHelper.computeMaxDistance();
+		double closestDist = SensorHelper.computeNormalizedMaxDistance();
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
@@ -205,7 +205,7 @@ public class SensorUpdater {
 		    	
 		    	if(!lake.containsResource(Fish.class)) continue;
 		    	
-		    	double dist = SensorHelper.computeDistanceToArea(personCoordinate, lake);
+		    	double dist = SensorHelper.computeNormalizedDistanceToArea(personCoordinate, lake);
 		    	
 		    	if(dist < closestDist)
 		    	{
@@ -229,7 +229,7 @@ public class SensorUpdater {
 	private double getAmountOfAquaInNearestDrinkingWater(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = SensorHelper.computeMaxDistance();
+		double closestDist = SensorHelper.computeNormalizedMaxDistance();
 		Area closestArea = null;
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
@@ -240,7 +240,7 @@ public class SensorUpdater {
 		    	
 		    	if(!lake.containsResource(Water.class)) continue;
 		    	
-		    	double dist = SensorHelper.computeDistanceToArea(personCoordinate, lake);
+		    	double dist = SensorHelper.computeNormalizedDistanceToArea(personCoordinate, lake);
 		    	
 		    	if(dist < closestDist)
 		    	{
@@ -252,7 +252,8 @@ public class SensorUpdater {
 		
 		if(closestArea != null)
 		{
-			return closestArea.getResourceAquaValue(Water.class);
+			double value = closestArea.getResourceAquaValue(Water.class);
+			return person.normalizeAqua(value);
 		}
 		return 0;
 	}
@@ -260,7 +261,7 @@ public class SensorUpdater {
 	private double getAmountOfNutritionInNearestFoodStorage(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = SensorHelper.computeMaxDistance();
+		double closestDist = SensorHelper.computeNormalizedMaxDistance();
 		Area closestArea = null;
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
@@ -271,7 +272,7 @@ public class SensorUpdater {
 		    	
 		    	if(!storage.containsResource(Food.class)) continue;
 		    	
-		    	double dist = SensorHelper.computeDistanceToArea(personCoordinate, storage);
+		    	double dist = SensorHelper.computeNormalizedDistanceToArea(personCoordinate, storage);
 		    	
 		    	if(dist < closestDist)
 		    	{
@@ -283,7 +284,8 @@ public class SensorUpdater {
 		
 		if(closestArea != null)
 		{
-			return closestArea.getResourceNutritionValue(Food.class);
+			double value = closestArea.getResourceNutritionValue(Food.class);
+			return person.normalizeNutrition(value);
 		}
 		return 0;
 	}
@@ -291,7 +293,7 @@ public class SensorUpdater {
 	private double getAmountOfNutritionInNearestWildFood(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = SensorHelper.computeMaxDistance();
+		double closestDist = SensorHelper.computeNormalizedMaxDistance();
 		Area closestArea = null;
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
@@ -302,7 +304,7 @@ public class SensorUpdater {
 		    	
 		    	if(!wood.containsResource(Berries.class) && !wood.containsResource(Nuts.class)) continue;
 		    	
-		    	double dist = SensorHelper.computeDistanceToArea(personCoordinate, wood);
+		    	double dist = SensorHelper.computeNormalizedDistanceToArea(personCoordinate, wood);
 		    	
 		    	if(dist < closestDist)
 		    	{
@@ -316,7 +318,7 @@ public class SensorUpdater {
 		{
 			double value = closestArea.getResourceNutritionValue(Berries.class);
 			value += closestArea.getResourceNutritionValue(Nuts.class);
-			return value;
+			return person.normalizeNutrition(value);
 		}
 		return 0;
 	}
@@ -324,7 +326,7 @@ public class SensorUpdater {
 	private double getAmountOfNutritionInNearestGameHerd(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = SensorHelper.computeMaxDistance();
+		double closestDist = SensorHelper.computeNormalizedMaxDistance();
 		Area closestArea = null;
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
@@ -335,7 +337,7 @@ public class SensorUpdater {
 		    	
 		    	if(!wood.containsResource(Game.class)) continue;
 		    	
-		    	double dist = SensorHelper.computeDistanceToArea(personCoordinate, wood);
+		    	double dist = SensorHelper.computeNormalizedDistanceToArea(personCoordinate, wood);
 		    	
 		    	if(dist < closestDist)
 		    	{
@@ -347,7 +349,8 @@ public class SensorUpdater {
 		
 		if(closestArea != null)
 		{
-			return closestArea.getResourceNutritionValue(Game.class);
+			double value = closestArea.getResourceNutritionValue(Game.class);
+			return person.normalizeNutrition(value);
 		}
 		return 0;
 	}
@@ -355,7 +358,7 @@ public class SensorUpdater {
 	private double getAmountOfNutritionInNearestFishingGround(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = SensorHelper.computeMaxDistance();
+		double closestDist = SensorHelper.computeNormalizedMaxDistance();
 		Area closestArea = null;
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
@@ -366,7 +369,7 @@ public class SensorUpdater {
 		    	
 		    	if(!lake.containsResource(Fish.class)) continue;
 		    	
-		    	double dist = SensorHelper.computeDistanceToArea(personCoordinate, lake);
+		    	double dist = SensorHelper.computeNormalizedDistanceToArea(personCoordinate, lake);
 		    	
 		    	if(dist < closestDist)
 		    	{
@@ -378,7 +381,8 @@ public class SensorUpdater {
 		
 		if(closestArea != null)
 		{
-			return closestArea.getResourceNutritionValue(Fish.class);
+			double value = closestArea.getResourceNutritionValue(Fish.class);
+			return person.normalizeNutrition(value);
 		}
 		return 0;
 	}
