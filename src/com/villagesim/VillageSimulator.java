@@ -17,7 +17,7 @@ public class VillageSimulator
 	private Set<Object> objectSet = new HashSet<Object>();
 	private final int WATER_AREAS = 40;
 	private final int FOOD_AREAS = 40;
-	private final int POPULATION = 100;
+	private final int POPULATION = 3;
 	private final int TIME_STEP = 60;
 	private SensorUpdater sensorUpdater;
 	
