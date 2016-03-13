@@ -53,7 +53,7 @@ public class ActionFactory {
 			actionList.sort(new AdvancedActionComparator());
 			
 			// Return first applicable action
-			createAdvancedAction(actionList.get(0));
+			return createAdvancedAction(actionList.get(0));
 		}
 		
 		return new NullAction(person);
