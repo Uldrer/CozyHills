@@ -13,7 +13,7 @@ public class FishGatherAction implements Action {
 	}
 	
 	@Override
-	public void execute() {
+	public void execute(int seconds) {
 		// TODO Auto-generated method stub
 		System.out.println("Person id: " + person.getId() + " is fishing.");
 	}

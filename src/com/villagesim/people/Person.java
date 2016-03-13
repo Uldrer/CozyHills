@@ -28,6 +28,8 @@ public class Person implements Drawable, Updateable {
 	private double aqua; // low values are thirst and dehydration, 0 is death
 	private double nutrition_decline_rate;
 	private double aqua_decline_rate;
+	private double nutrition_increase_rate;
+	private double aqua_increase_rate;
 	private double lifetime_days = 0;
 	private List<Double> sensorInputs;
 	private boolean logDeath = true;
@@ -44,6 +46,8 @@ public class Person implements Drawable, Updateable {
 	private final int ACTION_SIZE = BasicAction.values().length;
 	private final int MAX_RELEVANT_NUTRITION = 1000; // TODO correlate with one year food needed for a person
 	private final int MAX_RELEVANT_AQUA = 1000; // TODO correlate with one year qater needed for a person
+	private final int NUTRITION_INCREASE_TIME_S = 3600; // Assumption, eating for one hour restores 3 weeks of starvation, kinda crude
+	private final int AQUA_INCREASE_TIME_S = 900; // Assumption, drinking for 15 min restores 3 days of dehydration, kinda crude
 	
 	private static int id_counter = 0;
 	
@@ -54,6 +58,8 @@ public class Person implements Drawable, Updateable {
 		aqua = MAX_AQUA_POINTS;
 		nutrition_decline_rate = MAX_NUTRITION_POINTS/NUTRITION_DECLINE_TIME_S;
 		aqua_decline_rate = MAX_AQUA_POINTS/AQUA_DECLINE_TIME_S;
+		nutrition_increase_rate = MAX_NUTRITION_POINTS/NUTRITION_INCREASE_TIME_S;
+		aqua_increase_rate = MAX_AQUA_POINTS/AQUA_INCREASE_TIME_S;
 		coordinate = generateCoordinate();
 		actionFactory = new ActionFactory(this);
 		
@@ -202,6 +208,20 @@ public class Person implements Drawable, Updateable {
 		nutrition -= nutrition_decline_rate*seconds;
 		aqua -= aqua_decline_rate*seconds;
 		lifetime_days += seconds/SECONDS_PER_DAY;
+	}
+	
+	public double eat(int seconds)
+	{
+		double nutrition_value = nutrition_increase_rate*seconds;
+		nutrition += nutrition_value;
+		return nutrition_value;
+	}
+	
+	public double drink(int seconds)
+	{
+		double aqua_value = aqua_increase_rate*seconds;
+		aqua += aqua_value;
+		return aqua_value;
 	}
 
 

@@ -14,7 +14,7 @@ public class WalkMoveAction implements Action {
 
 	
 	@Override
-	public void execute() {
+	public void execute(int seconds) {
 		
 		// TODO move person in some given direction
 		System.out.println("Person id: " + person.getId() + " is wakling.");

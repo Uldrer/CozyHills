@@ -13,9 +13,14 @@ public class EatAction implements Action {
 	}
 	
 	@Override
-	public void execute() {
-		
+	public void execute(int seconds) {
 		// TODO add nutrition to person if it is available
+		
+		
+		// TODO add criterias for completion
+
+		person.eat(seconds);
+		
 		System.out.println("Person id: " + person.getId() + " is eating.");
 		
 	}

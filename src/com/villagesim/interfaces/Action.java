@@ -1,5 +1,5 @@
 package com.villagesim.interfaces;
 
 public interface Action {
-	void execute();
+	void execute(int seconds);
 }

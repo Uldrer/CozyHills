@@ -15,11 +15,11 @@ public class ActionMediator {
 	}
 	
 	
-	public static void executeActions()
+	public static void executeActions(int seconds)
 	{
 		for (Action action : actionSet)
 		{
-			action.execute();
+			action.execute(seconds);
 	    }
 		actionSet.clear();
 	}

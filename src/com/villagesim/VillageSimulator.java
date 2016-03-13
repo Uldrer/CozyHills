@@ -46,7 +46,7 @@ public class VillageSimulator
 		}
 		
 		// Perform actions
-		ActionMediator.executeActions();
+		ActionMediator.executeActions(TIME_STEP);
 		
     }
 	
