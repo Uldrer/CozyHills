@@ -16,6 +16,7 @@ public class DrinkAction implements Action {
 	public void execute() {
 
 		// TODO add aqua to person if it is available
+		System.out.println("Person id: " + person.getId() + " is drinking.");
 
 	}
 

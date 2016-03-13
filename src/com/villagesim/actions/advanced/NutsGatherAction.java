@@ -15,7 +15,7 @@ public class NutsGatherAction implements Action {
 	@Override
 	public void execute() {
 		// TODO Auto-generated method stub
-
+		System.out.println("Person id: " + person.getId() + " is gathering nuts.");
 	}
 
 }

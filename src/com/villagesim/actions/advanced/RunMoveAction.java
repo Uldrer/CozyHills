@@ -15,7 +15,7 @@ public class RunMoveAction implements Action {
 	@Override
 	public void execute() {
 		// TODO move person in some given direction faster
-
+		System.out.println("Person id: " + person.getId() + " is running.");
 	}
 
 }

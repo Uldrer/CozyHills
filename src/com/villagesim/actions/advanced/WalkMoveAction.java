@@ -17,6 +17,7 @@ public class WalkMoveAction implements Action {
 	public void execute() {
 		
 		// TODO move person in some given direction
+		System.out.println("Person id: " + person.getId() + " is wakling.");
 
 	}
 
