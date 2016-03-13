@@ -2,10 +2,12 @@ package com.villagesim.ui;
 
 import javax.swing.*;
 
+import com.cozyhills.ui.InputHandler;
 import com.villagesim.Const;
 import com.villagesim.VillageSimulator;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -23,6 +25,9 @@ public class GraphicsHandler extends JFrame {
 
     private BufferedImage backBuffer;
     private Insets insets;
+    private InputHandler input;
+    
+    private boolean paused = false;
 
     private VillageSimulator villageSimulator = new VillageSimulator();
 
@@ -76,15 +81,30 @@ public class GraphicsHandler extends JFrame {
                 insets.top + windowHeight + insets.bottom);
 
         backBuffer = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
+        input = new InputHandler(this);
     }
 
     /**
      * This method will check for input, move things
      * around and check for win conditions, etc
      */
+   
     private void update() {
-    	villageSimulator.update();
-
+    	if(!paused)
+    	{
+    		villageSimulator.update();
+    	}
+    	
+    	if (input.isKeyDown(KeyEvent.VK_SPACE)) {
+    	
+    		paused = !paused;
+    		try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
     }
 
     /**
