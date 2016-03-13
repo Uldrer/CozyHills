@@ -94,6 +94,15 @@ public class GraphicsHandler extends JFrame {
     	{
     		villageSimulator.update();
     	}
+    	else
+    	{
+    		try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
     	
     	if (input.isKeyDown(KeyEvent.VK_SPACE)) {
     	
