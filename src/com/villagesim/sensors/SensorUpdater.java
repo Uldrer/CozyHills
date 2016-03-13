@@ -98,7 +98,7 @@ public class SensorUpdater {
 	private double getDistanceToNearestDrinkingWater(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = Double.MAX_VALUE;
+		double closestDist = SensorHelper.computeMaxDistance();
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
@@ -123,7 +123,7 @@ public class SensorUpdater {
 	{
 		// TODO maybe redo to building
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = Double.MAX_VALUE;
+		double closestDist = SensorHelper.computeMaxDistance();
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
@@ -147,7 +147,7 @@ public class SensorUpdater {
 	private double getDistanceToNearestWildFood(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = Double.MAX_VALUE;
+		double closestDist = SensorHelper.computeMaxDistance();
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
@@ -171,7 +171,7 @@ public class SensorUpdater {
 	private double getDistanceToNearestGameHerd(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = Double.MAX_VALUE;
+		double closestDist = SensorHelper.computeMaxDistance();
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
@@ -195,7 +195,7 @@ public class SensorUpdater {
 	private double getDistanceToNearestFishingGround(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = Double.MAX_VALUE;
+		double closestDist = SensorHelper.computeMaxDistance();
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
@@ -229,7 +229,7 @@ public class SensorUpdater {
 	private double getAmountOfAquaInNearestDrinkingWater(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = Double.MAX_VALUE;
+		double closestDist = SensorHelper.computeMaxDistance();
 		Area closestArea = null;
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
@@ -260,7 +260,7 @@ public class SensorUpdater {
 	private double getAmountOfNutritionInNearestFoodStorage(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = Double.MAX_VALUE;
+		double closestDist = SensorHelper.computeMaxDistance();
 		Area closestArea = null;
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
@@ -291,7 +291,7 @@ public class SensorUpdater {
 	private double getAmountOfNutritionInNearestWildFood(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = Double.MAX_VALUE;
+		double closestDist = SensorHelper.computeMaxDistance();
 		Area closestArea = null;
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
@@ -324,7 +324,7 @@ public class SensorUpdater {
 	private double getAmountOfNutritionInNearestGameHerd(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = Double.MAX_VALUE;
+		double closestDist = SensorHelper.computeMaxDistance();
 		Area closestArea = null;
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
@@ -355,7 +355,7 @@ public class SensorUpdater {
 	private double getAmountOfNutritionInNearestFishingGround(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = Double.MAX_VALUE;
+		double closestDist = SensorHelper.computeMaxDistance();
 		Area closestArea = null;
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{

@@ -2,6 +2,7 @@ package com.villagesim.sensors;
 
 import java.awt.geom.Point2D;
 
+import com.villagesim.Const;
 import com.villagesim.areas.Area;
 
 public final class SensorHelper {
@@ -18,7 +19,15 @@ public final class SensorHelper {
 		double dx = Math.max(Math.abs(coordinate.getX() - areaCoordinate.getX()) - areaWidth / 2, 0);
 		double dy = Math.max(Math.abs(coordinate.getY()  - areaCoordinate.getY()) - areaHeight / 2, 0);
 	
-		return dx * dx + dy * dy;
+		// TODO Use squared distance to avoid square root
+		return Math.sqrt(dx * dx + dy * dy);
+	}
+	
+	public static double computeMaxDistance()
+	{
+		// TODO compute only once
+		double maxDist = Const.WINDOW_WIDTH * Const.WINDOW_WIDTH + Const.WINDOW_HEIGHT * Const.WINDOW_HEIGHT;
+		return Math.sqrt(maxDist);
 	}
 	
 
