@@ -214,6 +214,7 @@ public class Person implements Drawable, Updateable {
 	{
 		double nutrition_value = nutrition_increase_rate*seconds;
 		nutrition += nutrition_value;
+		if(nutrition > MAX_NUTRITION_POINTS) nutrition = MAX_NUTRITION_POINTS;
 		return nutrition_value;
 	}
 	
@@ -221,6 +222,7 @@ public class Person implements Drawable, Updateable {
 	{
 		double aqua_value = aqua_increase_rate*seconds;
 		aqua += aqua_value;
+		if(aqua > MAX_AQUA_POINTS) aqua = MAX_AQUA_POINTS;
 		return aqua_value;
 	}
 
