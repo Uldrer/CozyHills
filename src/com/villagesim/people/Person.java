@@ -4,11 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 import com.villagesim.Const;
 import com.villagesim.actions.BasicAction;
+import com.villagesim.helpers.ArrayIndexComparator;
 import com.villagesim.interfaces.Drawable;
 import com.villagesim.interfaces.Updateable;
 import com.villagesim.optimizer.ArtificialNeuralNetwork;
@@ -166,21 +169,24 @@ public class Person implements Drawable, Updateable {
 		double [][] thresholds = neuralNetwork.inititateRandomThresholds();
 		
 		double[][] outputNetwork = neuralNetwork.computePatternNetwork(inputs, weigths, thresholds);
-		int actionIndex = determineAction(outputNetwork);
+		Integer[] actionIndexList = determineAction(outputNetwork);
 		
 		
 		return 0;
 	}
 	
-	private int determineAction(double[][] network)
+	private Integer[] determineAction(double[][] network)
 	{
 		int outputLayer = network.length - 1;
-        int outputs = network[outputLayer].length;
         
-        // With only one output
-        double value = network[outputLayer][0];
+        // With one output per basic action
+        double[] output = network[outputLayer];
         
-        return (int)value;
+        ArrayIndexComparator comparator = new ArrayIndexComparator(output);
+        Integer[] indexes = comparator.createIndexArray();
+        Arrays.sort(indexes, Collections.reverseOrder(comparator));
+        
+        return indexes;
         	
 	}
 	
