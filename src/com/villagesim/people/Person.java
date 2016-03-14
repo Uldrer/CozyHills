@@ -182,10 +182,14 @@ public class Person implements Drawable, Updateable {
 		double[][] outputNetwork = neuralNetwork.computePatternNetwork(inputs, weigths, thresholds);
 		Integer[] actionIndexList = determineAction(outputNetwork);
 		
-		Action newAction = actionFactory.getAction(actionIndexList[0]);
+		List<Action> actionList = new ArrayList<Action>();
+		for(int actionIndex : actionIndexList)
+		{
+			actionList.add(actionFactory.getAction(actionIndex));
+		}
 		
 		// TODO send action package in priority order
-		ActionMediator.addAction(newAction);
+		ActionMediator.addActionList(actionList);
 	}
 	
 	private Integer[] determineAction(double[][] network)

@@ -1,27 +1,33 @@
 package com.villagesim.actions;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.villagesim.interfaces.Action;
 
 public class ActionMediator {
 	
-	private static Set<Action> actionSet = new HashSet<Action>(); 
+	private static Set<List<Action>> actionListSet = new HashSet<List<Action>>(); 
 	
-	public static void addAction(Action action)
+	public static void addActionList(List<Action> action)
 	{
-		actionSet.add(action);
+		actionListSet.add(action);
 	}
 	
 	
 	public static void executeActions(int seconds)
 	{
-		for (Action action : actionSet)
+		for (List<Action> actionList : actionListSet)
 		{
-			action.execute(seconds);
+			// Loop over prioritized list, if success move on
+			for(Action action : actionList)
+			{
+				boolean success = action.execute(seconds);
+				if(success) break;
+			}
 	    }
-		actionSet.clear();
+		actionListSet.clear();
 	}
 	
 

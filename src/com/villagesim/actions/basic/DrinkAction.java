@@ -13,13 +13,15 @@ public class DrinkAction implements Action {
 	}
 	
 	@Override
-	public void execute(int seconds) {
+	public boolean execute(int seconds) {
 
 		// TODO add aqua to person if it is available
 		
 		person.drink(seconds);
 		
 		System.out.println("Person id: " + person.getId() + " is drinking.");
+		
+		return true;
 
 	}
 

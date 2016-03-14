@@ -18,7 +18,7 @@ public class RunMoveAction implements Action {
 	}
 	
 	@Override
-	public void execute(int seconds) {
+	public boolean execute(int seconds) {
 		// TODO move person in some given direction, not in random direction
 		
 		// Randomize direction
@@ -32,6 +32,7 @@ public class RunMoveAction implements Action {
 		person.move(dx, dy);		
 				
 		System.out.println("Person id: " + person.getId() + " is running.");
+		return true;
 	}
 
 }
