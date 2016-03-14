@@ -13,10 +13,15 @@ public class BerriesGatherAction implements Action {
 	}
 	
 	@Override
-	public boolean execute(int seconds) {
+	public void execute(int seconds) {
 		// TODO Auto-generated method stub
 		System.out.println("Person id: " + person.getId() + " is gathering berries.");
-		return true;
+	}
+
+	@Override
+	public boolean isValid() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 

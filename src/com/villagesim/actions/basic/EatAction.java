@@ -13,7 +13,7 @@ public class EatAction implements Action {
 	}
 	
 	@Override
-	public boolean execute(int seconds) {
+	public void execute(int seconds) {
 		// TODO add nutrition to person if it is available
 		
 		
@@ -22,7 +22,12 @@ public class EatAction implements Action {
 		person.eat(seconds);
 		
 		System.out.println("Person id: " + person.getId() + " is eating.");
-		return true;
+	}
+
+	@Override
+	public boolean isValid() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

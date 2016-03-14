@@ -23,8 +23,11 @@ public class ActionMediator {
 			// Loop over prioritized list, if success move on
 			for(Action action : actionList)
 			{
-				boolean success = action.execute(seconds);
-				if(success) break;
+				if(action.isValid()) 
+				{
+					action.execute(seconds);
+					break;
+				}
 			}
 	    }
 		actionListSet.clear();

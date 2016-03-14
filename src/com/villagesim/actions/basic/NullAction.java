@@ -13,8 +13,13 @@ public class NullAction implements Action {
 	}
 
 	@Override
-	public boolean execute(int seconds) {
+	public void execute(int seconds) {
 		System.out.println("Person id: " + person.getId() + " doing no action.");
+	}
+
+	@Override
+	public boolean isValid() {
+		// It is always valid to chill
 		return true;
 	}
 

@@ -1,5 +1,6 @@
 package com.villagesim.interfaces;
 
 public interface Action {
-	boolean execute(int seconds);
+	void execute(int seconds);
+	boolean isValid();
 }

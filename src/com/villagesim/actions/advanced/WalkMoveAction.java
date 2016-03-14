@@ -19,7 +19,7 @@ public class WalkMoveAction implements Action {
 
 	
 	@Override
-	public boolean execute(int seconds) {
+	public void execute(int seconds) {
 		
 		// TODO move person in some given direction, not in random direction
 		
@@ -34,8 +34,13 @@ public class WalkMoveAction implements Action {
 		person.move(dx, dy);
 		
 		System.out.println("Person id: " + person.getId() + " is wakling.");
-		return true;
+	}
 
+
+	@Override
+	public boolean isValid() {
+		// For now always valid to walk
+		return true;
 	}
 
 }
