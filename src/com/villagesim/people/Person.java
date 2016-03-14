@@ -33,8 +33,12 @@ public class Person implements Drawable, Updateable {
 	private double lifetime_days = 0;
 	private List<Double> sensorInputs;
 	private boolean logDeath = true;
-	private ArtificialNeuralNetwork neuralNetwork;
 	private ActionFactory actionFactory;
+	
+	// Neural network
+	private ArtificialNeuralNetwork neuralNetwork;
+	private double [][][] weigths;
+	private double [][] thresholds;
 	
 	// Constants
 	private final double MAX_NUTRITION_POINTS = 1000;
@@ -71,6 +75,11 @@ public class Person implements Drawable, Updateable {
 		}
 		
 		neuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, ACTION_SIZE );
+		
+		// TODO get weights and thresholds from training sessions
+		weigths = neuralNetwork.initiateRandomWeights();
+		//double [][] thresholds = neuralNetwork.inititateNullThresholds();
+		thresholds = neuralNetwork.inititateRandomThresholds();
 	}
 	
 	public boolean isAlive()
@@ -174,11 +183,6 @@ public class Person implements Drawable, Updateable {
 			inputs[i] = sensorInputs.get(i);
 		}
 		
-		// TODO get weights and thresholds from training sessions
-		double [][][] weigths = neuralNetwork.initiateRandomWeights();
-		//double [][] thresholds = neuralNetwork.inititateNullThresholds();
-		double [][] thresholds = neuralNetwork.inititateRandomThresholds();
-		
 		double[][] outputNetwork = neuralNetwork.computePatternNetwork(inputs, weigths, thresholds);
 		Integer[] actionIndexList = determineAction(outputNetwork);
 		
@@ -188,7 +192,7 @@ public class Person implements Drawable, Updateable {
 			actionList.add(actionFactory.getAction(actionIndex));
 		}
 		
-		// TODO send action package in priority order
+		// Send action package in priority order
 		ActionMediator.addActionList(actionList);
 	}
 	
