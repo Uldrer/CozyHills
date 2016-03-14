@@ -29,10 +29,10 @@ public final class SensorHelper {
 	{
 		double dist = computeDistanceToArea(coordinate, area);
 		
-		return dist/computeMaxDistance();
+		return dist/getMaxDistance();
 	}
 	
-	public static double computeMaxDistance()
+	public static double getMaxDistance()
 	{
 		if(!max_computed)
 		{
@@ -44,10 +44,15 @@ public final class SensorHelper {
 		return maxValue;
 	}
 	
-	public static double computeNormalizedMaxDistance()
+	public static double getNormalizedMaxDistance()
 	{
 		return 1;
 	}
 	
+	public static boolean isNormalizedDistanceCloseEnoughForAction(double normalizedDist)
+	{
+		double dist = normalizedDist * getMaxDistance();
+		return (dist <= Const.MIN_DISTANCE_FOR_ACTION_METER/Const.METER_PER_PIXEL);
+	}
 
 }

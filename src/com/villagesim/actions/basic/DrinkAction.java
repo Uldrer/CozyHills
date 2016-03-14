@@ -2,20 +2,25 @@ package com.villagesim.actions.basic;
 
 import com.villagesim.interfaces.Action;
 import com.villagesim.people.Person;
+import com.villagesim.sensors.Sensor;
+import com.villagesim.sensors.SensorHelper;
 
 public class DrinkAction implements Action {
 
 	private Person person;
+	private Sensor distSensor;
 	
 	public DrinkAction(Person person)
 	{
 		this.person = person;
+		this.distSensor = Sensor.DIST_TO_WATER;
 	}
 	
 	@Override
 	public void execute(int seconds) {
 
-		// TODO add aqua to person if it is available
+		// TODO Add only as much aqua as is available
+		// TODO remove aqua from resource
 		
 		person.drink(seconds);
 		
@@ -24,8 +29,10 @@ public class DrinkAction implements Action {
 
 	@Override
 	public boolean isValid() {
-		// TODO Auto-generated method stub
-		return false;
+		
+		double distanceToResource = person.getSensorReading(distSensor.getIndex());
+		
+		return SensorHelper.isNormalizedDistanceCloseEnoughForAction(distanceToResource);
 	}
 
 }

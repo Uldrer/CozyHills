@@ -161,6 +161,14 @@ public class Person implements Drawable, Updateable {
 		this.sensorInputs = sensorInputs;
 	}
 	
+	public double getSensorReading(int index)
+	{
+		if(index < 0) return 0;
+		if(index >= sensorInputs.size()) return 0;
+		
+		return sensorInputs.get(index);
+	}
+	
 	public double normalizeNutrition(double nutrition)
 	{
 		nutrition = nutrition/MAX_RELEVANT_NUTRITION;
