@@ -43,7 +43,7 @@ public class GATrainer {
 	{
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter("the-file-name.txt", "UTF-8");
+			writer = new PrintWriter("weights.txt", "UTF-8");
 			
 			for (int i = 0; i < weights.length; i++)
             {
