@@ -52,6 +52,11 @@ public class SensorUpdater {
 		return aliveState;
 	}
 	
+	public void resetAliveState()
+	{
+		aliveState = true;
+	}
+	
 	private void updateSensorReadings(Person person)
 	{
 		// TODO here we can probably optimize quite a lot if needed

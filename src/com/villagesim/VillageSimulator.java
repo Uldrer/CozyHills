@@ -105,6 +105,7 @@ public class VillageSimulator
 	{
 		clearPeople();
 		objectSet.add(new Person(weights));
+		sensorUpdater.resetAliveState();
 	}
 	
 	private void createWater()

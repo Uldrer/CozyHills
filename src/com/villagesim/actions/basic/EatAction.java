@@ -35,7 +35,7 @@ public class EatAction implements Action {
 
 		person.eat(seconds);
 		
-		System.out.println("Person id: " + person.getId() + " is eating.");
+		//System.out.println("Person id: " + person.getId() + " is eating.");
 	}
 
 	@Override
