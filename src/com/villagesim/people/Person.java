@@ -46,6 +46,7 @@ public class Person implements Drawable, Updateable {
 	private final double NUTRITION_DECLINE_TIME_S = 18114400; // Assumption, death after 3 weeks without food
 	private final double AQUA_DECLINE_TIME_S = 259200; // Assumption, death after 3 days without water
 	private final double SECONDS_PER_DAY = 86400;
+	private final double OLD_AGE_LIMIT_DAYS = 14600; // Everyone dies at 40 for now, hunter/gather was harsch!
 	private final int PERSON_SIZE = 3;
 	private final int ACTION_SIZE = BasicAction.values().length;
 	private final int MAX_RELEVANT_NUTRITION = 1000; // TODO correlate with one year food needed for a person
@@ -53,9 +54,33 @@ public class Person implements Drawable, Updateable {
 	private final int NUTRITION_INCREASE_TIME_S = 3600; // Assumption, eating for one hour restores 3 weeks of starvation, kinda crude
 	private final int AQUA_INCREASE_TIME_S = 900; // Assumption, drinking for 15 min restores 3 days of dehydration, kinda crude
 	
+	
 	private static int id_counter = 0;
 	
 	public Person()
+	{
+		init();
+		
+		neuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, ACTION_SIZE );
+		
+		weigths = neuralNetwork.initiateRandomWeights();
+		thresholds = neuralNetwork.inititateNullThresholds(); // TODO evaluate thresholds as well
+		//thresholds = neuralNetwork.inititateRandomThresholds();
+	}
+	
+	public Person(double[][][] weigths)
+	{
+		init();
+		
+		neuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, ACTION_SIZE );
+		
+		this.weigths = weigths;
+		neuralNetwork.setWeights(weigths);
+		thresholds = neuralNetwork.inititateNullThresholds(); // TODO evaluate thresholds as well
+		//thresholds = neuralNetwork.inititateRandomThresholds();
+	}
+	
+	private void init()
 	{
 		id = ++id_counter;
 		nutrition = MAX_NUTRITION_POINTS;
@@ -73,21 +98,20 @@ public class Person implements Drawable, Updateable {
 		{
 			sensorInputs.add(0.0);
 		}
-		
-		neuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, ACTION_SIZE );
-		
-		// TODO get weights and thresholds from training sessions
-		weigths = neuralNetwork.initiateRandomWeights();
-		//double [][] thresholds = neuralNetwork.inititateNullThresholds();
-		thresholds = neuralNetwork.inititateRandomThresholds();
 	}
 	
 	public boolean isAlive()
 	{
 		if(nutrition <= 0) return false;
 		if(aqua <= 0) return false;
+		if(lifetime_days > OLD_AGE_LIMIT_DAYS) return false;
 		
 		return true;
+	}
+	
+	public boolean isWeightsEqual(double[][][] weightsToCompare)
+	{
+		return Arrays.equals(weigths, weightsToCompare);
 	}
 	
 	public double getLifetime()

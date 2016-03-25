@@ -21,6 +21,7 @@ import com.villagesim.resources.Water;
 public class SensorUpdater {
 	
 	private Set<Object> stateObjects;
+	private boolean aliveState = true;
 	
 	public SensorUpdater(Set<Object> objects)
 	{
@@ -29,6 +30,7 @@ public class SensorUpdater {
 	
 	public void updateSensorReadingsAll()
 	{
+		aliveState = false;
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
@@ -39,9 +41,15 @@ public class SensorUpdater {
 		    	if(person.isAlive())
 		    	{
 		    		updateSensorReadings(person);
+		    		aliveState = true;
 		    	}
 		    }
 		}
+	}
+	
+	public boolean getAliveState()
+	{
+		return aliveState;
 	}
 	
 	private void updateSensorReadings(Person person)

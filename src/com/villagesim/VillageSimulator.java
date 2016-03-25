@@ -62,7 +62,26 @@ public class VillageSimulator
 		}
 	}
 	
+	public boolean isAlive()
+	{
+		return sensorUpdater.getAliveState();
+	}
 	
+	public double getLifeTimeDays(double[][][] weights)
+	{
+		for(Object obj : objectSet)
+		{
+			if(obj instanceof Person)
+			{
+				Person person = (Person)obj;
+				if(person.isWeightsEqual(weights))
+				{
+					return person.getLifetime();
+				}
+			}
+		}
+		return -1;
+	}
 	
 	private void setupState()
 	{
@@ -72,6 +91,20 @@ public class VillageSimulator
 		
 		// Create people
 		createPeople();
+	}
+	
+	public void addPeople()
+	{
+		clearPeople();
+		// TODO add population from weights
+		// Problem, how do we get correct one back?
+	}
+	
+	// Using this we have no interaction with others, works for now
+	public void addPerson(double[][][] weights)
+	{
+		clearPeople();
+		objectSet.add(new Person(weights));
 	}
 	
 	private void createWater()
@@ -93,6 +126,17 @@ public class VillageSimulator
 		for (int i = 0; i < POPULATION; i++) {
 			objectSet.add(new Person());
         }
+	}
+	
+	private void clearPeople()
+	{
+		Iterator<Object> it = objectSet.iterator(); 
+		while(it.hasNext()){
+		    Object obj = it.next();
+		    if(obj instanceof Person){
+		        it.remove();
+		    }
+		}
 	}
 
 }

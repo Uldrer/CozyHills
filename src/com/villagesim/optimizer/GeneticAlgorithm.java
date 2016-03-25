@@ -1,13 +1,14 @@
 package com.villagesim.optimizer;
 import java.util.Random;
 
+import com.villagesim.VillageSimulator;
+import com.villagesim.actions.BasicAction;
+import com.villagesim.sensors.SensorHelper;
+
 public class GeneticAlgorithm {
 	
     /// A random number generator.
     private static Random rand = new Random();
-    
-    /// The thresholds for the network.
-    private double[][] thresholds;
     
     /// The population of weights.
     private double[][][][] population;
@@ -42,14 +43,14 @@ public class GeneticAlgorithm {
     /// The current score vector that holds the fitness values of the current population.
     private double[] score;
     
-    /// The data set to train on.
-    private double[][] data;
-    
     /// The artificial neural network for which the weights are trained.
     private ArtificialNeuralNetwork network;
     
     /// The current best fitness score. The score of <see cref="bestWeights"/>.
     private double bestScore;
+    
+    /// The simulator to use for evaluation
+    private VillageSimulator villageSimulator;
 
     /// Class constructor. Initializes a random population of weights according to 
     /// the size of <see cref="network"/>. Zero-thresholds are used.
@@ -57,10 +58,9 @@ public class GeneticAlgorithm {
     /// <param name="theNetwork">The artificial neural network.</param>
     /// <param name="gAParameters">Genetic algorithm parameters. Has the form 
     /// [mutation rate,crossover probability, poplation size, tournament select param, elitism, mutate width]</param>
-    public GeneticAlgorithm(double[][] inData, ArtificialNeuralNetwork theNetwork, double[] gAParameters)
+    public GeneticAlgorithm(double[] gAParameters)
     {
-        data = inData;
-        network = theNetwork;
+        network = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, BasicAction.values().length);
 
         mutationRate = gAParameters[0];
         crossoverProb = gAParameters[1];
@@ -70,34 +70,26 @@ public class GeneticAlgorithm {
         mutateWidth = gAParameters[5];
 
         initiateRandomPopulation();
-        thresholds = network.inititateNullThresholds();
         score = new double[populationSize];
 
         bestScore = 0;
+        
+        villageSimulator = new VillageSimulator();
     }
     
     /// Method for training the network. Trains one generation each time using mutation, crossover and
     /// elitism. The best individual in the population is always compared to the best so far and saved 
     /// if it has a better fitness score. Crossover is done among individuals chosen by <see cref="tournamentSelect"/>
-    /// <param name="evalAll">True if all patterns in the data set should be evaluated. 
-    /// Otherwise only a small number of randomly chosen pattern are evaluated.</param>
-    public void trainNetwork(boolean evalAll)
+    public void trainNetwork()
     {
         
         for (int i = 0; i < populationSize; i++)
         {
             double[][][] weights = population[i];
 
-            if (evalAll)
-            {
-                score[i] = evaluateIndividualAll(weights);
-            }
-            else
-            {
-                score[i] = evaluateIndividual(weights);
-            }
+            score[i] = evaluateIndividual(weights);
 
-            if (score[i] > bestScore && evalAll)
+            if (score[i] > bestScore)
             { 
                 bestScore = score[i];
                 bestWeights = copy(weights);
@@ -146,6 +138,7 @@ public class GeneticAlgorithm {
             //Insert a number of the best weights in the population
             for (int i = 0; i < numberOfBestToInsert; i++)
             {
+            	// TODO FIX: could crash on populationSize <= numberOfBestToInsert
                 tempPopulation[i] = copy(bestWeights);
             }
         }
@@ -160,68 +153,21 @@ public class GeneticAlgorithm {
     /// <returns>Returns the fitness of these weights.</returns>
     private double evaluateIndividual(double[][][] weights)
     {
-        int numberPatterns = 5;
-        double[][] tempData = new double[numberPatterns][];
-        for (int i = 0; i < numberPatterns; i++)
+        // Add a person with this weight to simulator
+        villageSimulator.addPerson(weights);
+        
+        // Let his life play out
+        while(villageSimulator.isAlive())
         {
-            int randPattern = rand.nextInt(data.length);
-            tempData[i] = data[randPattern];
+        	villageSimulator.update();
         }
-            
-
-        network.createData(tempData, weights, thresholds);
-        double energy = 0;
-        double[][][] trainingNetwork = network.getNetworks();
-
-
-
-        for (int u = 0; u < numberPatterns; u++)
-        {
-            int outputLayer = trainingNetwork[u].length - 1;
-            int outputs = trainingNetwork[u][outputLayer].length;
-            for (int j = 0; j < outputs; j++)
-            {
-                double zeta = tempData[u][tempData[u].length - outputs + j];
-                double output = trainingNetwork[u][outputLayer][j];
-
-                energy = energy + Math.pow(zeta - output, 2);
-            }
-        }
-        energy = energy / (2*numberPatterns);
-
-        double score = 1 / energy;
+        
+        // For now, give fitness score according to long life
+        double score = villageSimulator.getLifeTimeDays(weights);
 
         return score;
     }
-
-    /// Evaluation function for the weights. Computes the energy of the entire network. 
-    /// The fitness is the inverse of this value with respect to number of data points.
-    /// <param name="individual">The weights to evaluate.</param>
-    /// <returns>Returns the fitness of the individual.</returns>
-    private double evaluateIndividualAll(double[][][] individual)
-    {
-        network.createData(data, individual, thresholds);
-        double energy = 0;
-        double[][][] trainingNetwork = network.getNetworks();
-        for (int u = 0; u < trainingNetwork.length; u++)
-        {
-            int outputLayer = trainingNetwork[u].length - 1;
-            int outputs = trainingNetwork[u][outputLayer].length;
-            for (int j = 0; j < outputs; j++)
-            {
-                double zeta = data[u][data[u].length - outputs + j];
-                double output = trainingNetwork[u][outputLayer][j];
-
-                energy = energy + Math.pow(zeta - output, 2);
-            }
-        }
-        energy = energy / (2*data.length);
-
-        double score = 1 / energy;
-
-        return score;
-    }
-
+    
     /// Crossover method that returns a new pair of individuals out of two original.
     /// Crossover here works by switching weight values among these individuals 
     /// with a certain probability, <see cref="crossoverProb"/>.
@@ -402,6 +348,11 @@ public class GeneticAlgorithm {
             population[i] = network.initiateRandomWeights();
         }
 
+    }
+    
+    public double getBestScore()
+    {
+    	return bestScore;
     }
 
     /// Get method to get the current best weights.
