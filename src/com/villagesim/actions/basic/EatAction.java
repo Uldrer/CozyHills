@@ -40,8 +40,11 @@ public class EatAction implements Action {
 		{
 			// Check if that is possible
 			Area area = person.getClosestArea(distSensor.getIndex());
+			
+			if(area == null) continue;
+			
 			double availableValue = area.getResourceNutritionValue(Food.class);
-			double value = potentialNutrition <= availableValue ? potentialNutrition : potentialNutrition - availableValue;
+			double value = potentialNutrition <= availableValue ? potentialNutrition : availableValue;
 
 			// Eat what's available
 			person.eat(value);

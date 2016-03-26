@@ -27,7 +27,7 @@ public class DrinkAction implements Action {
 		// Check if that is possible
 		Area area = person.getClosestArea(distSensor.getIndex());
 		double availableValue = area.getResourceAquaValue(Water.class);
-		double value = potentialAqua <= availableValue ? potentialAqua : potentialAqua - availableValue;
+		double value = potentialAqua <= availableValue ? potentialAqua : availableValue;
 
 		// Drink what's available
 		person.drink(value);
