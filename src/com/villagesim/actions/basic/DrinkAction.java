@@ -24,7 +24,10 @@ public class DrinkAction implements Action {
 		
 		person.drink(seconds);
 		
-		//System.out.println("Person id: " + person.getId() + " is drinking.");
+		if(person.printDebug())
+		{
+			System.out.println("Person id: " + person.getId() + " is drinking.");
+		}
 	}
 
 	@Override

@@ -32,8 +32,11 @@ public class Person implements Drawable, Updateable {
 	private double aqua_increase_rate;
 	private double lifetime_days = 0;
 	private List<Double> sensorInputs;
-	private boolean logDeath = true;
 	private ActionFactory actionFactory;
+	
+	// Debugging
+	private boolean logDeath = true;
+	private boolean logDebug = true;
 	
 	// Neural network
 	private ArtificialNeuralNetwork neuralNetwork;
@@ -66,6 +69,8 @@ public class Person implements Drawable, Updateable {
 		weigths = neuralNetwork.initiateRandomWeights();
 		thresholds = neuralNetwork.inititateNullThresholds(); // TODO evaluate thresholds as well
 		//thresholds = neuralNetwork.inititateRandomThresholds();
+		
+		logDebug = true;
 	}
 	
 	public Person(double[][][] weigths)
@@ -78,6 +83,8 @@ public class Person implements Drawable, Updateable {
 		neuralNetwork.setWeights(weigths);
 		thresholds = neuralNetwork.inititateNullThresholds(); // TODO evaluate thresholds as well
 		//thresholds = neuralNetwork.inititateRandomThresholds();
+		
+		logDebug = false;
 	}
 	
 	private void init()
@@ -275,6 +282,11 @@ public class Person implements Drawable, Updateable {
 		if(y > Const.WINDOW_HEIGHT) y = Const.WINDOW_HEIGHT;
 		
 		coordinate.setLocation(x, y);
+	}
+	
+	public boolean printDebug()
+	{
+		return logDebug;
 	}
 
 

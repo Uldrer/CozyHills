@@ -31,7 +31,10 @@ public class RunMoveAction implements Action {
 		
 		person.move(dx, dy);		
 				
-		//System.out.println("Person id: " + person.getId() + " is running.");
+		if(person.printDebug())
+		{
+			System.out.println("Person id: " + person.getId() + " is running.");
+		}
 	}
 
 	@Override

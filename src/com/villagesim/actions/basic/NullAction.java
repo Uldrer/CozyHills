@@ -14,7 +14,11 @@ public class NullAction implements Action {
 
 	@Override
 	public void execute(int seconds) {
-		//System.out.println("Person id: " + person.getId() + " doing no action.");
+		
+		if(person.printDebug())
+		{
+			System.out.println("Person id: " + person.getId() + " doing no action.");
+		}
 	}
 
 	@Override
