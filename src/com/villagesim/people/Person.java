@@ -13,6 +13,7 @@ import com.villagesim.Const;
 import com.villagesim.actions.ActionFactory;
 import com.villagesim.actions.ActionMediator;
 import com.villagesim.actions.BasicAction;
+import com.villagesim.areas.Area;
 import com.villagesim.helpers.ArrayIndexComparator;
 import com.villagesim.helpers.FileHandler;
 import com.villagesim.interfaces.Action;
@@ -33,6 +34,7 @@ public class Person implements Drawable, Updateable {
 	private double aqua_increase_rate;
 	private double lifetime_days = 0;
 	private List<Double> sensorInputs;
+	private List<Area> closestAreas;
 	private ActionFactory actionFactory;
 	
 	// Debugging
@@ -53,8 +55,6 @@ public class Person implements Drawable, Updateable {
 	private final double OLD_AGE_LIMIT_DAYS = 14600; // Everyone dies at 40 for now, hunter/gather was harsch!
 	private final int PERSON_SIZE = 3;
 	private final int ACTION_SIZE = BasicAction.values().length;
-	private final int MAX_RELEVANT_NUTRITION = 1000; // TODO correlate with one year food needed for a person
-	private final int MAX_RELEVANT_AQUA = 1000; // TODO correlate with one year qater needed for a person
 	private final int NUTRITION_INCREASE_TIME_S = 3600; // Assumption, eating for one hour restores 3 weeks of starvation, kinda crude
 	private final int AQUA_INCREASE_TIME_S = 900; // Assumption, drinking for 15 min restores 3 days of dehydration, kinda crude
 	
@@ -188,11 +188,12 @@ public class Person implements Drawable, Updateable {
 		makeActionDecision();
 	}
 	
-	public void updateSensorReadings(List<Double> sensorInputs)
+	public void updateSensorReadings(List<Double> sensorInputs, List<Area> closestAreas)
 	{
 		if(!isAlive()) return;
 		
 		this.sensorInputs = sensorInputs;
+		this.closestAreas = closestAreas;
 	}
 	
 	public double getSensorReading(int index)
@@ -201,20 +202,6 @@ public class Person implements Drawable, Updateable {
 		if(index >= sensorInputs.size()) return 0;
 		
 		return sensorInputs.get(index);
-	}
-	
-	public double normalizeNutrition(double nutrition)
-	{
-		nutrition = nutrition/MAX_RELEVANT_NUTRITION;
-		if(nutrition > 1) nutrition = 1;
-		return nutrition;
-	}
-	
-	public double normalizeAqua(double aqua)
-	{
-		aqua = aqua/MAX_RELEVANT_AQUA;
-		if(aqua > 1) aqua = 1;
-		return aqua;
 	}
 	
 	private void makeActionDecision() {

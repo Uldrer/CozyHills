@@ -16,6 +16,7 @@ import com.villagesim.resources.Fish;
 import com.villagesim.resources.Food;
 import com.villagesim.resources.Game;
 import com.villagesim.resources.Nuts;
+import com.villagesim.resources.Resource;
 import com.villagesim.resources.Water;
 
 public class SensorUpdater {
@@ -64,54 +65,78 @@ public class SensorUpdater {
 		// Create list of sensor inputs
 		List<Double> sensorInputs = new ArrayList<Double>();
 		
+		// Create list of closest areas
+		List<Area> closestAreas = new ArrayList<Area>();
+
 		// The order of these inputs should not be altered lightly when weights have been produced to the ANN
 		// If more are added change in SensoreHelper.SENSOR_INPUTS
 		
 		// #1 Distance to nearest drinking water
-		sensorInputs.add(getDistanceToNearestDrinkingWater(person));
+		SensorArea drinkingArea = getNearestDrinkingWater(person);
+		sensorInputs.add(drinkingArea.getDistance());
+		closestAreas.add(drinkingArea.getArea());
 		
 		// #2 Distance to nearest food storage
-		sensorInputs.add(getDistanceToNearestFoodStorage(person));
+		SensorArea foodStorageArea = getNearestFoodStorage(person);
+		sensorInputs.add(foodStorageArea.getDistance());
+		closestAreas.add(foodStorageArea.getArea());
 		
 		// #3 Distance to nearest wild food gathering ground
-		sensorInputs.add(getDistanceToNearestWildFood(person));
+		SensorArea wildFoodArea = getNearestWildFood(person);
+		sensorInputs.add(wildFoodArea.getDistance());
+		closestAreas.add(wildFoodArea.getArea());
 		
 		// #4 Distance to nearest wild game herd
-		sensorInputs.add(getDistanceToNearestGameHerd(person));
+		SensorArea wildGameArea = getNearestGameHerd(person);
+		sensorInputs.add(wildGameArea.getDistance());
+		closestAreas.add(wildGameArea.getArea());
 		
 		// #5 Distance to nearest fishing ground
-		sensorInputs.add(getDistanceToNearestFishingGround(person));
+		SensorArea fishingArea = getNearestFishingGround(person);
+		sensorInputs.add(fishingArea.getDistance());
+		closestAreas.add(fishingArea.getArea());
 		
 		// #6 Current person thirst value
 		sensorInputs.add(getPersonThirst(person));
+		closestAreas.add(null);
 		
 		// #7 Current person hunger value
 		sensorInputs.add(getPersonHunger(person));
+		closestAreas.add(null);
 		
 		// #8 Amount of aqua in nearest drinking water
-		sensorInputs.add(getAmountOfAquaInNearestDrinkingWater(person));
+		sensorInputs.add(getAmountOfAquaInArea(drinkingArea.getArea(), Water.class));
+		closestAreas.add(null);
 		
 		// #9 Amount of nutrition in nearest food storage
-		sensorInputs.add(getAmountOfNutritionInNearestFoodStorage(person));
+		sensorInputs.add(getAmountOfNutritionInArea(foodStorageArea.getArea(), Food.class));
+		closestAreas.add(null);
 		
 		// #10 Amount of nutrition in nearest wild food gathering ground
-		sensorInputs.add(getAmountOfNutritionInNearestWildFood(person));
+		List<Class<? extends Resource>> resources = new ArrayList<Class<? extends Resource>>();
+		resources.add(Nuts.class);
+		resources.add(Berries.class);
+		sensorInputs.add(getAmountOfNutritionInAreas(wildFoodArea.getArea(), resources));
+		closestAreas.add(null);
 		
 		// #11 Amount of nutrition in nearest wild game herd
-		sensorInputs.add(getAmountOfNutritionInNearestGameHerd(person));
+		sensorInputs.add(getAmountOfNutritionInArea(wildGameArea.getArea(), Game.class));
+		closestAreas.add(null);
 		
 		// #12 Amount of nutrition in nearest fishing ground
-		sensorInputs.add(getAmountOfNutritionInNearestFishingGround(person));
+		sensorInputs.add(getAmountOfNutritionInArea(fishingArea.getArea(), Fish.class));
+		closestAreas.add(null);
 		
 		// Set new sensor inputs
-		person.updateSensorReadings(sensorInputs);
+		person.updateSensorReadings(sensorInputs, closestAreas);
 		
 	}
 	
-	private double getDistanceToNearestDrinkingWater(Person person)
+	private SensorArea getNearestDrinkingWater(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
 		double closestDist = SensorHelper.getNormalizedMaxDistance();
+		Area closestArea = null;
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
@@ -126,17 +151,19 @@ public class SensorUpdater {
 		    	if(dist < closestDist)
 		    	{
 		    		closestDist = dist;
+		    		closestArea = lake;
 		    	}
 		    }
 		}
-		return closestDist;
+		return new SensorArea(closestArea, closestDist);
 	}
 	
-	private double getDistanceToNearestFoodStorage(Person person)
+	private SensorArea getNearestFoodStorage(Person person)
 	{
 		// TODO maybe redo to building
 		Point2D personCoordinate = person.getCoordinate();
 		double closestDist = SensorHelper.getNormalizedMaxDistance();
+		Area closestArea = null;
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
@@ -151,16 +178,18 @@ public class SensorUpdater {
 		    	if(dist < closestDist)
 		    	{
 		    		closestDist = dist;
+		    		closestArea = storage;
 		    	}
 		    }
 		}
-		return closestDist;
+		return new SensorArea(closestArea, closestDist);
 	}
 	
-	private double getDistanceToNearestWildFood(Person person)
+	private SensorArea getNearestWildFood(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
 		double closestDist = SensorHelper.getNormalizedMaxDistance();
+		Area closestArea = null;
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
@@ -175,16 +204,18 @@ public class SensorUpdater {
 		    	if(dist < closestDist)
 		    	{
 		    		closestDist = dist;
+		    		closestArea = wood;
 		    	}
 		    }
 		}
-		return closestDist;
+		return new SensorArea(closestArea, closestDist);
 	}
 	
-	private double getDistanceToNearestGameHerd(Person person)
+	private SensorArea getNearestGameHerd(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
 		double closestDist = SensorHelper.getNormalizedMaxDistance();
+		Area closestArea = null;
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
@@ -199,16 +230,18 @@ public class SensorUpdater {
 		    	if(dist < closestDist)
 		    	{
 		    		closestDist = dist;
+		    		closestArea = wood;
 		    	}
 		    }
 		}
-		return closestDist;
+		return new SensorArea(closestArea, closestDist);
 	}
 	
-	private double getDistanceToNearestFishingGround(Person person)
+	private SensorArea getNearestFishingGround(Person person)
 	{
 		Point2D personCoordinate = person.getCoordinate();
 		double closestDist = SensorHelper.getNormalizedMaxDistance();
+		Area closestArea = null;
 		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
@@ -223,10 +256,11 @@ public class SensorUpdater {
 		    	if(dist < closestDist)
 		    	{
 		    		closestDist = dist;
+		    		closestArea = lake;
 		    	}
 		    }
 		}
-		return closestDist;
+		return new SensorArea(closestArea, closestDist);
 	}
 	
 	private double getPersonThirst(Person person)
@@ -239,166 +273,23 @@ public class SensorUpdater {
 		return person.getHungerValue();
 	}
 	
-	private double getAmountOfAquaInNearestDrinkingWater(Person person)
+	private double getAmountOfAquaInArea(Area area, Class<? extends Resource> resourceClass)
 	{
-		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = SensorHelper.getNormalizedMaxDistance();
-		Area closestArea = null;
-		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
-		{
-		    Object item = i.next();
-		    if(item instanceof Lake)
-		    {
-		    	Lake lake = ((Lake) item);
-		    	
-		    	if(!lake.containsResource(Water.class)) continue;
-		    	
-		    	double dist = SensorHelper.computeNormalizedDistanceToArea(personCoordinate, lake);
-		    	
-		    	if(dist < closestDist)
-		    	{
-		    		closestArea = lake;
-		    		closestDist = dist;
-		    	}
-		    }
-		}
-		
-		if(closestArea != null)
-		{
-			double value = closestArea.getResourceAquaValue(Water.class);
-			return person.normalizeAqua(value);
-		}
-		return 0;
+		return SensorHelper.normalizeAqua(area.getResourceAquaValue(resourceClass));
 	}
 	
-	private double getAmountOfNutritionInNearestFoodStorage(Person person)
+	private double getAmountOfNutritionInArea(Area area, Class<? extends Resource> resourceClass)
 	{
-		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = SensorHelper.getNormalizedMaxDistance();
-		Area closestArea = null;
-		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
-		{
-		    Object item = i.next();
-		    if(item instanceof Storage)
-		    {
-		    	Storage storage = ((Storage) item);
-		    	
-		    	if(!storage.containsResource(Food.class)) continue;
-		    	
-		    	double dist = SensorHelper.computeNormalizedDistanceToArea(personCoordinate, storage);
-		    	
-		    	if(dist < closestDist)
-		    	{
-		    		closestArea = storage;
-		    		closestDist = dist;
-		    	}
-		    }
-		}
-		
-		if(closestArea != null)
-		{
-			double value = closestArea.getResourceNutritionValue(Food.class);
-			return person.normalizeNutrition(value);
-		}
-		return 0;
+		return SensorHelper.normalizeNutrition(area.getResourceNutritionValue(resourceClass));
 	}
 	
-	private double getAmountOfNutritionInNearestWildFood(Person person)
+	private double getAmountOfNutritionInAreas(Area area, List<Class<? extends Resource>> resourceClasses)
 	{
-		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = SensorHelper.getNormalizedMaxDistance();
-		Area closestArea = null;
-		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
+		double nutrition = 0;
+		for(Class<? extends Resource> resourceClass : resourceClasses)
 		{
-		    Object item = i.next();
-		    if(item instanceof Wood)
-		    {
-		    	Wood wood = ((Wood) item);
-		    	
-		    	if(!wood.containsResource(Berries.class) && !wood.containsResource(Nuts.class)) continue;
-		    	
-		    	double dist = SensorHelper.computeNormalizedDistanceToArea(personCoordinate, wood);
-		    	
-		    	if(dist < closestDist)
-		    	{
-		    		closestArea = wood;
-		    		closestDist = dist;
-		    	}
-		    }
+			nutrition += area.getResourceNutritionValue(resourceClass);
 		}
-		
-		if(closestArea != null)
-		{
-			double value = closestArea.getResourceNutritionValue(Berries.class);
-			value += closestArea.getResourceNutritionValue(Nuts.class);
-			return person.normalizeNutrition(value);
-		}
-		return 0;
+		return SensorHelper.normalizeNutrition(nutrition);
 	}
-	
-	private double getAmountOfNutritionInNearestGameHerd(Person person)
-	{
-		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = SensorHelper.getNormalizedMaxDistance();
-		Area closestArea = null;
-		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
-		{
-		    Object item = i.next();
-		    if(item instanceof Wood)
-		    {
-		    	Wood wood = ((Wood) item);
-		    	
-		    	if(!wood.containsResource(Game.class)) continue;
-		    	
-		    	double dist = SensorHelper.computeNormalizedDistanceToArea(personCoordinate, wood);
-		    	
-		    	if(dist < closestDist)
-		    	{
-		    		closestArea = wood;
-		    		closestDist = dist;
-		    	}
-		    }
-		}
-		
-		if(closestArea != null)
-		{
-			double value = closestArea.getResourceNutritionValue(Game.class);
-			return person.normalizeNutrition(value);
-		}
-		return 0;
-	}
-	
-	private double getAmountOfNutritionInNearestFishingGround(Person person)
-	{
-		Point2D personCoordinate = person.getCoordinate();
-		double closestDist = SensorHelper.getNormalizedMaxDistance();
-		Area closestArea = null;
-		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
-		{
-		    Object item = i.next();
-		    if(item instanceof Lake)
-		    {
-		    	Lake lake = ((Lake) item);
-		    	
-		    	if(!lake.containsResource(Fish.class)) continue;
-		    	
-		    	double dist = SensorHelper.computeNormalizedDistanceToArea(personCoordinate, lake);
-		    	
-		    	if(dist < closestDist)
-		    	{
-		    		closestArea = lake;
-		    		closestDist = dist;
-		    	}
-		    }
-		}
-		
-		if(closestArea != null)
-		{
-			double value = closestArea.getResourceNutritionValue(Fish.class);
-			return person.normalizeNutrition(value);
-		}
-		return 0;
-	}
-	
-	
 }
