@@ -275,20 +275,33 @@ public class SensorUpdater {
 	
 	private double getAmountOfAquaInArea(Area area, Class<? extends Resource> resourceClass)
 	{
-		return SensorHelper.normalizeAqua(area.getResourceAquaValue(resourceClass));
+		double aqua = 0;
+		if(area != null)
+		{
+			aqua = SensorHelper.normalizeAqua(area.getResourceAquaValue(resourceClass));
+		}
+		return aqua;
 	}
 	
 	private double getAmountOfNutritionInArea(Area area, Class<? extends Resource> resourceClass)
 	{
-		return SensorHelper.normalizeNutrition(area.getResourceNutritionValue(resourceClass));
+		double nutrition = 0;
+		if(area != null)
+		{
+			nutrition = SensorHelper.normalizeNutrition(area.getResourceNutritionValue(resourceClass));
+		}
+		return nutrition;
 	}
 	
 	private double getAmountOfNutritionInAreas(Area area, List<Class<? extends Resource>> resourceClasses)
 	{
 		double nutrition = 0;
-		for(Class<? extends Resource> resourceClass : resourceClasses)
+		if(area != null)
 		{
-			nutrition += area.getResourceNutritionValue(resourceClass);
+			for(Class<? extends Resource> resourceClass : resourceClasses)
+			{
+				nutrition += area.getResourceNutritionValue(resourceClass);
+			}
 		}
 		return SensorHelper.normalizeNutrition(nutrition);
 	}
