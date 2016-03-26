@@ -9,6 +9,8 @@ import com.villagesim.resources.Resource;
 import com.villagesim.resources.Water;
 
 public class Lake extends Area {
+	
+	private final double LITERS_PER_CUBIC_METER = 1000;
 
 	public Lake(int width, int height) {
 		super(Color.BLUE, width, height);
@@ -19,7 +21,7 @@ public class Lake extends Area {
 		
 		Set<Resource> resourceSet = new HashSet<Resource>();
 		// Add resources
-		Resource water = new Water(getSize());
+		Resource water = new Water(getSize() * LITERS_PER_CUBIC_METER);
 		water.setIncreaseRate(0.1);
 		water.setDecreaseRate(0.1);
 		resourceSet.add(water);
