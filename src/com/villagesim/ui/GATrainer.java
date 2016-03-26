@@ -1,9 +1,6 @@
 package com.villagesim.ui;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-
+import com.villagesim.helpers.FileHandler;
 import com.villagesim.optimizer.GeneticAlgorithm;
 
 public class GATrainer {
@@ -34,37 +31,9 @@ public class GATrainer {
              
              if(bestLifeTime > 3.1)
              {
-            	 writeWeightsToFile(weights);
+            	 FileHandler.writeWeightsToFile(weights);
              }
          }
-	}
-	
-	private void writeWeightsToFile(double[][][] weights)
-	{
-		PrintWriter writer;
-		try {
-			writer = new PrintWriter("weights.txt", "UTF-8");
-			
-			for (int i = 0; i < weights.length; i++)
-            {
-                for (int j = 0; j < weights[i].length; j++)
-                {
-                    for (int k = 0; k < weights[i][j].length; k++)
-                    {
-                    	writer.print(String.valueOf(weights[i][j][k]));
-                        if (k != weights[i][j].length - 1)
-                        {
-                        	writer.print(" ");
-                        }
-                    }
-                    writer.println();
-                }
-            }
-			writer.close();
-		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 }

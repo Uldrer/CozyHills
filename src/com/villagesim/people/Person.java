@@ -14,6 +14,7 @@ import com.villagesim.actions.ActionFactory;
 import com.villagesim.actions.ActionMediator;
 import com.villagesim.actions.BasicAction;
 import com.villagesim.helpers.ArrayIndexComparator;
+import com.villagesim.helpers.FileHandler;
 import com.villagesim.interfaces.Action;
 import com.villagesim.interfaces.Drawable;
 import com.villagesim.interfaces.Updateable;
@@ -40,7 +41,7 @@ public class Person implements Drawable, Updateable {
 	
 	// Neural network
 	private ArtificialNeuralNetwork neuralNetwork;
-	private double [][][] weigths;
+	private double [][][] weights;
 	private double [][] thresholds;
 	
 	// Constants
@@ -66,21 +67,23 @@ public class Person implements Drawable, Updateable {
 		
 		neuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, ACTION_SIZE );
 		
-		weigths = neuralNetwork.initiateRandomWeights();
+		//weigths = neuralNetwork.initiateRandomWeights();
+		weights = FileHandler.retrieveWeights("weights.txt", neuralNetwork);
+		neuralNetwork.setWeights(weights);
 		thresholds = neuralNetwork.inititateNullThresholds(); // TODO evaluate thresholds as well
 		//thresholds = neuralNetwork.inititateRandomThresholds();
 		
 		logDebug = true;
 	}
 	
-	public Person(double[][][] weigths)
+	public Person(double[][][] weights)
 	{
 		init();
 		
 		neuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, ACTION_SIZE );
 		
-		this.weigths = weigths;
-		neuralNetwork.setWeights(weigths);
+		this.weights = weights;
+		neuralNetwork.setWeights(weights);
 		thresholds = neuralNetwork.inititateNullThresholds(); // TODO evaluate thresholds as well
 		//thresholds = neuralNetwork.inititateRandomThresholds();
 		
@@ -118,7 +121,7 @@ public class Person implements Drawable, Updateable {
 	
 	public boolean isWeightsEqual(double[][][] weightsToCompare)
 	{
-		return Arrays.equals(weigths, weightsToCompare);
+		return Arrays.equals(weights, weightsToCompare);
 	}
 	
 	public double getLifetime()
@@ -222,7 +225,7 @@ public class Person implements Drawable, Updateable {
 			inputs[i] = sensorInputs.get(i);
 		}
 		
-		double[][] outputNetwork = neuralNetwork.computePatternNetwork(inputs, weigths, thresholds);
+		double[][] outputNetwork = neuralNetwork.computePatternNetwork(inputs, weights, thresholds);
 		Integer[] actionIndexList = determineAction(outputNetwork);
 		
 		List<Action> actionList = new ArrayList<Action>();
