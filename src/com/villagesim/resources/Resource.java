@@ -41,7 +41,7 @@ public abstract class Resource implements Updateable {
 		this.aquaPerAmount = 0;
 	}
 	
-	public boolean collect(double amount)
+	public boolean consume(double amount)
 	{
 		double newAmount = this.amount - amount;
 		if(newAmount < 0) return false;

@@ -88,6 +88,42 @@ public abstract class Area implements Drawable, Updateable {
 		return value;
 	}
 	
+	public void consumeResourceAquaValue(Class<? extends Resource> resourceClass, double value)
+	{
+		double valueLeftToConsume = value;
+		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
+		{
+			Resource item = i.next();
+			
+			if(item.getClass().isAssignableFrom(resourceClass))
+			{
+				// Consume until done
+				double amount = valueLeftToConsume/item.getAquaPerAmount();
+				
+				// If successful return
+				if(item.consume(amount)) return;
+				
+				// If not successful we need to remove partly
+				if(amount > item.getAmount())
+				{
+					boolean res = item.consume(item.getAmount());
+					if(res)
+					{
+						valueLeftToConsume -= item.getAmount()*item.getAquaPerAmount();
+					}
+					else 
+					{
+						throw new AssertionError("AQUA: should be possible to remove what there is.");
+					}
+				}
+				else
+				{
+					throw new AssertionError("AQUA: should have been greater than available. Something is wrong.");
+				}
+			}
+		}
+	}
+	
 	public double getResourceNutritionValue(Class<? extends Resource> resourceClass)
 	{
 		double value = 0;
@@ -101,6 +137,42 @@ public abstract class Area implements Drawable, Updateable {
 			}
 		}
 		return value;
+	}
+	
+	public void consumeResourceNutritionValue(Class<? extends Resource> resourceClass, double value)
+	{
+		double valueLeftToConsume = value;
+		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
+		{
+			Resource item = i.next();
+			
+			if(item.getClass().isAssignableFrom(resourceClass))
+			{
+				// Consume until done
+				double amount = valueLeftToConsume/item.getNutritionPerAmount();
+				
+				// If successful return
+				if(item.consume(amount)) return;
+				
+				// If not successful we need to remove partly
+				if(amount > item.getAmount())
+				{
+					boolean res = item.consume(item.getAmount());
+					if(res)
+					{
+						valueLeftToConsume -= item.getAmount()*item.getNutritionPerAmount();
+					}
+					else 
+					{
+						throw new AssertionError("NUTRITION: should be possible to remove what there is.");
+					}
+				}
+				else
+				{
+					throw new AssertionError("NUTRITION: should have been greater than available. Something is wrong.");
+				}
+			}
+		}
 	}
 	
 	public double getSize()

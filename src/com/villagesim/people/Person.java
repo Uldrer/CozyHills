@@ -204,6 +204,14 @@ public class Person implements Drawable, Updateable {
 		return sensorInputs.get(index);
 	}
 	
+	public Area getClosestArea(int index)
+	{
+		if(index < 0) return null;
+		if(index >= closestAreas.size()) return null;
+		
+		return closestAreas.get(index);
+	}
+	
 	private void makeActionDecision() {
 
 		// Send sensor inputs into ANN and let it decide which action to take
@@ -247,20 +255,28 @@ public class Person implements Drawable, Updateable {
 		lifetime_days += seconds/SECONDS_PER_DAY;
 	}
 	
-	public double eat(int seconds)
+	public double getPotentialNutrition(int seconds)
 	{
 		double nutrition_value = nutrition_increase_rate*seconds;
-		nutrition += nutrition_value;
-		if(nutrition > MAX_NUTRITION_POINTS) nutrition = MAX_NUTRITION_POINTS;
 		return nutrition_value;
 	}
 	
-	public double drink(int seconds)
+	public void eat(double nutrition_value)
+	{
+		nutrition += nutrition_value;
+		if(nutrition > MAX_NUTRITION_POINTS) nutrition = MAX_NUTRITION_POINTS;
+	}
+	
+	public double getPotentialAqua(int seconds)
 	{
 		double aqua_value = aqua_increase_rate*seconds;
+		return aqua_value;
+	}
+	
+	public void drink(double aqua_value)
+	{
 		aqua += aqua_value;
 		if(aqua > MAX_AQUA_POINTS) aqua = MAX_AQUA_POINTS;
-		return aqua_value;
 	}
 	
 	public void move(double dx, double dy)
