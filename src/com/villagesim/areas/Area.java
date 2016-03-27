@@ -9,11 +9,12 @@ import java.util.Random;
 import java.util.Set;
 
 import com.villagesim.Const;
+import com.villagesim.interfaces.DepletedListener;
 import com.villagesim.interfaces.Drawable;
 import com.villagesim.interfaces.Updateable;
 import com.villagesim.resources.Resource;
 
-public abstract class Area implements Drawable, Updateable {
+public abstract class Area implements Drawable, Updateable, DepletedListener {
 	
 	private int width;
 	private int height;
@@ -182,6 +183,11 @@ public abstract class Area implements Drawable, Updateable {
 				}
 			}
 		}
+	}
+	
+	public void setColor(Color color)
+	{
+		this.color = color;
 	}
 	
 	public double getSize()

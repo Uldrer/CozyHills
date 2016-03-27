@@ -11,6 +11,10 @@ import com.villagesim.resources.Resource;
 
 public class Wood extends Area {
 
+	private boolean gameDepleted = false;
+	private boolean nutsDepleted = false;
+	private boolean berriesDepleted = false;
+	
 	public Wood(int width, int height) {
 		super(Color.GREEN, width, height);
 	}
@@ -35,4 +39,59 @@ public class Wood extends Area {
 		setResourceSet(resourceSet);
 	}
 
+	private void updateColor()
+	{
+		// TODO do it nicer
+		Color color = Color.GREEN; // All is fine
+		if(gameDepleted && nutsDepleted && berriesDepleted)
+		{
+			color = Color.RED;
+		}
+		else if(gameDepleted && nutsDepleted)
+		{
+			color = Color.ORANGE;
+		}
+		else if(gameDepleted && berriesDepleted)
+		{
+			color = Color.ORANGE;
+		}
+		else if(nutsDepleted && berriesDepleted)
+		{
+			color = Color.ORANGE;
+		}
+		else if(gameDepleted)
+		{
+			color = Color.PINK;
+		}
+		else if(nutsDepleted)
+		{
+			color = Color.PINK;
+		}
+		else if(berriesDepleted)
+		{
+			color = Color.PINK;
+		}
+		
+		setColor(color);
+	}
+
+	@Override
+	public void depletedEvent(boolean depleted, String name) {
+		
+		// TODO switch on enum
+		if(name.equals("Game"))
+		{
+			gameDepleted = depleted;
+		}
+		else if(name.equals("Nuts"))
+		{
+			nutsDepleted = depleted;
+		}
+		else if(name.equals("Berries"))
+		{
+			berriesDepleted = depleted;
+		}
+		
+		updateColor();
+	}
 }

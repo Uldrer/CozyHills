@@ -1,8 +1,13 @@
 package com.villagesim.resources;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.villagesim.interfaces.Depletable;
+import com.villagesim.interfaces.DepletedListener;
 import com.villagesim.interfaces.Updateable;
 
-public abstract class Resource implements Updateable {
+public abstract class Resource implements Updateable, Depletable {
 	
 	private String name;
 	private double initialAmount; // One standard unit
@@ -19,6 +24,8 @@ public abstract class Resource implements Updateable {
 	private double increaseRate = 0; // Increase per second
 	
 	private final double SECONDS_PER_YEAR = 31536000;
+	
+	private List<DepletedListener> listeners = new ArrayList<DepletedListener>();
 	
 	// Normal constructor
 	public Resource(String name, double amount, double weightPerAmount, double nutritionPerAmount, double aquaPerAmount)
@@ -64,9 +71,31 @@ public abstract class Resource implements Updateable {
 	@Override
 	public void update(int seconds) 
 	{
+		// TODO change to hysteres function that nonly fires once
+		if(this.amount <= 0) fireDepletedEvent(true);
+		if(this.amount > initialAmount*0.1) fireDepletedEvent(false); 
+		
 		// TODO add minor random element here
 		this.amount -= seconds*decreaseRate;
 		this.amount += seconds*increaseRate;
+	}
+	
+	@Override
+	public void addDepletedListener(DepletedListener listener)
+	{
+		if(!listeners.contains(listener))
+		{
+			listeners.add(listener);
+		}
+	}
+	
+	@Override
+	public void fireDepletedEvent(boolean depleted)
+	{
+		for(DepletedListener listener : listeners)
+		{
+			listener.depletedEvent(depleted, name);
+		}
 	}
 
 	// Getters

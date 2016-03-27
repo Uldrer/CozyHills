@@ -21,4 +21,10 @@ public class Storage extends Area {
 		this.setResourceSet(resourceSet);
 	}
 
+	@Override
+	public void depletedEvent(boolean depleted, String name) {
+		// TODO this seems wrong?
+		
+	}
+
 }
