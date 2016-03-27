@@ -141,7 +141,7 @@ public class VillageSimulator
 		}
 	}
 	
-	private void resetState()
+	public void resetState()
 	{
 		for(Object obj : objectSet)
 		{

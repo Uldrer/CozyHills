@@ -164,6 +164,9 @@ public class GeneticAlgorithm {
         
         // For now, give fitness score according to long life
         double score = villageSimulator.getLifeTimeDays(weights);
+        
+        // Reset state for next individual
+        villageSimulator.resetState();
 
         return score;
     }
