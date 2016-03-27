@@ -49,7 +49,8 @@ public class Person implements Drawable, Updateable {
 	// Constants
 	private final double MAX_NUTRITION_POINTS = 1000;
 	private final double MAX_AQUA_POINTS = 1000;
-	private final double LITER_PER_AQUA_POINTS = 0.0075; // Assumption, drinking speed 0.5 l/min
+	private final double LITER_PER_AQUA_POINT = 0.0075; // Assumption, drinking speed 0.5 l/min
+	private final double KG_PER_NUTRITION_POINT = 0.001; // Assumption, eating speed 1 kg/h
 	private final double NUTRITION_DECLINE_TIME_S = 18114400; // Assumption, death after 3 weeks without food
 	private final double AQUA_DECLINE_TIME_S = 259200; // Assumption, death after 3 days without water
 	private final double SECONDS_PER_DAY = 86400;
@@ -258,25 +259,25 @@ public class Person implements Drawable, Updateable {
 	
 	public double getPotentialNutrition(int seconds)
 	{
-		double nutrition_value = nutrition_increase_rate*seconds;
+		double nutrition_value = nutrition_increase_rate*seconds*KG_PER_NUTRITION_POINT;
 		return nutrition_value;
 	}
 	
-	public void eat(double nutrition_value)
+	public void eat(double kg_value)
 	{
-		nutrition += nutrition_value;
+		nutrition += kg_value/KG_PER_NUTRITION_POINT;
 		if(nutrition > MAX_NUTRITION_POINTS) nutrition = MAX_NUTRITION_POINTS;
 	}
 	
 	public double getPotentialAqua(int seconds)
 	{
-		double liter_value = aqua_increase_rate*seconds*LITER_PER_AQUA_POINTS;
+		double liter_value = aqua_increase_rate*seconds*LITER_PER_AQUA_POINT;
 		return liter_value;
 	}
 	
 	public void drink(double liter_value)
 	{
-		aqua += liter_value/LITER_PER_AQUA_POINTS;
+		aqua += liter_value/LITER_PER_AQUA_POINT;
 		if(aqua > MAX_AQUA_POINTS) aqua = MAX_AQUA_POINTS;
 	}
 	
