@@ -53,7 +53,6 @@ public class Person implements Drawable, Updateable {
 	private final double KG_PER_NUTRITION_POINT = 0.001; // Assumption, eating speed 1 kg/h
 	private final double NUTRITION_DECLINE_TIME_S = 18114400; // Assumption, death after 3 weeks without food
 	private final double AQUA_DECLINE_TIME_S = 259200; // Assumption, death after 3 days without water
-	private final double SECONDS_PER_DAY = 86400;
 	private final double OLD_AGE_LIMIT_DAYS = 14600; // Everyone dies at 40 for now, hunter/gather was harsch!
 	private final int PERSON_SIZE = 3;
 	private final int ACTION_SIZE = BasicAction.values().length;
@@ -254,7 +253,7 @@ public class Person implements Drawable, Updateable {
 
 		nutrition -= nutrition_decline_rate*seconds;
 		aqua -= aqua_decline_rate*seconds;
-		lifetime_days += seconds/SECONDS_PER_DAY;
+		lifetime_days += seconds/Const.SECONDS_PER_DAY;
 	}
 	
 	public double getPotentialNutrition(int seconds)

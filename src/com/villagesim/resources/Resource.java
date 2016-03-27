@@ -3,6 +3,7 @@ package com.villagesim.resources;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.villagesim.Const;
 import com.villagesim.interfaces.Depletable;
 import com.villagesim.interfaces.DepletedListener;
 import com.villagesim.interfaces.Updateable;
@@ -23,7 +24,11 @@ public abstract class Resource implements Updateable, Depletable {
 	private double decreaseRate = 0; // Decrease per second
 	private double increaseRate = 0; // Increase per second
 	
+	private double lifetime_days = 0;
+	
 	private final double SECONDS_PER_YEAR = 31536000;
+	
+	private boolean depleted = false;
 	
 	private List<DepletedListener> listeners = new ArrayList<DepletedListener>();
 	
@@ -71,13 +76,25 @@ public abstract class Resource implements Updateable, Depletable {
 	@Override
 	public void update(int seconds) 
 	{
-		// TODO change to hysteres function that nonly fires once
-		if(this.amount <= 0) fireDepletedEvent(true);
-		if(this.amount > initialAmount*0.1) fireDepletedEvent(false); 
+		// Hysteres function that nonly fires once
+		if(!depleted && this.amount <= 0) 
+		{
+			depleted = true;
+			fireDepletedEvent(true);
+			System.out.println("Resource: " + name + " depleted after liftime: " + lifetime_days);
+		}
+		if(depleted && this.amount > initialAmount*0.1) 
+		{
+			depleted = false;
+			fireDepletedEvent(false);
+			System.out.println("Resource: " + name + " un-depleted after liftime: " + lifetime_days);
+		}
 		
 		// TODO add minor random element here
 		this.amount -= seconds*amount*decreaseRate;
 		this.amount += seconds*amount*increaseRate;
+		
+		lifetime_days += seconds/Const.SECONDS_PER_DAY;
 	}
 	
 	@Override
