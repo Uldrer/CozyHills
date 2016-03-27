@@ -5,6 +5,7 @@ import com.villagesim.interfaces.Updateable;
 public abstract class Resource implements Updateable {
 	
 	private String name;
+	private double initialAmount; // One standard unit
 	private double amount; // One standard unit
 	private double weightPerAmount; // kg / standard unit
 	
@@ -25,6 +26,7 @@ public abstract class Resource implements Updateable {
 		System.out.println("Constructing resource " + name);
 		this.name = name;
 		this.amount = amount;
+		this.initialAmount = amount;
 		this.weightPerAmount = weightPerAmount;
 		this.nutritionPerAmount = nutritionPerAmount;
 		this.aquaPerAmount = aquaPerAmount;
@@ -36,6 +38,7 @@ public abstract class Resource implements Updateable {
 		System.out.println("Constructing resource " + name);
 		this.name = name;
 		this.amount = amount;
+		this.initialAmount = amount;
 		this.weightPerAmount = weightPerAmount;
 		this.nutritionPerAmount = 0;
 		this.aquaPerAmount = 0;
@@ -93,6 +96,11 @@ public abstract class Resource implements Updateable {
 	
 	public double getIncreaseRate() {
 		return increaseRate;
+	}
+	
+	public void reset()
+	{
+		amount = initialAmount;
 	}
 	
 	// Setters

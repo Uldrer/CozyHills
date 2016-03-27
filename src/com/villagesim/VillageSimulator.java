@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.util.*;
 
 import com.villagesim.actions.ActionMediator;
+import com.villagesim.areas.Area;
 import com.villagesim.areas.Lake;
 import com.villagesim.areas.Wood;
 import com.villagesim.interfaces.Drawable;
@@ -137,6 +138,18 @@ public class VillageSimulator
 		    if(obj instanceof Person){
 		        it.remove();
 		    }
+		}
+	}
+	
+	private void resetState()
+	{
+		for(Object obj : objectSet)
+		{
+			if(obj instanceof Area)
+			{
+				Area area = (Area) obj;
+				area.reset();
+			}
 		}
 	}
 

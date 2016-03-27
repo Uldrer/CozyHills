@@ -49,6 +49,15 @@ public abstract class Area implements Drawable, Updateable {
 		}
 	}
 	
+	public void reset()
+	{
+		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
+		{
+			Resource item = i.next();
+			item.reset();
+		}
+	}
+	
 	protected abstract void populateResourceSet();
 
 	public Set<Resource> getResourceSet() {
