@@ -65,6 +65,12 @@ public class EatAction implements Action {
 			
 			if(area == null) continue;
 			
+			// Check if region is close enough
+			double distanceToResource = person.getSensorReading(distSensor.getIndex());
+			boolean success = SensorHelper.isNormalizedDistanceCloseEnoughForAction(distanceToResource);
+			
+			if(!success) continue;
+			
 			List<Class<? extends Resource>> resources = resourceLists.get(i);
 			
 			for(Class<? extends Resource> resource : resources)

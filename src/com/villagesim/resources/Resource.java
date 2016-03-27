@@ -76,8 +76,8 @@ public abstract class Resource implements Updateable, Depletable {
 		if(this.amount > initialAmount*0.1) fireDepletedEvent(false); 
 		
 		// TODO add minor random element here
-		this.amount -= seconds*decreaseRate;
-		this.amount += seconds*increaseRate;
+		this.amount -= seconds*amount*decreaseRate;
+		this.amount += seconds*amount*increaseRate;
 	}
 	
 	@Override
@@ -139,13 +139,11 @@ public abstract class Resource implements Updateable, Depletable {
 	
 	// Input decrease-rate is the amount decrease per year in percent/100
 	public void setDecreaseRate(double decreaseRate) {
-		decreaseRate *= amount;
 		this.decreaseRate = decreaseRate/SECONDS_PER_YEAR;
 	}
 	
 	// Input increase-rate is the amount decrease per year in percent/100
 	public void setIncreaseRate(double increaseRate) {
-		increaseRate *= amount;
 		this.increaseRate = increaseRate/SECONDS_PER_YEAR;
 	}
 	
