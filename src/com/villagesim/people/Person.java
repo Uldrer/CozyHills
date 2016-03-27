@@ -51,7 +51,7 @@ public class Person implements Drawable, Updateable {
 	private final double MAX_AQUA_POINTS = 1000;
 	private final double LITER_PER_AQUA_POINT = 0.0075; // Assumption, drinking speed 0.5 l/min
 	private final double KG_PER_NUTRITION_POINT = 0.001; // Assumption, eating speed 1 kg/h
-	private final double NUTRITION_DECLINE_TIME_S = 18114400; // Assumption, death after 3 weeks without food
+	private final double NUTRITION_DECLINE_TIME_S = 1814400; // Assumption, death after 3 weeks without food
 	private final double AQUA_DECLINE_TIME_S = 259200; // Assumption, death after 3 days without water
 	private final double OLD_AGE_LIMIT_DAYS = 14600; // Everyone dies at 40 for now, hunter/gather was harsch!
 	private final int PERSON_SIZE = 3;
