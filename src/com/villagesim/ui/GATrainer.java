@@ -18,7 +18,7 @@ public class GATrainer {
 	{
 		
 		 GeneticAlgorithm GA = new GeneticAlgorithm(gaParam, true);
-		 double bestToalLifeTime = 3.1; // better than dehydration
+		 double bestTotalLifeTime = 3.1; // better than dehydration
          //GA
          for (int i = 0; i < trainingIter; i++)
          {
@@ -29,9 +29,9 @@ public class GATrainer {
 
              System.out.println("Iteration GA: " + i + " best lifetime: " + bestLifeTime);
              
-             if(bestLifeTime > bestToalLifeTime)
+             if(bestLifeTime > bestTotalLifeTime)
              {
-            	 bestToalLifeTime = bestLifeTime;
+            	 bestTotalLifeTime = bestLifeTime;
             	 FileHandler.writeWeightsToFile(weights);
              }
          }
