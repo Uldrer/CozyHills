@@ -11,6 +11,7 @@ import com.villagesim.interfaces.Updateable;
 public abstract class Resource implements Updateable, Depletable {
 	
 	private String name;
+	private int id;
 	private double initialAmount; // One standard unit
 	private double amount; // One standard unit
 	private double weightPerAmount; // kg / standard unit
@@ -31,6 +32,8 @@ public abstract class Resource implements Updateable, Depletable {
 	private boolean depleted = false;
 	private boolean printDebug = true;
 	
+	private static int id_counter = 0;
+	
 	private List<DepletedListener> listeners = new ArrayList<DepletedListener>();
 	
 	// Normal constructor
@@ -43,6 +46,7 @@ public abstract class Resource implements Updateable, Depletable {
 		this.weightPerAmount = weightPerAmount;
 		this.nutritionPerAmount = nutritionPerAmount;
 		this.aquaPerAmount = aquaPerAmount;
+		this.id = ++id_counter;
 	}
 	
 	// Non edible and non drinkable
@@ -55,6 +59,7 @@ public abstract class Resource implements Updateable, Depletable {
 		this.weightPerAmount = weightPerAmount;
 		this.nutritionPerAmount = 0;
 		this.aquaPerAmount = 0;
+		this.id = ++id_counter;
 	}
 	
 	public boolean consume(double amount)
@@ -84,7 +89,7 @@ public abstract class Resource implements Updateable, Depletable {
 			fireDepletedEvent(true);
 			if(printDebug)
 			{
-				System.out.println("Resource: " + name + " depleted after liftime: " + lifetime_days);
+				System.out.println("Resource " + id + ": " + name + " depleted after liftime: " + lifetime_days);
 			}
 		}
 		if(depleted && this.amount > initialAmount*0.1) 
@@ -93,7 +98,7 @@ public abstract class Resource implements Updateable, Depletable {
 			fireDepletedEvent(false);
 			if(printDebug)
 			{
-				System.out.println("Resource: " + name + " un-depleted after liftime: " + lifetime_days);
+				System.out.println("Resource: " + id + ": " + name + " un-depleted after liftime: " + lifetime_days);
 			}
 		}
 		
