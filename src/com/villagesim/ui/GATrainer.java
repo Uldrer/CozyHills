@@ -17,7 +17,7 @@ public class GATrainer {
 	public void run()
 	{
 		
-		 GeneticAlgorithm GA = new GeneticAlgorithm(gaParam);
+		 GeneticAlgorithm GA = new GeneticAlgorithm(gaParam, true);
 		 double bestToalLifeTime = 3.1; // better than dehydration
          //GA
          for (int i = 0; i < trainingIter; i++)

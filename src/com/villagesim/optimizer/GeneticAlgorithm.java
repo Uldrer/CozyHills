@@ -3,6 +3,7 @@ import java.util.Random;
 
 import com.villagesim.VillageSimulator;
 import com.villagesim.actions.BasicAction;
+import com.villagesim.helpers.FileHandler;
 import com.villagesim.sensors.SensorHelper;
 
 public class GeneticAlgorithm {
@@ -51,6 +52,11 @@ public class GeneticAlgorithm {
     
     /// The simulator to use for evaluation
     private VillageSimulator villageSimulator;
+    
+    public GeneticAlgorithm(double[] gAParameters)
+    {
+    	this(gAParameters, false);
+    }
 
     /// Class constructor. Initializes a random population of weights according to 
     /// the size of <see cref="network"/>. Zero-thresholds are used.
@@ -58,7 +64,7 @@ public class GeneticAlgorithm {
     /// <param name="theNetwork">The artificial neural network.</param>
     /// <param name="gAParameters">Genetic algorithm parameters. Has the form 
     /// [mutation rate,crossover probability, poplation size, tournament select param, elitism, mutate width]</param>
-    public GeneticAlgorithm(double[] gAParameters)
+    public GeneticAlgorithm(double[] gAParameters, boolean addBestWeights)
     {
         network = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, BasicAction.values().length);
 
@@ -71,6 +77,11 @@ public class GeneticAlgorithm {
 
         initiateRandomPopulation();
         score = new double[populationSize];
+        
+        if(addBestWeights)
+        {
+        	addBestWeights();
+        }
 
         bestScore = 0;
         
@@ -351,6 +362,17 @@ public class GeneticAlgorithm {
             population[i] = network.initiateRandomWeights();
         }
 
+    }
+    
+    private void addBestWeights()
+    {
+    	double[][][] bestWeights = FileHandler.retrieveWeights("weights.txt", network);
+    	
+    	// Add old best weights to initial population
+    	for(int i = 0; i < numberOfBestToInsert; i++)
+    	{
+    		population[i] = bestWeights;
+    	}
     }
     
     public double getBestScore()
