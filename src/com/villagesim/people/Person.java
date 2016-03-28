@@ -40,6 +40,8 @@ public class Person implements Drawable, Updateable {
 	// Debugging
 	private boolean logDeath = true;
 	private boolean logDebug = true;
+	private List<Action> lastActionList;
+	private Integer[] lastActionListIndex;
 	
 	// Neural network
 	private ArtificialNeuralNetwork neuralNetwork;
@@ -183,6 +185,7 @@ public class Person implements Drawable, Updateable {
 			if(logDeath)
 			{
 				System.out.println("Person id: " + id + " died of " + ((aqua <= 0) ? "dehydration" : "starvation") + " after " + lifetime_days + " days.");
+				printLastActionList();
 				logDeath = false;
 			}
 			return;
@@ -235,6 +238,18 @@ public class Person implements Drawable, Updateable {
 		
 		// Send action package in priority order
 		ActionMediator.addActionList(actionList);
+		lastActionList = actionList;
+		lastActionListIndex = actionIndexList;
+	}
+	
+	private void printLastActionList()
+	{
+		System.out.print("[");
+		for(Integer i : lastActionListIndex)
+		{
+			System.out.print(i + " ");
+		}
+		System.out.println("]");
 	}
 	
 	private Integer[] determineAction(double[][] network)
