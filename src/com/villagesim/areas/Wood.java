@@ -26,14 +26,17 @@ public class Wood extends Area {
 		// Add resources
 		Resource game = new Game(getSize()/40);
 		game.setIncreaseRate(0.5);
+		game.addDepletedListener(this);
 		resourceSet.add(game);
 		
 		Resource nuts = new Nuts(getSize());
 		nuts.setIncreaseRate(0.3);
+		nuts.addDepletedListener(this);
 		resourceSet.add(nuts);
 		
 		Resource berries = new Berries(getSize());
 		berries.setIncreaseRate(0.7);
+		berries.addDepletedListener(this);
 		resourceSet.add(berries);
 		
 		setResourceSet(resourceSet);
