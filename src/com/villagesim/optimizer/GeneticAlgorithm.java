@@ -53,6 +53,8 @@ public class GeneticAlgorithm {
     /// The simulator to use for evaluation
     private VillageSimulator villageSimulator;
     
+    private boolean bestEvaluated = false;
+    
     public GeneticAlgorithm(double[] gAParameters)
     {
     	this(gAParameters, false);
@@ -98,7 +100,7 @@ public class GeneticAlgorithm {
         {
             double[][][] weights = population[i];
 
-            if(i < numberOfBestToInsert)
+            if(i < numberOfBestToInsert && bestEvaluated)
             {
             	// Don't re-evaluate for best weights, as that takes the longest,
             	// we are interested in new combinations that come from these.
@@ -166,6 +168,9 @@ public class GeneticAlgorithm {
             }
         }
         population = tempPopulation;
+        
+        // Set after first run
+        bestEvaluated = true;
 
     }
 
