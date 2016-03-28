@@ -98,7 +98,17 @@ public class GeneticAlgorithm {
         {
             double[][][] weights = population[i];
 
-            score[i] = evaluateIndividual(weights);
+            if(i < numberOfBestToInsert)
+            {
+            	// Don't re-evaluate for best weights, as that takes the longest,
+            	// we are interested in new combinations that come from these.
+            	score[i] = bestScore;
+            }
+            else 
+            {
+            	score[i] = evaluateIndividual(weights);
+            }
+            
 
             if (score[i] > bestScore)
             { 

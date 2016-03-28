@@ -46,7 +46,13 @@ public class DrinkAction implements Action {
 		
 		double distanceToResource = person.getSensorReading(distSensor.getIndex());
 		
-		return SensorHelper.isNormalizedDistanceCloseEnoughForAction(distanceToResource);
+		boolean valid = SensorHelper.isNormalizedDistanceCloseEnoughForAction(distanceToResource);
+		
+		if(!valid && person.printDebug())
+		{
+			System.out.println("Person id: " + person.getId() + " can't drink. Distance to water: " + distanceToResource);
+		}
+		return valid;
 	}
 
 }
