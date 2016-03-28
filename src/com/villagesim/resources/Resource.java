@@ -89,7 +89,7 @@ public abstract class Resource implements Updateable, Depletable {
 			fireDepletedEvent(true);
 			if(printDebug)
 			{
-				System.out.println("Resource " + id + ": " + name + " depleted after liftime: " + lifetime_days);
+				System.out.println("Resource " + id + ": " + name + " depleted after lifetime: " + lifetime_days);
 			}
 		}
 		if(depleted && this.amount > initialAmount*0.1) 
@@ -98,7 +98,7 @@ public abstract class Resource implements Updateable, Depletable {
 			fireDepletedEvent(false);
 			if(printDebug)
 			{
-				System.out.println("Resource: " + id + ": " + name + " un-depleted after liftime: " + lifetime_days);
+				System.out.println("Resource: " + id + ": " + name + " un-depleted after lifetime: " + lifetime_days);
 			}
 		}
 		
