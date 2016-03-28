@@ -29,6 +29,7 @@ public abstract class Resource implements Updateable, Depletable {
 	private final double SECONDS_PER_YEAR = 31536000;
 	
 	private boolean depleted = false;
+	private boolean printDebug = false;
 	
 	private List<DepletedListener> listeners = new ArrayList<DepletedListener>();
 	
@@ -81,13 +82,19 @@ public abstract class Resource implements Updateable, Depletable {
 		{
 			depleted = true;
 			fireDepletedEvent(true);
-			System.out.println("Resource: " + name + " depleted after liftime: " + lifetime_days);
+			if(printDebug)
+			{
+				System.out.println("Resource: " + name + " depleted after liftime: " + lifetime_days);
+			}
 		}
 		if(depleted && this.amount > initialAmount*0.1) 
 		{
 			depleted = false;
 			fireDepletedEvent(false);
-			System.out.println("Resource: " + name + " un-depleted after liftime: " + lifetime_days);
+			if(printDebug)
+			{
+				System.out.println("Resource: " + name + " un-depleted after liftime: " + lifetime_days);
+			}
 		}
 		
 		// TODO add minor random element here
@@ -147,6 +154,8 @@ public abstract class Resource implements Updateable, Depletable {
 	public void reset()
 	{
 		amount = initialAmount;
+		depleted = false;
+		lifetime_days = 0;
 	}
 	
 	// Setters
