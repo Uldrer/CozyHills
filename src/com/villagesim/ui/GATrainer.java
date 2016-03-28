@@ -7,7 +7,7 @@ public class GATrainer {
 	
 	int trainingIter;
 	// mutation-rate , crossover probability, population size, tournament select param, number of best to insert, mutate width
-	double[] gaParam = {0.4 , 0.4, 100, 0.75 , 2, 0.5};
+	double[] gaParam = {0.4 , 0.7, 100, 0.75 , 5, 0.2};
 	
 	public GATrainer()
 	{

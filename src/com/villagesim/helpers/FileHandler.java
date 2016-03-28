@@ -39,6 +39,23 @@ public class FileHandler {
 		}
 	}
 	
+	public static void logScoreToFile(double[] score)
+	{
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter("score.txt", "UTF-8");
+			
+			for (int i = 0; i < score.length; i++)
+            {
+                writer.println(String.valueOf(score[i]));
+            }
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public static double[][][] retrieveWeights(String path, ArtificialNeuralNetwork network)
     {
 		double[][][] theWeights = null;

@@ -107,6 +107,8 @@ public class GeneticAlgorithm {
                 bestNetwork = network.getNetworks();
             }
         }
+        
+        FileHandler.logScoreToFile(score);
 
         double[][][][] tempPopulation = copyPopulation(population);
 
