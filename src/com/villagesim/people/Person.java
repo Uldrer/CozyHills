@@ -74,7 +74,7 @@ public class Person implements Drawable, Updateable {
 		thresholds = neuralNetwork.inititateNullThresholds(); // TODO evaluate thresholds as well
 		//thresholds = neuralNetwork.inititateRandomThresholds();
 		
-		logDebug = true;
+		logDebug = false;
 	}
 	
 	public Person(double[][][] weights)
@@ -145,11 +145,6 @@ public class Person implements Drawable, Updateable {
 		else
 		{
 			bbg.setColor(Color.RED);
-			if(logDeath)
-			{
-				System.out.println("Person id: " + id + " died of " + ((aqua <= 0) ? "dehydration" : "starvation") + " after " + lifetime_days + " days.");
-				logDeath = false;
-			}
 		}
 		bbg.fillOval((int)(coordinate.getX()+0.5), (int)(coordinate.getY()+0.5), PERSON_SIZE, PERSON_SIZE);
 	}
@@ -183,7 +178,15 @@ public class Person implements Drawable, Updateable {
 	@Override
 	public void update(int seconds) {
 		
-		if(!isAlive()) return;
+		if(!isAlive())
+		{
+			if(logDeath)
+			{
+				System.out.println("Person id: " + id + " died of " + ((aqua <= 0) ? "dehydration" : "starvation") + " after " + lifetime_days + " days.");
+				logDeath = false;
+			}
+			return;
+		}
 		
 		updateLifeStatus(seconds);
 		makeActionDecision();

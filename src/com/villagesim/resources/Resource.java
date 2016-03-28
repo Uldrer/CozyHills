@@ -29,7 +29,7 @@ public abstract class Resource implements Updateable, Depletable {
 	private final double SECONDS_PER_YEAR = 31536000;
 	
 	private boolean depleted = false;
-	private boolean printDebug = false;
+	private boolean printDebug = true;
 	
 	private List<DepletedListener> listeners = new ArrayList<DepletedListener>();
 	
