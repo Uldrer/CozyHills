@@ -35,7 +35,7 @@ public class WalkMoveAction implements Action {
 		
 		if(person.printDebug())
 		{
-			System.out.println("Person id: " + person.getId() + " is wakling.");
+			System.out.println("Person id: " + person.getId() + " is walking.");
 		}
 	}
 
