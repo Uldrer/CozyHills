@@ -45,7 +45,10 @@ public class GraphicsHandler extends JFrame {
 
             long time = System.currentTimeMillis();
             update();
-            draw();
+            if(!villageSimulator.isAlive())
+            {
+            	draw();
+            }
             if(true)
             	continue;
             
