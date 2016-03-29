@@ -7,6 +7,7 @@ import com.villagesim.actions.ActionMediator;
 import com.villagesim.areas.Area;
 import com.villagesim.areas.Lake;
 import com.villagesim.areas.Wood;
+import com.villagesim.helpers.FileHandler;
 import com.villagesim.interfaces.Drawable;
 import com.villagesim.interfaces.Updateable;
 import com.villagesim.people.Person;
@@ -48,6 +49,11 @@ public class VillageSimulator
 		
 		// Perform actions
 		ActionMediator.executeActions(TIME_STEP);
+		
+		if(!isAlive())
+		{
+			FileHandler.logResourcesToFile(objectSet);
+		}
 		
     }
 	

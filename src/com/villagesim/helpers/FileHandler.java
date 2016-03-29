@@ -6,8 +6,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Set;
 
+import com.villagesim.areas.Area;
 import com.villagesim.optimizer.ArtificialNeuralNetwork;
+import com.villagesim.resources.Resource;
 
 public class FileHandler {
 	
@@ -48,6 +51,30 @@ public class FileHandler {
 			for (int i = 0; i < score.length; i++)
             {
                 writer.println(String.valueOf(score[i]));
+            }
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void logResourcesToFile(Set<Object> objectSet)
+	{
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter("resources.txt", "UTF-8");
+			
+			for (Object obj : objectSet)
+            {
+				if(obj instanceof Area)
+				{
+					Area area = (Area) obj;
+					for(Resource resource : area.getResourceSet())
+					{
+						writer.println(resource.getDebugString());
+					}
+				}
             }
 			writer.close();
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {

@@ -126,6 +126,12 @@ public abstract class Resource implements Updateable, Depletable {
 			listener.depletedEvent(depleted, name);
 		}
 	}
+	
+	public String getDebugString()
+	{
+		String str = "Resource: " + id + ": " + name  + " amount left: " + amount;
+		return str;
+	}
 
 	// Getters
 	public String getName() {
