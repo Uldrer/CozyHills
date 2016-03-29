@@ -5,6 +5,7 @@ import javax.swing.*;
 import com.cozyhills.ui.InputHandler;
 import com.villagesim.Const;
 import com.villagesim.VillageSimulator;
+import com.villagesim.helpers.FileHandler;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -48,6 +49,7 @@ public class GraphicsHandler extends JFrame {
             if(!villageSimulator.isAlive())
             {
             	draw();
+            	villageSimulator.logResources();
             }
             if(true)
             	continue;
@@ -108,7 +110,7 @@ public class GraphicsHandler extends JFrame {
     	}
     	
     	if (input.isKeyDown(KeyEvent.VK_SPACE)) {
-    	
+    		villageSimulator.logResources();
     		paused = !paused;
     		try {
 				Thread.sleep(100);

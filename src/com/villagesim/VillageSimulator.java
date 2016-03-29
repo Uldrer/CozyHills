@@ -49,13 +49,12 @@ public class VillageSimulator
 		
 		// Perform actions
 		ActionMediator.executeActions(TIME_STEP);
-		
-		if(!isAlive())
-		{
-			FileHandler.logResourcesToFile(objectSet);
-		}
-		
     }
+	
+	public void logResources()
+	{
+		FileHandler.logResourcesToFile(objectSet);
+	}
 	
 	public void drawAllObjects(Graphics bbg)
 	{

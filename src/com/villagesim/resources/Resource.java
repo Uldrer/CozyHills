@@ -24,6 +24,8 @@ public abstract class Resource implements Updateable, Depletable {
 	
 	private double decreaseRate = 0; // Decrease per second
 	private double increaseRate = 0; // Increase per second
+	private double carryingCapacity;
+	private double intrinsicRate;
 	
 	private double lifetime_days = 0;
 	
@@ -43,6 +45,7 @@ public abstract class Resource implements Updateable, Depletable {
 		this.name = name;
 		this.amount = amount;
 		this.initialAmount = amount;
+		this.carryingCapacity = amount;
 		this.weightPerAmount = weightPerAmount;
 		this.nutritionPerAmount = nutritionPerAmount;
 		this.aquaPerAmount = aquaPerAmount;
@@ -52,14 +55,7 @@ public abstract class Resource implements Updateable, Depletable {
 	// Non edible and non drinkable
 	public Resource(String name, double amount, double weightPerAmount)
 	{
-		System.out.println("Constructing resource " + name);
-		this.name = name;
-		this.amount = amount;
-		this.initialAmount = amount;
-		this.weightPerAmount = weightPerAmount;
-		this.nutritionPerAmount = 0;
-		this.aquaPerAmount = 0;
-		this.id = ++id_counter;
+		this(name, amount, weightPerAmount, 0, 0);
 	}
 	
 	public boolean consume(double amount)
@@ -103,8 +99,7 @@ public abstract class Resource implements Updateable, Depletable {
 		}
 		
 		// TODO add minor random element here
-		this.amount -= seconds*amount*decreaseRate;
-		this.amount += seconds*amount*increaseRate;
+		this.amount += computeLogisticGrowth(seconds);
 		
 		lifetime_days += seconds/Const.SECONDS_PER_DAY;
 	}
@@ -177,11 +172,35 @@ public abstract class Resource implements Updateable, Depletable {
 	// Input decrease-rate is the amount decrease per year in percent/100
 	public void setDecreaseRate(double decreaseRate) {
 		this.decreaseRate = decreaseRate/SECONDS_PER_YEAR;
+		updateIntrinsicRate();
 	}
 	
 	// Input increase-rate is the amount decrease per year in percent/100
 	public void setIncreaseRate(double increaseRate) {
 		this.increaseRate = increaseRate/SECONDS_PER_YEAR;
+		updateIntrinsicRate();
+	}
+	
+	private void updateIntrinsicRate()
+	{
+		this.intrinsicRate = increaseRate - decreaseRate;
+	}
+	
+	private double computeExponentialGrowth(double seconds)
+	{
+		// dN/dT = r*N
+		double growthSpeed = intrinsicRate*amount;
+		double growth_value = seconds*growthSpeed;
+		return growth_value;
+	}
+	
+	private double computeLogisticGrowth(double seconds)
+	{
+		// dN/dT = r*N (1 - N/K)
+		double growthSpeed = intrinsicRate*amount*(1 - amount/carryingCapacity);
+		double growth_value = seconds*growthSpeed;
+		//System.out.println("id: " + id + ", growthrate: " + growthSpeed + ", amount: " + amount);
+		return growth_value;
 	}
 	
 	
