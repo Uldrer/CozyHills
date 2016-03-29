@@ -199,7 +199,6 @@ public abstract class Resource implements Updateable, Depletable {
 		// dN/dT = r*N (1 - N/K)
 		double growthSpeed = intrinsicRate*amount*(1 - amount/carryingCapacity);
 		double growth_value = seconds*growthSpeed;
-		//System.out.println("id: " + id + ", growthrate: " + growthSpeed + ", amount: " + amount);
 		return growth_value;
 	}
 	
