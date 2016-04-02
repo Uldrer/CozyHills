@@ -75,7 +75,7 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 		{
 			Resource item = i.next();
 			
-			if(item.getClass().isAssignableFrom(resourceClass))
+			if(resourceClass.isAssignableFrom(item.getClass()))
 			{
 				return true;
 			}
@@ -95,7 +95,7 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 		{
 			Resource item = i.next();
 			
-			if(item.getClass().isAssignableFrom(resourceClass))
+			if(resourceClass.isAssignableFrom(item.getClass()))
 			{
 				if(useAmount)
 				{
@@ -155,7 +155,7 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 		{
 			Resource item = i.next();
 			
-			if(item.getClass().isAssignableFrom(resourceClass))
+			if(resourceClass.isAssignableFrom(item.getClass()))
 			{
 				// Consume until done
 				double amount;
@@ -250,7 +250,7 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 		{
 			Resource item = i.next();
 			
-			if(item.getClass().isAssignableFrom(resourceClass))
+			if(resourceClass.isAssignableFrom(item.getClass()))
 			{
 				double amount;
 				if(useAmount)
