@@ -30,13 +30,21 @@ public class EatAction implements Action {
 		// Check if that is possible
 		Area area = person.getClosestArea(distSensor.getIndex());
 			
-		if(area == null) eatFromPersonalStorage(seconds);
+		if(area == null) 
+		{
+			eatFromPersonalStorage(seconds);
+			return;
+		}
 			
 		// Check if region is close enough
 		double distanceToResource = person.getSensorReading(distSensor.getIndex());
 		boolean success = SensorHelper.isNormalizedDistanceCloseEnoughForAction(distanceToResource);
 			
-		if(!success) eatFromPersonalStorage(seconds);
+		if(!success) 
+		{
+			eatFromPersonalStorage(seconds);
+			return;
+		}
 		
 		if(area instanceof Storage)
 		{
@@ -46,6 +54,7 @@ public class EatAction implements Action {
 		else
 		{
 			eatFromPersonalStorage(seconds);
+			return;
 		}
 		
 		if(person.printDebug())

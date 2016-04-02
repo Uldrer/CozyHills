@@ -29,13 +29,21 @@ public class DrinkAction implements Action {
 		// Check if that is possible
 		Area area = person.getClosestArea(distSensor.getIndex());
 			
-		if(area == null) drinkFromPersonalStorage(seconds);
+		if(area == null) 
+		{
+			drinkFromPersonalStorage(seconds);
+			return;
+		}
 			
 		// Check if region is close enough
 		double distanceToResource = person.getSensorReading(distSensor.getIndex());
 		boolean success = SensorHelper.isNormalizedDistanceCloseEnoughForAction(distanceToResource);
 			
-		if(!success) drinkFromPersonalStorage(seconds);
+		if(!success) 
+		{
+			drinkFromPersonalStorage(seconds);
+			return;
+		}
 		
 		if(area instanceof Storage)
 		{
@@ -45,6 +53,7 @@ public class DrinkAction implements Action {
 		else
 		{
 			drinkFromPersonalStorage(seconds);
+			return;
 		}
 		
 		if(person.printDebug())
