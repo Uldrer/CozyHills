@@ -263,14 +263,14 @@ public class GeneticAlgorithm {
 	                    {
 	                        randomNr = getRandomNumber(-1, 1);
 	
-	                        individP3[k] = individP3[k] + randomNr * mutateWidth;
+	                        individP3[l] = individP3[l] + randomNr * mutateWidth;
 	                    }
 	                    else
 	                    {
-	                    	individP3[k] = individual[i][j][k][l];
+	                    	individP3[l] = individual[i][j][k][l];
 	                    }
                     }
-                	individP2[j] = individP3;
+                	individP2[k] = individP3;
                 }
                 individP1[j] = individP2;
             }
