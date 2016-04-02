@@ -138,9 +138,11 @@ public class FileHandler {
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			theWeights = network.initiateRandomWeights();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			theWeights = network.initiateRandomWeights();
 		}
         return theWeights;
     }
