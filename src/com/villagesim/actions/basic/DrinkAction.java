@@ -88,16 +88,8 @@ public class DrinkAction implements Action {
 
 	@Override
 	public boolean isValid() {
-		
-		double distanceToResource = person.getSensorReading(distSensor.getIndex());
-		
-		boolean valid = SensorHelper.isNormalizedDistanceCloseEnoughForAction(distanceToResource);
-		
-		if(!valid && person.printDebug())
-		{
-			System.out.println("Person id: " + person.getId() + " can't drink. Distance to water: " + distanceToResource);
-		}
-		return valid;
+		// Always valid to drink from personal storage
+		return true;
 	}
 
 }
