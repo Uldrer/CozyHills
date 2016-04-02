@@ -1,16 +1,11 @@
 package com.villagesim.actions.basic;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import com.villagesim.areas.Area;
+import com.villagesim.areas.Storage;
 import com.villagesim.interfaces.Action;
 import com.villagesim.people.Person;
-import com.villagesim.resources.Berries;
-import com.villagesim.resources.Fish;
 import com.villagesim.resources.Food;
-import com.villagesim.resources.Game;
-import com.villagesim.resources.Nuts;
 import com.villagesim.resources.Resource;
 import com.villagesim.sensors.Sensor;
 import com.villagesim.sensors.SensorHelper;
@@ -18,92 +13,78 @@ import com.villagesim.sensors.SensorHelper;
 public class EatAction implements Action {
 
 	private Person person;
-	private List<Sensor> distSensors;
-	private List<List<Class<? extends Resource>>> resourceLists;
+	private Sensor distSensor;
+	private Class<? extends Resource> resource;
 	
 	public EatAction(Person person)
 	{
 		this.person = person;
-		
-		// TODO eat from storage
-		// For now eat whatever is available
-		this.distSensors = new ArrayList<Sensor>();
-		this.resourceLists = new ArrayList<List<Class<? extends Resource>>>();
-		
-		List<Class<? extends Resource>> resources = new ArrayList<Class<? extends Resource>>();
-		distSensors.add(Sensor.DIST_TO_FOOD_STORAGE);
-		resources.add(Food.class);
-		resourceLists.add(resources);
-		distSensors.add(Sensor.DIST_TO_FISH);
-		resources = new ArrayList<Class<? extends Resource>>();
-		resources.add(Fish.class);
-		resourceLists.add(resources);
-		distSensors.add(Sensor.DIST_TO_GAME);
-		resources = new ArrayList<Class<? extends Resource>>();
-		resources.add(Game.class);
-		resourceLists.add(resources);
-		distSensors.add(Sensor.DIST_TO_WILD_FOOD);
-		resources = new ArrayList<Class<? extends Resource>>();
-		resources.add(Nuts.class);
-		resources.add(Berries.class);
-		resourceLists.add(resources);
+		this.distSensor = Sensor.DIST_TO_FOOD_STORAGE;
+		this.resource = Food.class;
 	}
 	
 	@Override
 	public void execute(int seconds) {
 
-		// Check how much will be consumed
-		double potentialNutrition = person.getPotentialNutrition(seconds);
+		// If within range of storage use that food, else use personal storage
+		// Check if that is possible
+		Area area = person.getClosestArea(distSensor.getIndex());
+			
+		if(area == null) eatFromPersonalStorage(seconds);
+			
+		// Check if region is close enough
+		double distanceToResource = person.getSensorReading(distSensor.getIndex());
+		boolean success = SensorHelper.isNormalizedDistanceCloseEnoughForAction(distanceToResource);
+			
+		if(!success) eatFromPersonalStorage(seconds);
 		
-		// TODO eat from storage
-		for(int i = 0; i < distSensors.size(); i++)
+		if(area instanceof Storage)
 		{
-			Sensor distSensor = distSensors.get(i);
-			
-			// Check if that is possible
-			Area area = person.getClosestArea(distSensor.getIndex());
-			
-			if(area == null) continue;
-			
-			// Check if region is close enough
-			double distanceToResource = person.getSensorReading(distSensor.getIndex());
-			boolean success = SensorHelper.isNormalizedDistanceCloseEnoughForAction(distanceToResource);
-			
-			if(!success) continue;
-			
-			List<Class<? extends Resource>> resources = resourceLists.get(i);
-			
-			for(Class<? extends Resource> resource : resources)
-			{
-				double availableValue = area.getResourceNutritionValue(resource);
-				double value = potentialNutrition <= availableValue ? potentialNutrition : availableValue;
-	
-				// Eat what's available
-				person.eat(value);
-				potentialNutrition -= value;
-				
-				// Remove that value from resource
-				area.consumeResourceNutritionValue(resource, value);
-			}
+			Storage storage = (Storage) area;
+			eatFromStorage(storage, seconds);
 		}
+		else
+		{
+			eatFromPersonalStorage(seconds);
+		}
+
+		
 		
 		if(person.printDebug())
 		{
-			System.out.println("Person id: " + person.getId() + " is eating.");
+			System.out.println("Person id: " + person.getId() + " is eating from storage.");
 		}
 	}
 
-	@Override
-	public boolean isValid() {
-		
-		for(Sensor distSensor : distSensors)
+	private void eatFromPersonalStorage(int seconds)
+	{
+		eatFromStorage(person.getPersonalStorage(), seconds);
+		if(person.printDebug())
 		{
-			double distanceToResource = person.getSensorReading(distSensor.getIndex());
-		
-			boolean success = SensorHelper.isNormalizedDistanceCloseEnoughForAction(distanceToResource);
-			if(success) return true;
+			System.out.println("Person id: " + person.getId() + " is eating from personal storage.");
 		}
-		return false;
+	}
+	
+	private void eatFromStorage(Storage storage, int seconds)
+	{
+		// Check how much will be consumed
+		double potentialNutrition = person.getPotentialNutrition(seconds);
+		double availableValue = storage.getResourceNutritionValue(resource);
+		double value = potentialNutrition <= availableValue ? potentialNutrition : availableValue;
+
+		// Eat what's available
+		person.eat(value);
+		potentialNutrition -= value;
+		
+		// Remove that value from resource
+		storage.consumeResourceNutritionValue(resource, value);
+	}
+
+	@Override
+	public boolean isValid() 
+	{
+		// Always valid to eat from personal storage
+		return true;
 	}
 	
 
