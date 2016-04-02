@@ -21,6 +21,7 @@ import com.villagesim.helpers.ArrayIndexComparator;
 import com.villagesim.helpers.FileHandler;
 import com.villagesim.interfaces.Action;
 import com.villagesim.interfaces.Drawable;
+import com.villagesim.interfaces.Printable;
 import com.villagesim.interfaces.Updateable;
 import com.villagesim.optimizer.ArtificialNeuralNetwork;
 import com.villagesim.sensors.SensorHelper;
@@ -290,9 +291,13 @@ public class Person implements Drawable, Updateable {
 	private void printLastActionList()
 	{
 		System.out.print("[");
-		for(Integer i : lastActionListIndex)
+		for(Action action : lastActionList)
 		{
-			System.out.print(i + " ");
+			if(action instanceof Printable)
+			{
+				Printable printableAction = (Printable) action;
+				System.out.print(printableAction.getDebugPrint() + " ");
+			}
 		}
 		System.out.println("]");
 	}

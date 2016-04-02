@@ -3,13 +3,14 @@ package com.villagesim.actions.basic;
 import com.villagesim.areas.Area;
 import com.villagesim.areas.Storage;
 import com.villagesim.interfaces.Action;
+import com.villagesim.interfaces.Printable;
 import com.villagesim.people.Person;
 import com.villagesim.resources.Resource;
 import com.villagesim.resources.Water;
 import com.villagesim.sensors.Sensor;
 import com.villagesim.sensors.SensorHelper;
 
-public class DrinkAction implements Action {
+public class DrinkAction implements Action, Printable  {
 
 	private Person person;
 	private Sensor distSensor;
@@ -90,6 +91,12 @@ public class DrinkAction implements Action {
 	public boolean isValid() {
 		// Always valid to drink from personal storage
 		return true;
+	}
+	
+	@Override
+	public String getDebugPrint() {
+		String str = "D"; 
+		return str;
 	}
 
 }

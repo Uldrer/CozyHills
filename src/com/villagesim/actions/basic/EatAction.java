@@ -4,13 +4,14 @@ package com.villagesim.actions.basic;
 import com.villagesim.areas.Area;
 import com.villagesim.areas.Storage;
 import com.villagesim.interfaces.Action;
+import com.villagesim.interfaces.Printable;
 import com.villagesim.people.Person;
 import com.villagesim.resources.Food;
 import com.villagesim.resources.Resource;
 import com.villagesim.sensors.Sensor;
 import com.villagesim.sensors.SensorHelper;
 
-public class EatAction implements Action {
+public class EatAction implements Action, Printable  {
 
 	private Person person;
 	private Sensor distSensor;
@@ -92,6 +93,12 @@ public class EatAction implements Action {
 	{
 		// Always valid to eat from personal storage
 		return true;
+	}
+	
+	@Override
+	public String getDebugPrint() {
+		String str = "E"; 
+		return str;
 	}
 	
 

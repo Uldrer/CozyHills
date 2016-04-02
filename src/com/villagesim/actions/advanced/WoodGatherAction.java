@@ -1,9 +1,10 @@
 package com.villagesim.actions.advanced;
 
 import com.villagesim.interfaces.Action;
+import com.villagesim.interfaces.Printable;
 import com.villagesim.people.Person;
 
-public class WoodGatherAction implements Action {
+public class WoodGatherAction implements Action, Printable  {
 
 	private Person person;
 	
@@ -25,6 +26,12 @@ public class WoodGatherAction implements Action {
 	public boolean isValid() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	@Override
+	public String getDebugPrint() {
+		String str = "G_Wo"; 
+		return str;
 	}
 
 }

@@ -1,9 +1,10 @@
 package com.villagesim.actions.basic;
 
 import com.villagesim.interfaces.Action;
+import com.villagesim.interfaces.Printable;
 import com.villagesim.people.Person;
 
-public class NullAction implements Action {
+public class NullAction implements Action, Printable  {
 	
 	private Person person;
 	
@@ -25,6 +26,12 @@ public class NullAction implements Action {
 	public boolean isValid() {
 		// It is always valid to chill
 		return true;
+	}
+
+	@Override
+	public String getDebugPrint() {
+		String str = "N"; 
+		return str;
 	}
 
 }

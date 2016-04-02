@@ -4,12 +4,13 @@ import com.villagesim.Const;
 import com.villagesim.areas.Area;
 import com.villagesim.areas.Storage;
 import com.villagesim.interfaces.Action;
+import com.villagesim.interfaces.Printable;
 import com.villagesim.people.Person;
 import com.villagesim.resources.Fish;
 import com.villagesim.sensors.Sensor;
 import com.villagesim.sensors.SensorHelper;
 
-public class FishGatherAction implements Action {
+public class FishGatherAction implements Action, Printable  {
 
 	private Person person;
 	private Sensor distSensor;
@@ -54,6 +55,12 @@ public class FishGatherAction implements Action {
 		boolean valid = SensorHelper.isNormalizedDistanceCloseEnoughForAction(distanceToResource);
 
 		return valid;
+	}
+	
+	@Override
+	public String getDebugPrint() {
+		String str = "G_F"; 
+		return str;
 	}
 
 }

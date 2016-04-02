@@ -4,9 +4,10 @@ import java.util.Random;
 
 import com.villagesim.Const;
 import com.villagesim.interfaces.Action;
+import com.villagesim.interfaces.Printable;
 import com.villagesim.people.Person;
 
-public class WalkMoveAction implements Action {
+public class WalkMoveAction implements Action, Printable  {
 
 	private Person person;
 	private Random rand = new Random();
@@ -44,6 +45,12 @@ public class WalkMoveAction implements Action {
 	public boolean isValid() {
 		// For now always valid to walk
 		return true;
+	}
+	
+	@Override
+	public String getDebugPrint() {
+		String str = "W_W"; 
+		return str;
 	}
 
 }
