@@ -25,8 +25,9 @@ public class ActionFactory {
 		this.person = person;
 	}
 	
-	public Action getAction(int index)
+	public List<Action> getAction(int index)
 	{
+		List<Action> returnList = new ArrayList<Action>();
 		List<AdvancedAction> actionList = new ArrayList<AdvancedAction>();
 		for (AdvancedAction action : AdvancedAction.values()) 
 		{
@@ -42,7 +43,8 @@ public class ActionFactory {
 			{
 				if(index == action.getIndex())
 				{
-					return createBasicAction(action);
+					returnList.add(createBasicAction(action));
+					return returnList;
 				}
 			}
 			
@@ -50,12 +52,32 @@ public class ActionFactory {
 		else
 		{
 			// TODO do some fancy decision making here instead of using rank
-			actionList.sort(new AdvancedActionComparator());
-			
-			// Return first applicable action
-			return createAdvancedAction(actionList.get(0));
+			// Testing with special case for gather
+			if(index == 2)
+			{
+				List<Action> advancedActions = person.makeAdvancedActionDecision();
+				return advancedActions;
+			}
+			else 
+			{
+				actionList.sort(new AdvancedActionComparator());
+				returnList.add(createAdvancedAction(actionList.get(0)));
+				return returnList;
+			}
 		}
-		
+		returnList.add(new NullAction(person));
+		return returnList;
+	}
+	
+	public Action getAdvancedAction(int index, BasicAction basicAction)
+	{
+		for (AdvancedAction action : AdvancedAction.values()) 
+		{
+			if(index == action.getRank() && basicAction.getActionType().equals(action.getActionType()))
+			{
+				return createAdvancedAction(action);
+			}
+		}
 		return new NullAction(person);
 	}
 	

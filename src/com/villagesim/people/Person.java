@@ -12,6 +12,7 @@ import java.util.Random;
 import com.villagesim.Const;
 import com.villagesim.actions.ActionFactory;
 import com.villagesim.actions.ActionMediator;
+import com.villagesim.actions.AdvancedAction;
 import com.villagesim.actions.BasicAction;
 import com.villagesim.areas.Area;
 import com.villagesim.helpers.ArrayIndexComparator;
@@ -45,7 +46,8 @@ public class Person implements Drawable, Updateable {
 	private DeathReason reasonOfDeath;
 	
 	// Neural network
-	private ArtificialNeuralNetwork neuralNetwork;
+	private ArtificialNeuralNetwork basicNeuralNetwork;
+	private ArtificialNeuralNetwork gatherNeuralNetwork;
 	private double [][][] weights;
 	private double [][] thresholds;
 	
@@ -58,7 +60,7 @@ public class Person implements Drawable, Updateable {
 	private final double AQUA_DECLINE_TIME_S = 259200; // Assumption, death after 3 days without water
 	private final double OLD_AGE_LIMIT_DAYS = 14600; // Everyone dies at 40 for now, hunter/gather was harsch!
 	private final int PERSON_SIZE = 3;
-	private final int ACTION_SIZE = BasicAction.values().length;
+	private final int BASIC_ACTION_SIZE = BasicAction.values().length;
 	private final int NUTRITION_INCREASE_TIME_S = 3600; // Assumption, eating for one hour restores 3 weeks of starvation, kinda crude
 	private final int AQUA_INCREASE_TIME_S = 900; // Assumption, drinking for 15 min restores 3 days of dehydration, kinda crude
 	
@@ -69,27 +71,19 @@ public class Person implements Drawable, Updateable {
 	{
 		init();
 		
-		neuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, ACTION_SIZE );
-		
 		//weigths = neuralNetwork.initiateRandomWeights();
-		weights = FileHandler.retrieveWeights("weights.txt", neuralNetwork);
-		neuralNetwork.setWeights(weights);
-		thresholds = neuralNetwork.inititateNullThresholds(); // TODO evaluate thresholds as well
-		//thresholds = neuralNetwork.inititateRandomThresholds();
-		
-		logDebug = false;
+		weights = FileHandler.retrieveWeights("weights.txt", basicNeuralNetwork);
+		basicNeuralNetwork.setWeights(weights);
+
+		logDebug = true;
 	}
 	
 	public Person(double[][][] weights)
 	{
 		init();
 		
-		neuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, ACTION_SIZE );
-		
 		this.weights = weights;
-		neuralNetwork.setWeights(weights);
-		thresholds = neuralNetwork.inititateNullThresholds(); // TODO evaluate thresholds as well
-		//thresholds = neuralNetwork.inititateRandomThresholds();
+		basicNeuralNetwork.setWeights(weights);
 		
 		logDebug = false;
 	}
@@ -112,6 +106,26 @@ public class Person implements Drawable, Updateable {
 		{
 			sensorInputs.add(0.0);
 		}
+		
+		basicNeuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, BASIC_ACTION_SIZE );
+		thresholds = basicNeuralNetwork.inititateNullThresholds(); // TODO evaluate thresholds as well
+		//thresholds = neuralNetwork.inititateRandomThresholds();
+		
+		// Determine advanced actions size
+		int gatherSize = 0;
+		for(AdvancedAction action : AdvancedAction.values())
+		{
+			// Use only gather for now
+			if(action.getActionType().equals("Gather"))
+			{
+				gatherSize++;
+			}
+		}
+		
+		gatherNeuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, gatherSize );
+		gatherNeuralNetwork.inititateNullThresholds(); // don't care to save thresholds for now
+		gatherNeuralNetwork.initiateRandomWeights(); // for testing
+		
 	}
 	
 	public boolean isAlive()
@@ -240,19 +254,38 @@ public class Person implements Drawable, Updateable {
 			inputs[i] = sensorInputs.get(i);
 		}
 		
-		double[][] outputNetwork = neuralNetwork.computePatternNetwork(inputs, weights, thresholds);
+		double[][] outputNetwork = basicNeuralNetwork.computePatternNetwork(inputs, weights, thresholds);
 		Integer[] actionIndexList = determineAction(outputNetwork);
 		
 		List<Action> actionList = new ArrayList<Action>();
 		for(int actionIndex : actionIndexList)
 		{
-			actionList.add(actionFactory.getAction(actionIndex));
+			actionList.addAll(actionFactory.getAction(actionIndex));
 		}
 		
 		// Send action package in priority order
 		ActionMediator.addActionList(actionList);
 		lastActionList = actionList;
 		lastActionListIndex = actionIndexList;
+	}
+	
+	public List<Action> makeAdvancedActionDecision() 
+	{
+		double[] inputs = new double[sensorInputs.size()];
+		for (int i = 0; i < inputs.length; i++) {
+			inputs[i] = sensorInputs.get(i);
+		}
+		
+		// TODO use generic advanced action instead of just gather
+		double[][] outputNetwork = gatherNeuralNetwork.computePatternNetwork(inputs);
+		Integer[] actionIndexList = determineAction(outputNetwork);
+		
+		List<Action> actionList = new ArrayList<Action>();
+		for(int actionIndex : actionIndexList)
+		{
+			actionList.add(actionFactory.getAdvancedAction(actionIndex, BasicAction.GATHER));
+		}
+		return actionList;
 	}
 	
 	private void printLastActionList()

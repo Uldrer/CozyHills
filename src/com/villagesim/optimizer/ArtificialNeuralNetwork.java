@@ -149,6 +149,11 @@ public class ArtificialNeuralNetwork {
         return network;
     }
     
+    public double[][] computePatternNetwork(double[] patternData)
+    {
+    	return computePatternNetwork(patternData, weights, thresholds);
+    }
+    
     /// Initiate random weights in [-1,1] for the network.
     /// <returns>Returns a set of random weights. </returns>
     public double[][][] initiateRandomWeights()
