@@ -39,9 +39,12 @@ public abstract class Resource implements Updateable, Depletable {
 	private List<DepletedListener> listeners = new ArrayList<DepletedListener>();
 	
 	// Normal constructor
-	public Resource(String name, double amount, double weightPerAmount, double nutritionPerAmount, double aquaPerAmount)
+	public Resource(String name, double amount, double weightPerAmount, double nutritionPerAmount, double aquaPerAmount, boolean printDebug)
 	{
-		System.out.println("Constructing resource " + name);
+		if(printDebug)
+		{
+			System.out.println("Constructing resource " + name);
+		}
 		this.name = name;
 		this.amount = amount;
 		this.initialAmount = amount;
@@ -49,13 +52,19 @@ public abstract class Resource implements Updateable, Depletable {
 		this.weightPerAmount = weightPerAmount;
 		this.nutritionPerAmount = nutritionPerAmount;
 		this.aquaPerAmount = aquaPerAmount;
+		this.printDebug = printDebug;
 		this.id = ++id_counter;
+	}
+	
+	public Resource(String name, double amount, double weightPerAmount, double nutritionPerAmount, double aquaPerAmount)
+	{
+		this(name, amount, weightPerAmount, nutritionPerAmount, aquaPerAmount, true);
 	}
 	
 	// Non edible and non drinkable
 	public Resource(String name, double amount, double weightPerAmount)
 	{
-		this(name, amount, weightPerAmount, 0, 0);
+		this(name, amount, weightPerAmount, 0, 0, true);
 	}
 	
 	public boolean consume(double amount)

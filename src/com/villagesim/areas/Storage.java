@@ -25,23 +25,23 @@ public class Storage extends Area {
 		// TODO add possibility for food/water spoilage
 		Set<Resource> resourceSet = new HashSet<Resource>();
 		
-		Resource water = new Water(0);
+		Resource water = new Water(0, false);
 		water.addDepletedListener(this);
 		resourceSet.add(water);
 		
-		Resource fish = new Fish(0);
+		Resource fish = new Fish(0, false);
 		fish.addDepletedListener(this);
 		resourceSet.add(fish);
 		
-		Resource game = new Game(0);
+		Resource game = new Game(0, false);
 		game.addDepletedListener(this);
 		resourceSet.add(game);
 		
-		Resource nuts = new Nuts(0);
+		Resource nuts = new Nuts(0, false);
 		nuts.addDepletedListener(this);
 		resourceSet.add(nuts);
 		
-		Resource berries = new Berries(0);
+		Resource berries = new Berries(0, false);
 		berries.addDepletedListener(this);
 		resourceSet.add(berries);
 		
