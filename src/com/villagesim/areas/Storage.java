@@ -4,7 +4,12 @@ import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.villagesim.resources.Berries;
+import com.villagesim.resources.Fish;
+import com.villagesim.resources.Game;
+import com.villagesim.resources.Nuts;
 import com.villagesim.resources.Resource;
+import com.villagesim.resources.Water;
 
 public class Storage extends Area {
 	
@@ -17,14 +22,35 @@ public class Storage extends Area {
 	@Override
 	protected void populateResourceSet() {
 		// Populated empty
+		// TODO add possibility for food/water spoilage
 		Set<Resource> resourceSet = new HashSet<Resource>();
+		
+		Resource water = new Water(0);
+		water.addDepletedListener(this);
+		resourceSet.add(water);
+		
+		Resource fish = new Fish(0);
+		fish.addDepletedListener(this);
+		resourceSet.add(fish);
+		
+		Resource game = new Game(0);
+		game.addDepletedListener(this);
+		resourceSet.add(game);
+		
+		Resource nuts = new Nuts(0);
+		nuts.addDepletedListener(this);
+		resourceSet.add(nuts);
+		
+		Resource berries = new Berries(0);
+		berries.addDepletedListener(this);
+		resourceSet.add(berries);
+		
 		this.setResourceSet(resourceSet);
 	}
 
 	@Override
 	public void depletedEvent(boolean depleted, String name) {
-		// TODO this seems wrong?
-		
+		// TODO Change color for drawn storages depending on what is and what isn't present
 	}
 
 }

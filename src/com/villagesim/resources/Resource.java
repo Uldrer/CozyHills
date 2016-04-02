@@ -67,7 +67,7 @@ public abstract class Resource implements Updateable, Depletable {
 		return true;
 	}
 	
-	public void add(double amount)
+	public void fill(double amount)
 	{
 		// Only allow additions
 		if(amount < 0) return;

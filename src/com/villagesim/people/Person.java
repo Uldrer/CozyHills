@@ -15,6 +15,7 @@ import com.villagesim.actions.ActionMediator;
 import com.villagesim.actions.AdvancedAction;
 import com.villagesim.actions.BasicAction;
 import com.villagesim.areas.Area;
+import com.villagesim.areas.Storage;
 import com.villagesim.helpers.ArrayIndexComparator;
 import com.villagesim.helpers.FileHandler;
 import com.villagesim.interfaces.Action;
@@ -37,6 +38,7 @@ public class Person implements Drawable, Updateable {
 	private List<Double> sensorInputs;
 	private List<Area> closestAreas;
 	private ActionFactory actionFactory;
+	private Storage personalStorage;
 	
 	// Debugging
 	private boolean logDeath = true;
@@ -99,6 +101,7 @@ public class Person implements Drawable, Updateable {
 		aqua_increase_rate = MAX_AQUA_POINTS/AQUA_INCREASE_TIME_S;
 		coordinate = generateCoordinate();
 		actionFactory = new ActionFactory(this);
+		personalStorage = new Storage();
 		
 		// Init default list
 		sensorInputs = new ArrayList<Double>();
@@ -353,6 +356,11 @@ public class Person implements Drawable, Updateable {
 		if(y > Const.WINDOW_HEIGHT) y = Const.WINDOW_HEIGHT;
 		
 		coordinate.setLocation(x, y);
+	}
+	
+	public Storage getPersonalStorage()
+	{
+		return personalStorage;
 	}
 	
 	public boolean printDebug()

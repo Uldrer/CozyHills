@@ -85,6 +85,11 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 	
 	public double getResourceAquaValue(Class<? extends Resource> resourceClass)
 	{
+		return getResourceValue(resourceClass, false, false);
+	}
+	
+	private double getResourceValue(Class<? extends Resource> resourceClass, boolean nutrition, boolean useAmount)
+	{
 		double value = 0;
 		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
 		{
@@ -92,64 +97,58 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 			
 			if(item.getClass().isAssignableFrom(resourceClass))
 			{
-				value += item.getAmount()*item.getAquaPerAmount();
+				if(useAmount)
+				{
+					value += item.getAmount();
+				}
+				else
+				{
+					if(nutrition)
+					{
+						value += item.getAmount()*item.getNutritionPerAmount();
+					}
+					else
+					{
+						value += item.getAmount()*item.getAquaPerAmount();
+					}
+				}
+				
 			}
 		}
 		return value;
+	}
+	
+	public void fillResourceAquaValue(Class<? extends Resource> resourceClass, double value)
+	{
+		fillResourceValue(resourceClass, value, false, false);
 	}
 	
 	public void consumeResourceAquaValue(Class<? extends Resource> resourceClass, double value)
 	{
-		double valueLeftToConsume = value;
-		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
-		{
-			Resource item = i.next();
-			
-			if(item.getClass().isAssignableFrom(resourceClass))
-			{
-				// Consume until done
-				double amount = valueLeftToConsume/item.getAquaPerAmount();
-				
-				// If successful return
-				if(item.consume(amount)) return;
-				
-				// If not successful we need to remove partly
-				if(amount > item.getAmount())
-				{
-					boolean res = item.consume(item.getAmount());
-					if(res)
-					{
-						valueLeftToConsume -= item.getAmount()*item.getAquaPerAmount();
-					}
-					else 
-					{
-						throw new AssertionError("AQUA: should be possible to remove what there is.");
-					}
-				}
-				else
-				{
-					throw new AssertionError("AQUA: should have been greater than available. Something is wrong.");
-				}
-			}
-		}
+		consumeResourceValue(resourceClass, value, false, false);
 	}
 	
 	public double getResourceNutritionValue(Class<? extends Resource> resourceClass)
 	{
-		double value = 0;
-		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
-		{
-			Resource item = i.next();
-			
-			if(item.getClass().isAssignableFrom(resourceClass))
-			{
-				value += item.getAmount()*item.getNutritionPerAmount();
-			}
-		}
-		return value;
+		return getResourceValue(resourceClass, true, false);
+	}
+	
+	public double getResourceAmountValue(Class<? extends Resource> resourceClass)
+	{
+		return getResourceValue(resourceClass, true, true); // the same as false, true
 	}
 	
 	public void consumeResourceNutritionValue(Class<? extends Resource> resourceClass, double value)
+	{
+		consumeResourceValue(resourceClass, value, true, false);
+	}
+	
+	public void consumeResourceAmountValue(Class<? extends Resource> resourceClass, double value)
+	{
+		consumeResourceValue(resourceClass, value, true, true); // the same as false, true
+	}
+	
+	private void consumeResourceValue(Class<? extends Resource> resourceClass, double value, boolean nutrition, boolean useAmount)
 	{
 		double valueLeftToConsume = value;
 		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
@@ -159,7 +158,22 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 			if(item.getClass().isAssignableFrom(resourceClass))
 			{
 				// Consume until done
-				double amount = valueLeftToConsume/item.getNutritionPerAmount();
+				double amount;
+				if(useAmount)
+				{
+					amount = valueLeftToConsume;
+				}
+				else
+				{
+					if(nutrition)
+					{
+						amount = valueLeftToConsume/item.getNutritionPerAmount();
+					}
+					else
+					{
+						amount = valueLeftToConsume/item.getAquaPerAmount();
+					}
+				}
 				
 				// If successful return
 				if(item.consume(amount)) return;
@@ -170,17 +184,93 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 					boolean res = item.consume(item.getAmount());
 					if(res)
 					{
-						valueLeftToConsume -= item.getAmount()*item.getNutritionPerAmount();
+						if(useAmount)
+						{
+							valueLeftToConsume -= item.getAmount();
+						}
+						else
+						{
+							if(nutrition)
+							{
+								valueLeftToConsume -= item.getAmount()*item.getNutritionPerAmount();
+							}
+							else
+							{
+								valueLeftToConsume -= item.getAmount()*item.getAquaPerAmount();
+							}
+						}
 					}
 					else 
 					{
-						throw new AssertionError("NUTRITION: should be possible to remove what there is.");
+						if(useAmount)
+						{
+							throw new AssertionError("AMOUNT: Should be possible to remove what there is.");
+						}
+						else
+						{
+							if(nutrition)
+								throw new AssertionError("NUTRITION: Should be possible to remove what there is.");
+							else
+								throw new AssertionError("AQUA: Should be possible to remove what there is.");
+						}
 					}
 				}
 				else
 				{
-					throw new AssertionError("NUTRITION: should have been greater than available. Something is wrong.");
+					if(useAmount)
+					{
+						throw new AssertionError("AMOUNT: Should have been greater than available. Something is wrong.");
+					}
+					else
+					{
+						if(nutrition)
+							throw new AssertionError("NUTRITION: Should have been greater than available. Something is wrong.");
+						else
+							throw new AssertionError("AQUA: Should have been greater than available. Something is wrong.");
+					}
 				}
+			}
+		}
+	}
+	
+	public void fillResourceNutritionValue(Class<? extends Resource> resourceClass, double value)
+	{
+		fillResourceValue(resourceClass, value, true, false);
+	}
+	
+	public void fillResourceAmountValue(Class<? extends Resource> resourceClass, double value)
+	{
+		fillResourceValue(resourceClass, value, true, true); // the same as false, true
+	}
+	
+	private void fillResourceValue(Class<? extends Resource> resourceClass, double value, boolean nutrition, boolean useAmount)
+	{
+		double valueToFill = value;
+		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
+		{
+			Resource item = i.next();
+			
+			if(item.getClass().isAssignableFrom(resourceClass))
+			{
+				double amount;
+				if(useAmount)
+				{
+					amount= valueToFill;
+				}
+				else
+				{
+					if(nutrition)
+					{
+						amount= valueToFill/item.getNutritionPerAmount();
+					}
+					else
+					{
+						amount= valueToFill/item.getAquaPerAmount();
+					}
+				}
+				
+				item.fill(amount);
+				return;
 			}
 		}
 	}
