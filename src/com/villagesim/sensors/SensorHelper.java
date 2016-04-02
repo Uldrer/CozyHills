@@ -7,7 +7,7 @@ import com.villagesim.areas.Area;
 
 public final class SensorHelper {
 	
-	public static int SENSOR_INPUTS = 12;
+	public static int SENSOR_INPUTS = 15;
 	private static boolean max_computed = false;
 	private static double maxValue = 0;
 	private static final int MAX_RELEVANT_NUTRITION = 1000; // TODO correlate with one year food needed for a person

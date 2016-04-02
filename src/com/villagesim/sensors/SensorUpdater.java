@@ -77,9 +77,9 @@ public class SensorUpdater {
 		closestAreas.add(drinkingArea.getArea());
 		
 		// #2 Distance to nearest food storage
-		SensorArea foodStorageArea = getNearestFoodStorage(person);
-		sensorInputs.add(foodStorageArea.getDistance());
-		closestAreas.add(foodStorageArea.getArea());
+		SensorArea storageArea = getNearestStorage(person);
+		sensorInputs.add(storageArea.getDistance());
+		closestAreas.add(storageArea.getArea());
 		
 		// #3 Distance to nearest wild food gathering ground
 		SensorArea wildFoodArea = getNearestWildFood(person);
@@ -108,8 +108,8 @@ public class SensorUpdater {
 		sensorInputs.add(getAmountOfAquaInArea(drinkingArea.getArea(), Water.class));
 		closestAreas.add(null);
 		
-		// #9 Amount of nutrition in nearest food storage
-		sensorInputs.add(getAmountOfNutritionInArea(foodStorageArea.getArea(), Food.class));
+		// #9 Amount of nutrition in nearest storage
+		sensorInputs.add(getAmountOfNutritionInArea(storageArea.getArea(), Food.class));
 		closestAreas.add(null);
 		
 		// #10 Amount of nutrition in nearest wild food gathering ground
@@ -125,6 +125,18 @@ public class SensorUpdater {
 		
 		// #12 Amount of nutrition in nearest fishing ground
 		sensorInputs.add(getAmountOfNutritionInArea(fishingArea.getArea(), Fish.class));
+		closestAreas.add(null);
+		
+		// #13 Amount of nutrition in personal storage
+		sensorInputs.add(getAmountOfNutritionInArea(person.getPersonalStorage(), Food.class));
+		closestAreas.add(null);
+		
+		// #14 Amount of aqua in personal storage
+		sensorInputs.add(getAmountOfAquaInArea(person.getPersonalStorage(), Water.class));
+		closestAreas.add(null);
+		
+		// #15 Amount of aqua in nearest storage
+		sensorInputs.add(getAmountOfAquaInArea(storageArea.getArea(), Water.class));
 		closestAreas.add(null);
 		
 		// Set new sensor inputs
@@ -158,7 +170,7 @@ public class SensorUpdater {
 		return new SensorArea(closestArea, closestDist);
 	}
 	
-	private SensorArea getNearestFoodStorage(Person person)
+	private SensorArea getNearestStorage(Person person)
 	{
 		// TODO maybe redo to building
 		Point2D personCoordinate = person.getCoordinate();
@@ -171,7 +183,7 @@ public class SensorUpdater {
 		    {
 		    	Storage storage = ((Storage) item);
 		    	
-		    	if(!storage.containsResource(Food.class)) continue;
+		    	if(!storage.containsResource(Food.class) && !storage.containsResource(Water.class)) continue;
 		    	
 		    	double dist = SensorHelper.computeNormalizedDistanceToArea(personCoordinate, storage);
 		    	
