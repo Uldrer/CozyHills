@@ -46,7 +46,6 @@ public class Person implements Drawable, Updateable {
 	private boolean logDeath = true;
 	private boolean logDebug = true;
 	private List<Action> lastActionList;
-	private Integer[] lastActionListIndex;
 	private DeathReason reasonOfDeath;
 	
 	// Neural network
@@ -78,8 +77,7 @@ public class Person implements Drawable, Updateable {
 		
 		basicWeights = FileHandler.retrieveWeights("weights.txt", basicNeuralNetwork);
 		basicNeuralNetwork.setWeights(basicWeights);
-		
-		// TODO retrieve these as well
+
 		gatherWeights = FileHandler.retrieveWeights("gatherWeights.txt", gatherNeuralNetwork);
 		gatherNeuralNetwork.setWeights(gatherWeights);
 
@@ -266,7 +264,6 @@ public class Person implements Drawable, Updateable {
 		// Send action package in priority order
 		ActionMediator.addActionList(actionList);
 		lastActionList = actionList;
-		lastActionListIndex = actionIndexList;
 	}
 	
 	public List<Action> makeAdvancedActionDecision() 
