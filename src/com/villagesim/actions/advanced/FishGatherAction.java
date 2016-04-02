@@ -23,8 +23,8 @@ public class FishGatherAction implements Action {
 	}
 	
 	@Override
-	public void execute(int seconds) {
-
+	public void execute(int seconds) 
+	{
 		// TODO use gathering rate to randomize the catch, so that parts of fish are not caught
 		// Consume resource according to gathering rate
 		double potentialAmount = gather_rate*seconds;
