@@ -18,7 +18,8 @@ public class NullAction implements Action, Printable  {
 		
 		if(person.printDebug())
 		{
-			System.out.println("Person id: " + person.getId() + " doing no action.");
+			//System.out.println("Person id: " + person.getId() + " doing no action.");
+			System.out.print(".");
 		}
 	}
 
