@@ -149,6 +149,11 @@ public class ArtificialNeuralNetwork {
         return network;
     }
     
+    public double[][] computePatternNetwork(double[] patternData, double[][][] weights)
+    {
+    	return computePatternNetwork(patternData, weights, thresholds);
+    }
+    
     public double[][] computePatternNetwork(double[] patternData)
     {
     	return computePatternNetwork(patternData, weights, thresholds);

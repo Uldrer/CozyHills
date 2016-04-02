@@ -11,6 +11,7 @@ import java.util.Random;
 
 import com.villagesim.Const;
 import com.villagesim.actions.ActionFactory;
+import com.villagesim.actions.ActionHelper;
 import com.villagesim.actions.ActionMediator;
 import com.villagesim.actions.AdvancedAction;
 import com.villagesim.actions.BasicAction;
@@ -50,7 +51,8 @@ public class Person implements Drawable, Updateable {
 	// Neural network
 	private ArtificialNeuralNetwork basicNeuralNetwork;
 	private ArtificialNeuralNetwork gatherNeuralNetwork;
-	private double [][][] weights;
+	private double [][][] basicWeights;
+	private double [][][] gatherWeights;
 	private double [][] thresholds;
 	
 	// Constants
@@ -73,19 +75,25 @@ public class Person implements Drawable, Updateable {
 	{
 		init();
 		
-		//weigths = neuralNetwork.initiateRandomWeights();
-		weights = FileHandler.retrieveWeights("weights.txt", basicNeuralNetwork);
-		basicNeuralNetwork.setWeights(weights);
+		basicWeights = FileHandler.retrieveWeights("weights.txt", basicNeuralNetwork);
+		basicNeuralNetwork.setWeights(basicWeights);
+		
+		// TODO retrieve these as well
+		gatherWeights = FileHandler.retrieveWeights("gatherWeights.txt", gatherNeuralNetwork);
+		gatherNeuralNetwork.setWeights(gatherWeights);
 
 		logDebug = true;
 	}
 	
-	public Person(double[][][] weights)
+	public Person(double[][][] basicWeights, double[][][] gatherWeights)
 	{
 		init();
 		
-		this.weights = weights;
-		basicNeuralNetwork.setWeights(weights);
+		this.basicWeights = basicWeights;
+		basicNeuralNetwork.setWeights(basicWeights);
+		
+		this.gatherWeights = gatherWeights;
+		gatherNeuralNetwork.setWeights(gatherWeights);
 		
 		logDebug = false;
 	}
@@ -114,20 +122,8 @@ public class Person implements Drawable, Updateable {
 		thresholds = basicNeuralNetwork.inititateNullThresholds(); // TODO evaluate thresholds as well
 		//thresholds = neuralNetwork.inititateRandomThresholds();
 		
-		// Determine advanced actions size
-		int gatherSize = 0;
-		for(AdvancedAction action : AdvancedAction.values())
-		{
-			// Use only gather for now
-			if(action.getActionType().equals("Gather"))
-			{
-				gatherSize++;
-			}
-		}
-		
-		gatherNeuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, gatherSize );
+		gatherNeuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, ActionHelper.getAdvancedActionSize("Gather") );
 		gatherNeuralNetwork.inititateNullThresholds(); // don't care to save thresholds for now
-		gatherNeuralNetwork.initiateRandomWeights(); // for testing
 		
 	}
 	
@@ -152,9 +148,9 @@ public class Person implements Drawable, Updateable {
 		return true;
 	}
 	
-	public boolean isWeightsEqual(double[][][] weightsToCompare)
+	public boolean isWeightsEqual(double[][][] basicWeightsToCompare, double[][][] gatherWeightsToCompare)
 	{
-		return Arrays.equals(weights, weightsToCompare);
+		return Arrays.equals(basicWeights, basicWeightsToCompare) && Arrays.equals(gatherWeights, gatherWeightsToCompare);
 	}
 	
 	public double getLifetime()
@@ -257,7 +253,7 @@ public class Person implements Drawable, Updateable {
 			inputs[i] = sensorInputs.get(i);
 		}
 		
-		double[][] outputNetwork = basicNeuralNetwork.computePatternNetwork(inputs, weights, thresholds);
+		double[][] outputNetwork = basicNeuralNetwork.computePatternNetwork(inputs, basicWeights, thresholds);
 		Integer[] actionIndexList = determineAction(outputNetwork);
 		
 		List<Action> actionList = new ArrayList<Action>();

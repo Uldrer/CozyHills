@@ -14,11 +14,11 @@ import com.villagesim.resources.Resource;
 
 public class FileHandler {
 	
-	public static void writeWeightsToFile(double[][][] weights)
+	public static void writeWeightsToFile(double[][][] weights, String path)
 	{
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter("weights.txt", "UTF-8");
+			writer = new PrintWriter(path, "UTF-8");
 			
 			for (int i = 0; i < weights.length; i++)
             {
@@ -81,6 +81,16 @@ public class FileHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public static double[][][][] retrieveWeights(String basicPath, ArtificialNeuralNetwork basicNetwork, String gatherPath, ArtificialNeuralNetwork gatherNetwork)
+	{
+		double[][][][] theWeights = new double[2][][][];
+		
+		theWeights[0] = retrieveWeights(basicPath, basicNetwork);
+		theWeights[1] = retrieveWeights(gatherPath, gatherNetwork);
+		
+		return theWeights;
 	}
 	
 	public static double[][][] retrieveWeights(String path, ArtificialNeuralNetwork network)

@@ -2,6 +2,7 @@ package com.villagesim.optimizer;
 import java.util.Random;
 
 import com.villagesim.VillageSimulator;
+import com.villagesim.actions.ActionHelper;
 import com.villagesim.actions.BasicAction;
 import com.villagesim.helpers.FileHandler;
 import com.villagesim.sensors.SensorHelper;
@@ -12,14 +13,10 @@ public class GeneticAlgorithm {
     private static Random rand = new Random();
     
     /// The population of weights.
-    private double[][][][] population;
+    private double[][][][][] population;
     
     /// The stored current best individual of weights.
-    private double[][][] bestWeights;
-    
-    /// The stored values for the network of the current <see cref="bestWeights"/>. To avoid 
-    /// re-computation during validation.
-    private double[][][] bestNetwork;
+    private double[][][][] bestWeights;
     
     /// The mutation probability for a weight value of an individual to mutate.
     private double mutationRate;
@@ -44,8 +41,11 @@ public class GeneticAlgorithm {
     /// The current score vector that holds the fitness values of the current population.
     private double[] score;
     
-    /// The artificial neural network for which the weights are trained.
-    private ArtificialNeuralNetwork network;
+    /// The basic artificial neural network for which the basic weights are trained.
+    private ArtificialNeuralNetwork basicNetwork;
+    
+  /// The gather artificial neural network for which the gather weights are trained.
+    private ArtificialNeuralNetwork gatherNetwork;
     
     /// The current best fitness score. The score of <see cref="bestWeights"/>.
     private double bestScore;
@@ -68,7 +68,8 @@ public class GeneticAlgorithm {
     /// [mutation rate,crossover probability, poplation size, tournament select param, elitism, mutate width]</param>
     public GeneticAlgorithm(double[] gAParameters, boolean addBestWeights)
     {
-        network = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, BasicAction.values().length);
+        basicNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, BasicAction.values().length);
+        gatherNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, ActionHelper.getAdvancedActionSize("Gather"));
 
         mutationRate = gAParameters[0];
         crossoverProb = gAParameters[1];
@@ -98,7 +99,7 @@ public class GeneticAlgorithm {
         
         for (int i = 0; i < populationSize; i++)
         {
-            double[][][] weights = population[i];
+            double[][][][] weights = population[i];
 
             if(i < numberOfBestToInsert && bestEvaluated)
             {
@@ -108,7 +109,7 @@ public class GeneticAlgorithm {
             }
             else 
             {
-            	score[i] = evaluateIndividual(weights);
+            	score[i] = evaluateIndividual(weights[0], weights[1]);
             }
             
 
@@ -116,13 +117,12 @@ public class GeneticAlgorithm {
             { 
                 bestScore = score[i];
                 bestWeights = copy(weights);
-                bestNetwork = network.getNetworks();
             }
         }
         
         FileHandler.logScoreToFile(score);
 
-        double[][][][] tempPopulation = copyPopulation(population);
+        double[][][][][] tempPopulation = copyPopulation(population);
 
         if (populationSize == 1)
         {
@@ -140,7 +140,7 @@ public class GeneticAlgorithm {
 
                 if (r < crossoverProb)
                 {
-                    double[][][][] newPair = cross(index1, index2);
+                    double[][][][][] newPair = cross(index1, index2);
                     tempPopulation[i] = newPair[0];
                     tempPopulation[i + 1] = newPair[1];
                 }
@@ -179,10 +179,10 @@ public class GeneticAlgorithm {
     /// The fitness is the inverse of this energy with respect to number of data points.
     /// <param name="weights">The weights to evaluate.</param>
     /// <returns>Returns the fitness of these weights.</returns>
-    private double evaluateIndividual(double[][][] weights)
+    private double evaluateIndividual(double[][][] basicWeights, double[][][] gatherWeights)
     {
         // Add a person with this weight to simulator
-        villageSimulator.addPerson(weights);
+        villageSimulator.addPerson(basicWeights, gatherWeights);
         
         // Let his life play out
         while(villageSimulator.isAlive())
@@ -191,7 +191,7 @@ public class GeneticAlgorithm {
         }
         
         // For now, give fitness score according to long life
-        double score = villageSimulator.getLifeTimeDays(weights);
+        double score = villageSimulator.getLifeTimeDays(basicWeights, gatherWeights);
         
         // Reset state for next individual
         villageSimulator.resetState();
@@ -205,9 +205,9 @@ public class GeneticAlgorithm {
     /// <param name="individ1">The index of the first individual.</param>
     /// <param name="individ2">The index of the second individual.</param>
     /// <returns>Returns a pair of new individuals.</returns>
-    private double[][][][] cross(int individ1, int individ2)
+    private double[][][][][] cross(int individ1, int individ2)
     {
-        double[][][][] newPair = new double[2][][][];
+        double[][][][][] newPair = new double[2][][][][];
 
         newPair[0] = population[individ1];
         newPair[1] = population[individ2];
@@ -218,14 +218,17 @@ public class GeneticAlgorithm {
             {
                 for (int k = 0; k < newPair[0][i][j].length; k++)
                 {
-                    double randomNr = rand.nextDouble();
-
-                    if (randomNr < crossoverProb)
+                	for (int l = 0; l < newPair[0][i][j][k].length; l++)
                     {
-                        double value1 = population[individ1][i][j][k];
-                        double value2 = population[individ2][i][j][k];
-                        newPair[0][i][j][k] = value2;
-                        newPair[1][i][j][k] = value1;
+	                    double randomNr = rand.nextDouble();
+	
+	                    if (randomNr < crossoverProb)
+	                    {
+	                        double value1 = population[individ1][i][j][k][l];
+	                        double value2 = population[individ2][i][j][k][l];
+	                        newPair[0][i][j][k][l] = value2;
+	                        newPair[1][i][j][k][l] = value1;
+	                    }
                     }
                 }
             }
@@ -240,29 +243,34 @@ public class GeneticAlgorithm {
     /// the weight value is modifed by a new r in [-1,1], times <see cref="mutateWidth"/>.
     /// <param name="individual">The individual to mutate.</param>
     /// <returns>Returns the mutated individual.</returns>
-    private double[][][] mutate(double[][][] individual)
+    private double[][][][] mutate(double[][][][] individual)
     {
-        double[][][] individ = new double[individual.length][][];
+        double[][][][] individ = new double[individual.length][][][];
         for (int i = 0; i < individual.length; i++)
         {
-            double[][] individP1 = new double[individual[i].length][];
+            double[][][] individP1 = new double[individual[i].length][][];
             for (int j = 0; j < individual[i].length; j++)
             {
-                double[] individP2 = new double[individual[i][j].length];
+                double[][] individP2 = new double[individual[i][j].length][];
                 for (int k = 0; k < individual[i][j].length; k++)
                 {
-                    double randomNr = rand.nextDouble();
-
-                    if (randomNr < mutationRate)
+                	double[] individP3 = new double[individual[i][j][k].length];
+                	for (int l = 0; l < individual[i][j][k].length; l++)
                     {
-                        randomNr = getRandomNumber(-1, 1);
-
-                        individP2[k] = individP2[k] + randomNr * mutateWidth;
+	                    double randomNr = rand.nextDouble();
+	
+	                    if (randomNr < mutationRate)
+	                    {
+	                        randomNr = getRandomNumber(-1, 1);
+	
+	                        individP3[k] = individP3[k] + randomNr * mutateWidth;
+	                    }
+	                    else
+	                    {
+	                    	individP3[k] = individual[i][j][k][l];
+	                    }
                     }
-                    else
-                    {
-                        individP2[k] = individual[i][j][k];
-                    }
+                	individP2[j] = individP3;
                 }
                 individP1[j] = individP2;
             }
@@ -337,6 +345,16 @@ public class GeneticAlgorithm {
         return copy;
     }
     
+    private double[][][][][] copyPopulation(double[][][][][] thePopulation)
+    {
+        double[][][][][] copy = new double[thePopulation.length][][][][];
+        for (int i = 0; i < thePopulation.length; i++)
+        {
+            copy[i] = copyPopulation(thePopulation[i]);
+        }
+        return copy;
+    }
+    
     /// Copy function for weights.
     /// <param name="weights">The weights to copy.</param>
     /// <returns>The copied weights.</returns>
@@ -359,6 +377,16 @@ public class GeneticAlgorithm {
         }
         return temp1;
     }
+    
+    private double[][][][] copy(double[][][][] weights)
+    {
+        double[][][][] temp1 = new double[weights.length][][][];
+        for (int i = 0; i < weights.length; i++)
+        {
+        	temp1[i] = copy(weights[i]);
+        }
+        return temp1;
+    }
 
     /// Generates random double between to double values. 
     /// <param name="min">The minimum value.</param>
@@ -372,18 +400,20 @@ public class GeneticAlgorithm {
     /// Initiates a population of random weigths.
     private void initiateRandomPopulation()
     {
-        population = new double[populationSize][][][];
+        population = new double[populationSize][][][][];
 
+        double[][][][] weightsArray = new double[2][][][];
         for (int i = 0; i < populationSize; i++)
         {
-            population[i] = network.initiateRandomWeights();
+        	weightsArray[0] = basicNetwork.initiateRandomWeights();
+        	weightsArray[1] = gatherNetwork.initiateRandomWeights();
+        	population[i] = weightsArray;
         }
-
     }
     
     private void addBestWeights()
     {
-    	double[][][] bestWeights = FileHandler.retrieveWeights("weights.txt", network);
+    	double[][][][] bestWeights = FileHandler.retrieveWeights("weights.txt", basicNetwork, "gatherWeights.txt", gatherNetwork);
     	
     	// Add old best weights to initial population
     	for(int i = 0; i < numberOfBestToInsert; i++)
@@ -398,15 +428,9 @@ public class GeneticAlgorithm {
     }
 
     /// Get method to get the current best weights.
-    public double[][][] getBestWeights()
+    public double[][][][] getBestWeights()
     {
         return bestWeights;
-    }
-
-    /// Get current best network values.
-    public double[][][] getBestNetwork()
-    {
-        return bestNetwork;
     }
     
 }

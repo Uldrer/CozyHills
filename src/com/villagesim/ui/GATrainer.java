@@ -24,7 +24,7 @@ public class GATrainer {
          {
              GA.trainNetwork();
 
-             double[][][] weights = GA.getBestWeights();
+             double[][][][] weights = GA.getBestWeights();
              double bestLifeTime = GA.getBestScore();
 
              System.out.println("Iteration GA: " + i + " best lifetime: " + bestLifeTime);
@@ -32,7 +32,8 @@ public class GATrainer {
              if(bestLifeTime > bestTotalLifeTime)
              {
             	 bestTotalLifeTime = bestLifeTime;
-            	 FileHandler.writeWeightsToFile(weights);
+            	 FileHandler.writeWeightsToFile(weights[0], "weights.txt");
+            	 FileHandler.writeWeightsToFile(weights[1], "gatherWeights.txt");
              }
          }
 	}
