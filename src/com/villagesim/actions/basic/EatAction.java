@@ -91,8 +91,10 @@ public class EatAction implements Action, Printable  {
 	@Override
 	public boolean isValid() 
 	{
-		// Always valid to eat from personal storage
-		return true;
+		// Always valid to eat from personal storage?
+		// For now don't allow it if personalStorage is empty
+		double availableResource = person.getSensorReading(Sensor.NUTRITION_IN_PERSONAL_STORAGE.getIndex());
+		return availableResource > 0;
 	}
 	
 	@Override

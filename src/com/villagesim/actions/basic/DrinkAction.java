@@ -89,8 +89,10 @@ public class DrinkAction implements Action, Printable  {
 
 	@Override
 	public boolean isValid() {
-		// Always valid to drink from personal storage
-		return true;
+		// Always valid to drink from personal storage?
+		// For now don't allow it if personalStorage is empty
+		double availableResource = person.getSensorReading(Sensor.AQUA_IN_PERSONAL_STORAGE.getIndex());
+		return availableResource > 0;
 	}
 	
 	@Override
