@@ -18,6 +18,9 @@ public class GeneticAlgorithm {
     /// The stored current best individual of weights.
     private double[][][][] bestWeights;
     
+  /// The stored the last best individual of weights.
+    private double[][][][] lastBestWeights;
+    
     /// The mutation probability for a weight value of an individual to mutate.
     private double mutationRate;
     
@@ -50,10 +53,15 @@ public class GeneticAlgorithm {
     /// The current best fitness score. The score of <see cref="bestWeights"/>.
     private double bestScore;
     
+  /// The current best fitness score. The score of <see cref="bestWeights"/>.
+    private double lastBestScore;
+    
     /// The simulator to use for evaluation
     private VillageSimulator villageSimulator;
     
     private boolean bestEvaluated = false;
+    private boolean bestEvalChecked = false;
+    private boolean newBestInPopulation = false;
     
     public GeneticAlgorithm(double[] gAParameters)
     {
@@ -85,6 +93,8 @@ public class GeneticAlgorithm {
         {
         	addBestWeights();
         }
+        
+        bestWeights = FileHandler.retrieveWeights("weights.txt", basicNetwork, "gatherWeights.txt", gatherNetwork);
 
         bestScore = 0;
         
@@ -103,20 +113,60 @@ public class GeneticAlgorithm {
 
             if(i < numberOfBestToInsert && bestEvaluated)
             {
-            	// Don't re-evaluate for best weights, as that takes the longest,
-            	// we are interested in new combinations that come from these.
-            	score[i] = bestScore;
+            	System.out.println("In best evaluated. bestEvalChecked: " + bestEvalChecked);
+            	if(bestEvalChecked)
+            	{
+	            	// Don't re-evaluate for best weights, as that takes the longest,
+	            	// we are interested in new combinations that come from these.
+	            	score[i] = bestScore;
+            	}
+            	else
+            	{
+            		// Check best again and make sure they are really better the the last over several runs
+            		score[i] = evaluateIndividual(weights[0], weights[1]);
+            		System.out.println("Bestscore reevaluated: " + score[i]);
+            	}
             }
             else 
             {
             	score[i] = evaluateIndividual(weights[0], weights[1]);
+            	if(bestEvaluated && !bestEvalChecked)
+            	{
+            		System.out.println("In not bestEvalChecked");
+            		// Check if average of new best is better than last best
+            		double average = 0;
+            		for(int j = 0; j < numberOfBestToInsert; j++)
+            		{
+            			average += score[j]/numberOfBestToInsert;
+            		}
+            		
+            		System.out.println("In not bestEvalChecked i: "+ i + " average: " + average);
+            		
+            		if(average > lastBestScore)
+            		{
+            			bestScore = average;
+            		}
+            		else
+            		{
+            			// Go back to last weights, the new ones were a lucky hit
+            			bestWeights = copy(lastBestWeights);
+            			bestScore = lastBestScore;
+            		}
+            		bestEvalChecked = true;
+            	}
             }
             
 
             if (score[i] > bestScore)
             { 
+                if(!newBestInPopulation)
+                {
+                	lastBestScore = bestScore;
+                	lastBestWeights = copy(bestWeights);
+                }
                 bestScore = score[i];
                 bestWeights = copy(weights);
+                newBestInPopulation = true;
             }
         }
         
@@ -171,6 +221,12 @@ public class GeneticAlgorithm {
         
         // Set after first run
         bestEvaluated = true;
+        
+        if(newBestInPopulation)
+        {
+        	bestEvalChecked = false;
+        	newBestInPopulation = false;
+        }
 
     }
 
