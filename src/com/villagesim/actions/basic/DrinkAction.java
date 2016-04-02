@@ -80,7 +80,7 @@ public class DrinkAction implements Action, Printable  {
 		double value = potentialAqua <= availableValue ? potentialAqua : availableValue;
 
 		// Eat what's available
-		person.eat(value);
+		person.drink(value);
 		potentialAqua -= value;
 		
 		// Remove that value from resource
