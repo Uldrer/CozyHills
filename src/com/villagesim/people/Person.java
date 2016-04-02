@@ -42,6 +42,7 @@ public class Person implements Drawable, Updateable {
 	private boolean logDebug = true;
 	private List<Action> lastActionList;
 	private Integer[] lastActionListIndex;
+	private DeathReason reasonOfDeath;
 	
 	// Neural network
 	private ArtificialNeuralNetwork neuralNetwork;
@@ -115,9 +116,21 @@ public class Person implements Drawable, Updateable {
 	
 	public boolean isAlive()
 	{
-		if(nutrition <= 0) return false;
-		if(aqua <= 0) return false;
-		if(lifetime_days > OLD_AGE_LIMIT_DAYS) return false;
+		if(nutrition <= 0) 
+		{
+			reasonOfDeath = DeathReason.STARVATION;
+			return false;
+		}
+		if(aqua <= 0)
+		{
+			reasonOfDeath = DeathReason.DEHYDRATION;
+			return false;
+		}
+		if(lifetime_days > OLD_AGE_LIMIT_DAYS) 
+		{
+			reasonOfDeath = DeathReason.OLD_AGE;
+			return false;
+		}
 		
 		return true;
 	}
@@ -184,7 +197,7 @@ public class Person implements Drawable, Updateable {
 		{
 			if(logDeath)
 			{
-				System.out.println("Person id: " + id + " died of " + ((aqua <= 0) ? "dehydration" : "starvation") + " after " + lifetime_days + " days.");
+				System.out.println("Person id: " + id + " died of " + reasonOfDeath.getName() + " after " + lifetime_days + " days.");
 				printLastActionList();
 				logDeath = false;
 			}
