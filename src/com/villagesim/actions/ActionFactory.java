@@ -10,6 +10,7 @@ import com.villagesim.actions.advanced.NutsGatherAction;
 import com.villagesim.actions.advanced.RunMoveAction;
 import com.villagesim.actions.advanced.WalkMoveAction;
 import com.villagesim.actions.advanced.WaterGatherAction;
+import com.villagesim.actions.advanced.WoodGatherAction;
 import com.villagesim.actions.basic.DrinkAction;
 import com.villagesim.actions.basic.EatAction;
 import com.villagesim.actions.basic.NullAction;
@@ -128,8 +129,7 @@ public class ActionFactory {
 			newAction = new WaterGatherAction(person);
 			break;
 		case WOOD:
-			// TODO Implement
-			newAction = new NullAction(person);
+			newAction = new WoodGatherAction(person);
 			break;
 		default:
 			newAction = new NullAction(person);
