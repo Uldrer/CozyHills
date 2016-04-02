@@ -19,7 +19,7 @@ public class EatAction implements Action {
 	public EatAction(Person person)
 	{
 		this.person = person;
-		this.distSensor = Sensor.DIST_TO_FOOD_STORAGE;
+		this.distSensor = Sensor.DIST_TO_STORAGE;
 		this.resource = Food.class;
 	}
 	
@@ -47,8 +47,6 @@ public class EatAction implements Action {
 		{
 			eatFromPersonalStorage(seconds);
 		}
-
-		
 		
 		if(person.printDebug())
 		{
