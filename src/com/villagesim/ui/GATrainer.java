@@ -34,6 +34,8 @@ public class GATrainer {
             	 bestTotalLifeTime = bestLifeTime;
             	 FileHandler.writeWeightsToFile(weights[0], "weights.txt");
             	 FileHandler.writeWeightsToFile(weights[1], "gatherWeights.txt");
+            	 FileHandler.writeWeightsToFile(weights[2], "moveWeights.txt");
+            	 FileHandler.writeWeightsToFile(weights[3], "workWeights.txt");
              }
          }
 	}
