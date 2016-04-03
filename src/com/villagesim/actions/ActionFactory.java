@@ -26,7 +26,7 @@ public class ActionFactory {
 		this.person = person;
 	}
 	
-	public List<Action> getAction(int index)
+	public List<Action> getActions(int index)
 	{
 		List<Action> returnList = new ArrayList<Action>();
 		List<AdvancedAction> actionList = new ArrayList<AdvancedAction>();

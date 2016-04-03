@@ -13,7 +13,6 @@ import com.villagesim.Const;
 import com.villagesim.actions.ActionFactory;
 import com.villagesim.actions.ActionHelper;
 import com.villagesim.actions.ActionMediator;
-import com.villagesim.actions.AdvancedAction;
 import com.villagesim.actions.BasicAction;
 import com.villagesim.areas.Area;
 import com.villagesim.areas.Storage;
@@ -81,7 +80,7 @@ public class Person implements Drawable, Updateable {
 		gatherWeights = FileHandler.retrieveWeights("gatherWeights.txt", gatherNeuralNetwork);
 		gatherNeuralNetwork.setWeights(gatherWeights);
 
-		logDebug = true;
+		logDebug = false;
 	}
 	
 	public Person(double[][][] basicWeights, double[][][] gatherWeights)
@@ -256,9 +255,23 @@ public class Person implements Drawable, Updateable {
 		Integer[] actionIndexList = determineAction(outputNetwork);
 		
 		List<Action> actionList = new ArrayList<Action>();
+		boolean done = false;
 		for(int actionIndex : actionIndexList)
 		{
-			actionList.addAll(actionFactory.getAction(actionIndex));
+			List<Action> actions = actionFactory.getActions(actionIndex);
+			for(Action action : actions)
+			{
+				if(action.isValid())
+				{
+					actionList.add(action);
+					done = true;
+					break;
+				}
+			}
+			if(done)
+			{
+				break;
+			}
 		}
 		
 		// Send action package in priority order
