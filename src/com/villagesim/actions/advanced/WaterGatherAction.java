@@ -20,7 +20,7 @@ public class WaterGatherAction implements Action, Printable  {
 	{
 		this.person = person;
 		this.distSensor = Sensor.DIST_TO_WATER;
-		this.gather_rate = 360/Const.SECONDS_PER_HOUR; // Assumption, you can gather 6 liters of water in a minute on average
+		this.gather_rate = 120/Const.SECONDS_PER_HOUR; // Assumption, you can gather 2 liters of water in a minute on average
 	}
 	
 	@Override
