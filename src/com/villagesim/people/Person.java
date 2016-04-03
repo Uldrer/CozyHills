@@ -251,8 +251,8 @@ public class Person implements Drawable, Updateable {
 			inputs[i] = sensorInputs.get(i);
 		}
 		
-		double[][] outputNetwork = basicNeuralNetwork.computePatternNetwork(inputs, basicWeights, thresholds);
-		Integer[] actionIndexList = determineAction(outputNetwork);
+		double[] output = basicNeuralNetwork.computePatternNetwork_fast(inputs);
+		Integer[] actionIndexList = determineAction(output);
 		
 		List<Action> actionList = new ArrayList<Action>();
 		boolean done = false;
@@ -287,8 +287,8 @@ public class Person implements Drawable, Updateable {
 		}
 		
 		// TODO use generic advanced action instead of just gather
-		double[][] outputNetwork = gatherNeuralNetwork.computePatternNetwork(inputs);
-		Integer[] actionIndexList = determineAction(outputNetwork);
+		double[] output = gatherNeuralNetwork.computePatternNetwork_fast(inputs);
+		Integer[] actionIndexList = determineAction(output);
 		
 		List<Action> actionList = new ArrayList<Action>();
 		for(int actionIndex : actionIndexList)
@@ -312,13 +312,8 @@ public class Person implements Drawable, Updateable {
 		System.out.println("]");
 	}
 	
-	private Integer[] determineAction(double[][] network)
+	private Integer[] determineAction(double[] output)
 	{
-		int outputLayer = network.length - 1;
-        
-        // With one output per basic action
-        double[] output = network[outputLayer];
-        
         ArrayIndexComparator comparator = new ArrayIndexComparator(output);
         Integer[] indexes = comparator.createIndexArray();
         Arrays.sort(indexes, Collections.reverseOrder(comparator));

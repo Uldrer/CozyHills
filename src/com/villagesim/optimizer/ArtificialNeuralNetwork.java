@@ -159,6 +159,119 @@ public class ArtificialNeuralNetwork {
     	return computePatternNetwork(patternData, weights, thresholds);
     }
     
+    public double[] computePatternNetwork_fast(double[] patternData)
+    {
+    	// TODO set at initiation time which should be used
+    	if(nodes[nodes.length-1] == 3)
+    	{
+    		return computePatternNetwork_fast_3out(patternData);
+    	}
+    	else if(nodes[nodes.length-1] == 4)
+    	{
+    		return computePatternNetwork_fast_4out(patternData);
+    	}
+    	else if(nodes[nodes.length-1] == 5)
+    	{
+    		return computePatternNetwork_fast_5out(patternData);
+    	}
+    	else if(nodes[nodes.length-1] == 6)
+    	{
+    		return computePatternNetwork_fast_6out(patternData);
+    	}
+    	else if(nodes[nodes.length-1] == 7)
+    	{
+    		return computePatternNetwork_fast_7out(patternData);
+    	}
+    	else
+    	{
+    		double[][] outNetwork = computePatternNetwork(patternData);
+    		int outputLayer = outNetwork.length - 1;
+    		
+            double[] output = outNetwork[outputLayer];
+    		return output;
+    	}
+    }
+    
+    private double[] computePatternNetwork_fast_3out(double[] patternData)
+    {
+        double[] output = new double[nodes[nodes.length-1]];
+        
+        for(int i = 0; i < nodes[0]; i++)
+        {
+        	output[0] += weights[0][0][i] * patternData[i];
+        	output[1] += weights[0][1][i] * patternData[i];
+        	output[2] += weights[0][2][i] * patternData[i];
+        }
+        
+        return output;
+    }
+    
+    private double[] computePatternNetwork_fast_4out(double[] patternData)
+    {
+        double[] output = new double[nodes[nodes.length-1]];
+        
+        for(int i = 0; i < nodes[0]; i++)
+        {
+        	output[0] += weights[0][0][i] * patternData[i];
+        	output[1] += weights[0][1][i] * patternData[i];
+        	output[2] += weights[0][2][i] * patternData[i];
+        	output[3] += weights[0][3][i] * patternData[i];
+        }
+        
+        return output;
+    }
+    
+    private double[] computePatternNetwork_fast_5out(double[] patternData)
+    {
+        double[] output = new double[nodes[nodes.length-1]];
+        
+        for(int i = 0; i < nodes[0]; i++)
+        {
+        	output[0] += weights[0][0][i] * patternData[i];
+        	output[1] += weights[0][1][i] * patternData[i];
+        	output[2] += weights[0][2][i] * patternData[i];
+        	output[3] += weights[0][3][i] * patternData[i];
+        	output[4] += weights[0][4][i] * patternData[i];
+        }
+        
+        return output;
+    }
+    
+    private double[] computePatternNetwork_fast_6out(double[] patternData)
+    {
+        double[] output = new double[nodes[nodes.length-1]];
+        
+        for(int i = 0; i < nodes[0]; i++)
+        {
+        	output[0] += weights[0][0][i] * patternData[i];
+        	output[1] += weights[0][1][i] * patternData[i];
+        	output[2] += weights[0][2][i] * patternData[i];
+        	output[3] += weights[0][3][i] * patternData[i];
+        	output[4] += weights[0][4][i] * patternData[i];
+        	output[5] += weights[0][5][i] * patternData[i];
+        }
+        
+        return output;
+    }
+    
+    private double[] computePatternNetwork_fast_7out(double[] patternData)
+    {
+        double[] output = new double[nodes[nodes.length-1]];
+        
+        for(int i = 0; i < nodes[0]; i++)
+        {
+        	output[0] += weights[0][0][i] * patternData[i];
+        	output[1] += weights[0][1][i] * patternData[i];
+        	output[2] += weights[0][2][i] * patternData[i];
+        	output[3] += weights[0][3][i] * patternData[i];
+        	output[4] += weights[0][4][i] * patternData[i];
+        	output[5] += weights[0][5][i] * patternData[i];
+        	output[6] += weights[0][6][i] * patternData[i];
+        }
+        
+        return output;
+    }
+    
     /// Initiate random weights in [-1,1] for the network.
     /// <returns>Returns a set of random weights. </returns>
     public double[][][] initiateRandomWeights()
