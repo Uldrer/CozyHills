@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import com.villagesim.Const;
@@ -24,6 +26,7 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 	private boolean restrictionActive = false;
 	private double restrictionWeightLimit = 0;
 	private boolean resourceLimitReached = false;
+	private Map<Class<? extends Resource>, Boolean> containsMap = new HashMap<Class<? extends Resource>, Boolean>();
 	
 	public Area(Color color, int width, int height)
 	{
@@ -96,10 +99,19 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 	
 	public boolean containsResource(Class<? extends Resource> resourceClass)
 	{
-		for(Iterator<Resource> i = resourceList.iterator(); i.hasNext(); ) 
+		if(!containsMap.containsKey(resourceClass))
 		{
-			Resource item = i.next();
-			
+			boolean containsResource = containsResourceSlow(resourceClass);
+			containsMap.put(resourceClass, containsResource);
+			return containsResource;
+		}
+		return containsMap.get(resourceClass);
+	}
+	
+	private boolean containsResourceSlow(Class<? extends Resource> resourceClass)
+	{
+		for(Resource item : resourceList)
+		{
 			if(resourceClass.isAssignableFrom(item.getClass()))
 			{
 				return true;
