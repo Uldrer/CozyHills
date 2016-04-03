@@ -70,7 +70,7 @@ public class FileHandler {
 				if(obj instanceof Area)
 				{
 					Area area = (Area) obj;
-					for(Resource resource : area.getResourceSet())
+					for(Resource resource : area.getResourceList())
 					{
 						writer.println(resource.getDebugString());
 					}

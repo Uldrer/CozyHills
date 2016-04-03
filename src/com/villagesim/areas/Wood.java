@@ -1,8 +1,8 @@
 package com.villagesim.areas;
 
 import java.awt.Color;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.villagesim.resources.Berries;
 import com.villagesim.resources.Game;
@@ -20,26 +20,26 @@ public class Wood extends Area {
 	}
 
 	@Override
-	protected void populateResourceSet() {
-		Set<Resource> resourceSet = new HashSet<Resource>();
+	protected void populateResourceList() {
+		List<Resource> resourceList = new ArrayList<Resource>();
 		
 		// Add resources
 		Resource game = new Game(getSize()/40);
 		game.setIncreaseRate(0.5);
 		game.addDepletedListener(this);
-		resourceSet.add(game);
+		resourceList.add(game);
 		
 		Resource nuts = new Nuts(getSize());
 		nuts.setIncreaseRate(0.3);
 		nuts.addDepletedListener(this);
-		resourceSet.add(nuts);
+		resourceList.add(nuts);
 		
 		Resource berries = new Berries(getSize());
 		berries.setIncreaseRate(0.7);
 		berries.addDepletedListener(this);
-		resourceSet.add(berries);
+		resourceList.add(berries);
 		
-		setResourceSet(resourceSet);
+		setResourceList(resourceList);
 	}
 
 	private void updateColor()

@@ -3,10 +3,10 @@ package com.villagesim.areas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import com.villagesim.Const;
 import com.villagesim.interfaces.DepletedListener;
@@ -20,7 +20,7 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 	private int height;
 	private Point2D coordinate;
 	private Color color;
-	private Set<Resource> resourceSet = new HashSet<Resource>();
+	private List<Resource> resourceList = new ArrayList<Resource>();
 	private boolean restrictionActive = false;
 	private double restrictionWeightLimit = 0;
 	private boolean resourceLimitReached = false;
@@ -32,7 +32,7 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 		this.height = height;
 		this.coordinate = generateCoordinate();
 		
-		populateResourceSet();
+		populateResourceList();
 	}
 	
 	public void setRestrictionActive(boolean active)
@@ -57,7 +57,7 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 	public void update(int seconds) 
 	{
 		double weight = 0;
-		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
+		for(Iterator<Resource> i = resourceList.iterator(); i.hasNext(); ) 
 		{
 			Resource item = i.next();
 			item.update(seconds);
@@ -76,7 +76,7 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 	
 	public void reset()
 	{
-		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
+		for(Iterator<Resource> i = resourceList.iterator(); i.hasNext(); ) 
 		{
 			Resource item = i.next();
 			item.reset();
@@ -84,19 +84,19 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 		resourceLimitReached = false;
 	}
 	
-	protected abstract void populateResourceSet();
+	protected abstract void populateResourceList();
 
-	public Set<Resource> getResourceSet() {
-		return resourceSet;
+	public List<Resource> getResourceList() {
+		return resourceList;
 	}
 
-	public void setResourceSet(Set<Resource> resourceSet) {
-		this.resourceSet = resourceSet;
+	public void setResourceList(List<Resource> resourceList) {
+		this.resourceList = resourceList;
 	}
 	
 	public boolean containsResource(Class<? extends Resource> resourceClass)
 	{
-		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
+		for(Iterator<Resource> i = resourceList.iterator(); i.hasNext(); ) 
 		{
 			Resource item = i.next();
 			
@@ -116,7 +116,7 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 	private double getResourceValue(Class<? extends Resource> resourceClass, boolean nutrition, boolean useAmount)
 	{
 		double value = 0;
-		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
+		for(Iterator<Resource> i = resourceList.iterator(); i.hasNext(); ) 
 		{
 			Resource item = i.next();
 			
@@ -176,7 +176,7 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 	private void consumeResourceValue(Class<? extends Resource> resourceClass, double value, boolean nutrition, boolean useAmount)
 	{
 		double valueLeftToConsume = value;
-		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
+		for(Iterator<Resource> i = resourceList.iterator(); i.hasNext(); ) 
 		{
 			Resource item = i.next();
 			
@@ -274,7 +274,7 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 		if(resourceLimitReached) return;
 		
 		double valueToFill = value;
-		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
+		for(Iterator<Resource> i = resourceList.iterator(); i.hasNext(); ) 
 		{
 			Resource item = i.next();
 			

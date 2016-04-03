@@ -1,8 +1,8 @@
 package com.villagesim.areas;
 
 import java.awt.Color;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.villagesim.resources.Berries;
 import com.villagesim.resources.Fish;
@@ -20,32 +20,32 @@ public class Storage extends Area {
 	}
 
 	@Override
-	protected void populateResourceSet() {
+	protected void populateResourceList() {
 		// Populated empty
 		// TODO add possibility for food/water spoilage
-		Set<Resource> resourceSet = new HashSet<Resource>();
+		List<Resource> resourceList = new ArrayList<Resource>();
 		
 		Resource water = new Water(0, false);
 		water.addDepletedListener(this);
-		resourceSet.add(water);
+		resourceList.add(water);
 		
 		Resource fish = new Fish(0, false);
 		fish.addDepletedListener(this);
-		resourceSet.add(fish);
+		resourceList.add(fish);
 		
 		Resource game = new Game(0, false);
 		game.addDepletedListener(this);
-		resourceSet.add(game);
+		resourceList.add(game);
 		
 		Resource nuts = new Nuts(0, false);
 		nuts.addDepletedListener(this);
-		resourceSet.add(nuts);
+		resourceList.add(nuts);
 		
 		Resource berries = new Berries(0, false);
 		berries.addDepletedListener(this);
-		resourceSet.add(berries);
+		resourceList.add(berries);
 		
-		this.setResourceSet(resourceSet);
+		this.setResourceList(resourceList);
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 package com.villagesim.areas;
 
 import java.awt.Color;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.villagesim.resources.Fish;
 import com.villagesim.resources.Resource;
@@ -19,22 +19,22 @@ public class Lake extends Area {
 	}
 
 	@Override
-	protected void populateResourceSet() {
+	protected void populateResourceList() {
 		
-		Set<Resource> resourceSet = new HashSet<Resource>();
+		List<Resource> resourceList = new ArrayList<Resource>();
 		// Add resources
 		Resource water = new Water(getSize() * LITERS_PER_CUBIC_METER);
 		water.setIncreaseRate(0.1);
 		water.setDecreaseRate(0.1);
 		water.addDepletedListener(this);
-		resourceSet.add(water);
+		resourceList.add(water);
 		
 		Resource fish = new Fish(getSize());
 		fish.setIncreaseRate(0.5);
 		fish.addDepletedListener(this);
-		resourceSet.add(fish);
+		resourceList.add(fish);
 		
-		setResourceSet(resourceSet);
+		setResourceList(resourceList);
 	}
 	
 	private void updateColor()
