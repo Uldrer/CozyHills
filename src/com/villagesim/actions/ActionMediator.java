@@ -1,14 +1,13 @@
 package com.villagesim.actions;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import com.villagesim.interfaces.Action;
 
 public class ActionMediator {
 	
-	private static Set<List<Action>> actionListSet = new HashSet<List<Action>>(); 
+	private static List<List<Action>> actionListSet = new ArrayList<List<Action>>(); 
 	
 	public static void addActionList(List<Action> action)
 	{
