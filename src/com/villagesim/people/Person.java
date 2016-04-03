@@ -52,7 +52,6 @@ public class Person implements Drawable, Updateable {
 	private ArtificialNeuralNetwork gatherNeuralNetwork;
 	private double [][][] basicWeights;
 	private double [][][] gatherWeights;
-	private double [][] thresholds;
 	
 	// Constants
 	private final double MAX_NUTRITION_POINTS = 1000;
@@ -117,7 +116,7 @@ public class Person implements Drawable, Updateable {
 		}
 		
 		basicNeuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, BASIC_ACTION_SIZE );
-		thresholds = basicNeuralNetwork.inititateNullThresholds(); // TODO evaluate thresholds as well
+		basicNeuralNetwork.inititateNullThresholds(); // TODO evaluate thresholds as well
 		//thresholds = neuralNetwork.inititateRandomThresholds();
 		
 		gatherNeuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, ActionHelper.getAdvancedActionSize("Gather") );
