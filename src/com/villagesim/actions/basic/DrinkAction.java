@@ -68,7 +68,8 @@ public class DrinkAction implements Action, Printable  {
 		drinkFromStorage(person.getPersonalStorage(), seconds);
 		if(person.printDebug())
 		{
-			System.out.println("Person id: " + person.getId() + " is drinking from personal storage.");
+			//System.out.println("Person id: " + person.getId() + " is drinking from personal storage.");
+			System.out.print("+");
 		}
 	}
 	
