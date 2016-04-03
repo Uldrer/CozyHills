@@ -69,6 +69,7 @@ public class Person implements Drawable, Updateable {
 	private final int BASIC_ACTION_SIZE = BasicAction.values().length;
 	private final int NUTRITION_INCREASE_TIME_S = 3600; // Assumption, eating for one hour restores 3 weeks of starvation, kinda crude
 	private final int AQUA_INCREASE_TIME_S = 900; // Assumption, drinking for 15 min restores 3 days of dehydration, kinda crude
+	private final double PERSONAL_STORAGE_LIMIT = 20; // Assumption, you can't carry more than 20 kgs on average
 	
 	
 	private static int id_counter = 0;
@@ -89,7 +90,7 @@ public class Person implements Drawable, Updateable {
 		workWeights = FileHandler.retrieveWeights("workWeights.txt", workNeuralNetwork);
 		workNeuralNetwork.setWeights(workWeights);
 
-		logDebug = false;
+		logDebug = true;
 	}
 	
 	public Person(double[][][] basicWeights, double[][][] gatherWeights, double[][][] moveWeights, double[][][] workWeights)
@@ -123,6 +124,9 @@ public class Person implements Drawable, Updateable {
 		coordinate = generateCoordinate();
 		actionFactory = new ActionFactory(this);
 		personalStorage = new Storage();
+		// Personal storage can hold just so much
+		personalStorage.setRestrictionActive(true);
+		personalStorage.setRestrictionWeightLimit(PERSONAL_STORAGE_LIMIT);
 		
 		// Init default list
 		sensorInputs = new ArrayList<Double>();
@@ -222,7 +226,10 @@ public class Person implements Drawable, Updateable {
 	}
 
 	@Override
-	public void update(int seconds) {
+	public void update(int seconds)
+	{
+		// Update status for personal storage
+		personalStorage.update(seconds);
 		
 		if(!isAlive())
 		{

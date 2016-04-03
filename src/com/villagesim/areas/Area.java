@@ -21,6 +21,9 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 	private Point2D coordinate;
 	private Color color;
 	private Set<Resource> resourceSet = new HashSet<Resource>();
+	private boolean restrictionActive = false;
+	private double restrictionWeightLimit = 0;
+	private boolean resourceLimitReached = false;
 	
 	public Area(Color color, int width, int height)
 	{
@@ -30,6 +33,16 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 		this.coordinate = generateCoordinate();
 		
 		populateResourceSet();
+	}
+	
+	public void setRestrictionActive(boolean active)
+	{
+		restrictionActive = active;
+	}
+	
+	public void setRestrictionWeightLimit(double weightLimit)
+	{
+		restrictionWeightLimit = weightLimit;
 	}
 	
 	@Override
@@ -43,10 +56,21 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 	@Override
 	public void update(int seconds) 
 	{
+		double weight = 0;
 		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
 		{
 			Resource item = i.next();
 			item.update(seconds);
+			weight += item.getAmount()*item.getWeightPerAmount();
+		}
+		
+		if(restrictionActive && weight > restrictionWeightLimit)
+		{
+			resourceLimitReached = true;
+		}
+		else 
+		{
+			resourceLimitReached = false;
 		}
 	}
 	
@@ -57,6 +81,7 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 			Resource item = i.next();
 			item.reset();
 		}
+		resourceLimitReached = false;
 	}
 	
 	protected abstract void populateResourceSet();
@@ -245,6 +270,9 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 	
 	private void fillResourceValue(Class<? extends Resource> resourceClass, double value, boolean nutrition, boolean useAmount)
 	{
+		// Don't fill if limit is reached
+		if(resourceLimitReached) return;
+		
 		double valueToFill = value;
 		for(Iterator<Resource> i = resourceSet.iterator(); i.hasNext(); ) 
 		{

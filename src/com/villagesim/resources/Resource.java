@@ -108,7 +108,14 @@ public abstract class Resource implements Updateable, Depletable {
 		}
 		
 		// TODO add minor random element here
-		this.amount += computeLogisticGrowth(seconds);
+		if(carryingCapacity != 0)
+		{
+			this.amount += computeLogisticGrowth(seconds);
+		}
+		else
+		{
+			this.amount += computeExponentialGrowth(seconds);
+		}
 		
 		lifetime_days += seconds/Const.SECONDS_PER_DAY;
 	}
