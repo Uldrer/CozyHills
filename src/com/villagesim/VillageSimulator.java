@@ -73,14 +73,14 @@ public class VillageSimulator
 		return sensorUpdater.getAliveState();
 	}
 	
-	public double getLifeTimeDays(double[][][] basicWeights, double[][][] gatherWeights)
+	public double getLifeTimeDays(double[][][] basicWeights, double[][][] gatherWeights, double[][][] moveWeights, double[][][] workWeights)
 	{
 		for(Object obj : objectSet)
 		{
 			if(obj instanceof Person)
 			{
 				Person person = (Person)obj;
-				if(person.isWeightsEqual(basicWeights, gatherWeights))
+				if(person.isWeightsEqual(basicWeights, gatherWeights, moveWeights, workWeights))
 				{
 					return person.getLifetime();
 				}
@@ -107,10 +107,10 @@ public class VillageSimulator
 	}
 	
 	// Using this we have no interaction with others, works for now
-	public void addPerson(double[][][] basicWeights, double[][][] gatherWeights)
+	public void addPerson(double[][][] basicWeights, double[][][] gatherWeights, double[][][] moveWeights, double[][][] workWeights)
 	{
 		clearPeople();
-		objectSet.add(new Person(basicWeights, gatherWeights));
+		objectSet.add(new Person(basicWeights, gatherWeights, moveWeights, workWeights));
 		sensorUpdater.resetAliveState();
 	}
 	

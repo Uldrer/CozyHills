@@ -50,8 +50,12 @@ public class Person implements Drawable, Updateable {
 	// Neural network
 	private ArtificialNeuralNetwork basicNeuralNetwork;
 	private ArtificialNeuralNetwork gatherNeuralNetwork;
+	private ArtificialNeuralNetwork moveNeuralNetwork;
+	private ArtificialNeuralNetwork workNeuralNetwork;
 	private double [][][] basicWeights;
 	private double [][][] gatherWeights;
+	private double [][][] moveWeights;
+	private double [][][] workWeights;
 	
 	// Constants
 	private final double MAX_NUTRITION_POINTS = 1000;
@@ -78,11 +82,17 @@ public class Person implements Drawable, Updateable {
 
 		gatherWeights = FileHandler.retrieveWeights("gatherWeights.txt", gatherNeuralNetwork);
 		gatherNeuralNetwork.setWeights(gatherWeights);
+		
+		moveWeights = FileHandler.retrieveWeights("moveWeights.txt", moveNeuralNetwork);
+		moveNeuralNetwork.setWeights(moveWeights);
+		
+		workWeights = FileHandler.retrieveWeights("workWeights.txt", workNeuralNetwork);
+		workNeuralNetwork.setWeights(workWeights);
 
 		logDebug = false;
 	}
 	
-	public Person(double[][][] basicWeights, double[][][] gatherWeights)
+	public Person(double[][][] basicWeights, double[][][] gatherWeights, double[][][] moveWeights, double[][][] workWeights)
 	{
 		init();
 		
@@ -91,6 +101,12 @@ public class Person implements Drawable, Updateable {
 		
 		this.gatherWeights = gatherWeights;
 		gatherNeuralNetwork.setWeights(gatherWeights);
+		
+		this.moveWeights = moveWeights;
+		moveNeuralNetwork.setWeights(moveWeights);
+		
+		this.workWeights = workWeights;
+		workNeuralNetwork.setWeights(workWeights);
 		
 		logDebug = false;
 	}
@@ -117,10 +133,15 @@ public class Person implements Drawable, Updateable {
 		
 		basicNeuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, BASIC_ACTION_SIZE );
 		basicNeuralNetwork.inititateNullThresholds(); // TODO evaluate thresholds as well
-		//thresholds = neuralNetwork.inititateRandomThresholds();
 		
 		gatherNeuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, ActionHelper.getAdvancedActionSize("Gather") );
 		gatherNeuralNetwork.inititateNullThresholds(); // don't care to save thresholds for now
+		
+		moveNeuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, ActionHelper.getAdvancedActionSize("Move") );
+		moveNeuralNetwork.inititateNullThresholds(); // don't care to save thresholds for now
+		
+		workNeuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, ActionHelper.getAdvancedActionSize("Work") );
+		workNeuralNetwork.inititateNullThresholds(); // don't care to save thresholds for now
 		
 	}
 	
@@ -145,9 +166,9 @@ public class Person implements Drawable, Updateable {
 		return true;
 	}
 	
-	public boolean isWeightsEqual(double[][][] basicWeightsToCompare, double[][][] gatherWeightsToCompare)
+	public boolean isWeightsEqual(double[][][] basicWeightsToCompare, double[][][] gatherWeightsToCompare, double[][][] moveWeightsToCompare, double[][][] workWeightsToCompare)
 	{
-		return Arrays.equals(basicWeights, basicWeightsToCompare) && Arrays.equals(gatherWeights, gatherWeightsToCompare);
+		return Arrays.equals(basicWeights, basicWeightsToCompare) && Arrays.equals(gatherWeights, gatherWeightsToCompare) && Arrays.equals(moveWeights, moveWeightsToCompare)  && Arrays.equals(workWeights, workWeightsToCompare);
 	}
 	
 	public double getLifetime()
@@ -278,21 +299,48 @@ public class Person implements Drawable, Updateable {
 		lastActionList = actionList;
 	}
 	
-	public List<Action> makeAdvancedActionDecision() 
+	public List<Action> makeAdvancedActionDecision(BasicAction basicAction) 
 	{
 		double[] inputs = new double[sensorInputs.size()];
 		for (int i = 0; i < inputs.length; i++) {
 			inputs[i] = sensorInputs.get(i);
 		}
 		
-		// TODO use generic advanced action instead of just gather
-		double[] output = gatherNeuralNetwork.computePatternNetwork_fast(inputs);
-		Integer[] actionIndexList = determineAction(output);
+		double[] output = new double[1];
+		switch(basicAction)
+		{
+		case DRINK:
+			// This should not happen, will produce NullAction
+			break;
+		case EAT:
+			// This should not happen, will produce NullAction
+			break;
+		case GATHER:
+			output = gatherNeuralNetwork.computePatternNetwork_fast(inputs);
+			break;
+		case MOVE:
+			output = moveNeuralNetwork.computePatternNetwork_fast(inputs);
+			break;
+		case SLEEP:
+			// This should not happen, will produce NullAction
+			break;
+		case SOCIALIZE:
+			// This should not happen, will produce NullAction
+			break;
+		case WORK:
+			output = workNeuralNetwork.computePatternNetwork_fast(inputs);
+			break;
+		default:
+			// This should not happen, will produce NullAction
+			break;
 		
+		}
+		
+		Integer[] actionIndexList = determineAction(output);
 		List<Action> actionList = new ArrayList<Action>();
 		for(int actionIndex : actionIndexList)
 		{
-			actionList.add(actionFactory.getAdvancedAction(actionIndex, BasicAction.GATHER));
+			actionList.add(actionFactory.getAdvancedAction(actionIndex, basicAction));
 		}
 		return actionList;
 	}

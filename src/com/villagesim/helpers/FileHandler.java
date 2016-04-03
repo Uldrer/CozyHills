@@ -83,12 +83,15 @@ public class FileHandler {
 		}
 	}
 	
-	public static double[][][][] retrieveWeights(String basicPath, ArtificialNeuralNetwork basicNetwork, String gatherPath, ArtificialNeuralNetwork gatherNetwork)
+	public static double[][][][] retrieveWeights(String basicPath, ArtificialNeuralNetwork basicNetwork, String gatherPath, ArtificialNeuralNetwork gatherNetwork,
+			String movePath, ArtificialNeuralNetwork moveNetwork, String workPath, ArtificialNeuralNetwork workNetwork)
 	{
-		double[][][][] theWeights = new double[2][][][];
+		double[][][][] theWeights = new double[4][][][];
 		
 		theWeights[0] = retrieveWeights(basicPath, basicNetwork);
 		theWeights[1] = retrieveWeights(gatherPath, gatherNetwork);
+		theWeights[2] = retrieveWeights(movePath, moveNetwork);
+		theWeights[3] = retrieveWeights(workPath, workNetwork);
 		
 		return theWeights;
 	}
