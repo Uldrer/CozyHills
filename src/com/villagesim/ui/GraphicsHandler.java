@@ -110,6 +110,7 @@ public class GraphicsHandler extends JFrame {
     	}
     	
     	if (input.isKeyDown(KeyEvent.VK_SPACE)) {
+			draw();
     		villageSimulator.logResources();
     		paused = !paused;
     		try {
