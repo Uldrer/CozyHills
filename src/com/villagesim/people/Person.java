@@ -6,7 +6,9 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import com.villagesim.Const;
@@ -23,6 +25,9 @@ import com.villagesim.interfaces.Drawable;
 import com.villagesim.interfaces.Printable;
 import com.villagesim.interfaces.Updateable;
 import com.villagesim.optimizer.ArtificialNeuralNetwork;
+import com.villagesim.resources.Game;
+import com.villagesim.resources.Resource;
+import com.villagesim.sensors.SensorArea;
 import com.villagesim.sensors.SensorHelper;
 
 public class Person implements Drawable, Updateable {
@@ -40,6 +45,8 @@ public class Person implements Drawable, Updateable {
 	private List<Area> closestAreas;
 	private ActionFactory actionFactory;
 	private Storage personalStorage;
+	private Map<Class<? extends Resource>, SensorArea> lastAreaMap = new HashMap<Class<? extends Resource>, SensorArea>();
+	private Map<Class<? extends Resource>, Boolean> hasChangedCoordinateMap = new HashMap<Class<? extends Resource>, Boolean>();// boolean for knowing if movement has occured
 	
 	// Debugging
 	private boolean logDeath = true;
@@ -90,7 +97,7 @@ public class Person implements Drawable, Updateable {
 		workWeights = FileHandler.retrieveWeights("workWeights.txt", workNeuralNetwork);
 		workNeuralNetwork.setWeights(workWeights);
 
-		logDebug = true;
+		logDebug = false;
 	}
 	
 	public Person(double[][][] basicWeights, double[][][] gatherWeights, double[][][] moveWeights, double[][][] workWeights)
@@ -209,8 +216,18 @@ public class Person implements Drawable, Updateable {
 		return 1 - nutrition/MAX_NUTRITION_POINTS;
 	}
 	
-	public Point2D getCoordinate()
+	public boolean hasNewCoordinate(Class<? extends Resource> resourceClass)
 	{
+		if(hasChangedCoordinateMap.containsKey(resourceClass))
+		{
+			return hasChangedCoordinateMap.get(resourceClass);
+		}
+		return true;
+	}
+	
+	public Point2D getCoordinate(Class<? extends Resource> resourceClass)
+	{
+		hasChangedCoordinateMap.put(resourceClass, false);
 		return coordinate;
 	}
 	
@@ -381,6 +398,10 @@ public class Person implements Drawable, Updateable {
 		nutrition -= nutrition_decline_rate*seconds;
 		aqua -= aqua_decline_rate*seconds;
 		lifetime_days += seconds/Const.SECONDS_PER_DAY;
+		if(lifetime_days > 1 && (int)(lifetime_days) % 365 == 0) 
+		{
+			System.out.println("Person: " + id + " has age: " + lifetime_days/365);
+		}
 	}
 	
 	public double getPotentialNutrition(int seconds)
@@ -416,6 +437,21 @@ public class Person implements Drawable, Updateable {
 		if(y > Const.WINDOW_HEIGHT) y = Const.WINDOW_HEIGHT;
 		
 		coordinate.setLocation(x, y);
+		hasChangedCoordinateMap.replaceAll((k, v) -> true);
+	}
+	
+	public void setLastSensorArea(Class<? extends Resource> resourceClass, SensorArea newArea)
+	{
+		lastAreaMap.put(resourceClass, newArea);
+	}
+	
+	public SensorArea getLastSensorArea(Class<? extends Resource> resourceClass)
+	{
+		if(!lastAreaMap.containsKey(resourceClass))
+		{
+			return new SensorArea(-1, 1);
+		}
+		return lastAreaMap.get(resourceClass);
 	}
 	
 	public Storage getPersonalStorage()

@@ -1,21 +1,19 @@
 package com.villagesim.sensors;
 
-import com.villagesim.areas.Area;
-
 public class SensorArea {
 	
-	private Area area;
+	private int areaId;
 	private double distance;
 	
-	public SensorArea(Area area, double distance)
+	public SensorArea(int areaId, double distance)
 	{
-		this.area = area;
+		this.areaId = areaId;
 		this.distance = distance;
 	}
 
-	public Area getArea()
+	public int getAreaId()
 	{
-		return area;
+		return areaId;
 	}
 	
 	public double getDistance()

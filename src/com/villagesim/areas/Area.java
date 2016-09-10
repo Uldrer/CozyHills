@@ -26,7 +26,10 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 	private boolean restrictionActive = false;
 	private double restrictionWeightLimit = 0;
 	private boolean resourceLimitReached = false;
+	private int id; // unique area id
 	private Map<Class<? extends Resource>, Boolean> containsMap = new HashMap<Class<? extends Resource>, Boolean>();
+	
+	private static int id_counter = 0;
 	
 	public Area(Color color, int width, int height)
 	{
@@ -34,8 +37,14 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 		this.width = width;
 		this.height = height;
 		this.coordinate = generateCoordinate();
+		id = ++id_counter;
 		
 		populateResourceList();
+	}
+	
+	public int getId()
+	{
+		return id;
 	}
 	
 	public void setRestrictionActive(boolean active)
