@@ -242,6 +242,7 @@ public class SensorUpdater {
 			}
 			SensorArea newWildFoodArea = new SensorArea(closestArea != null ? closestArea.getId() : -1, closestDist);
 			person.setLastSensorArea(Nuts.class,newWildFoodArea);
+			person.setLastSensorArea(Berries.class,newWildFoodArea);
 			return newWildFoodArea;
 		}
 		else

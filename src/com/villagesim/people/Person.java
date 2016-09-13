@@ -25,7 +25,6 @@ import com.villagesim.interfaces.Drawable;
 import com.villagesim.interfaces.Printable;
 import com.villagesim.interfaces.Updateable;
 import com.villagesim.optimizer.ArtificialNeuralNetwork;
-import com.villagesim.resources.Game;
 import com.villagesim.resources.Resource;
 import com.villagesim.sensors.SensorArea;
 import com.villagesim.sensors.SensorHelper;
