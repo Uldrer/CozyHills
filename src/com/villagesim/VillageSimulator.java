@@ -16,7 +16,8 @@ import com.villagesim.sensors.SensorUpdater;
 public class VillageSimulator 
 {
 	
-	private Set<Object> objectSet = new HashSet<Object>();
+	private List<Person> personList = new ArrayList<Person>();
+	private Map<Integer, Area> areaMap = new HashMap<Integer, Area>();
 	private final int WATER_AREAS = 40;
 	private final int FOOD_AREAS = 40;
 	private final int POPULATION = 1;
@@ -28,7 +29,7 @@ public class VillageSimulator
 		// Setup state
 		setupState();
 		
-		sensorUpdater = new SensorUpdater(objectSet);
+		sensorUpdater = new SensorUpdater(personList, areaMap);
 		
 	}
 
@@ -37,13 +38,22 @@ public class VillageSimulator
 		// Update sensors
 		sensorUpdater.updateSensorReadingsAll();
 		
-		// Update objects
-		for(Iterator<Object> i = objectSet.iterator(); i.hasNext(); ) 
+		// Update persons
+		for(Iterator<Person> i = personList.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
 		    if(item instanceof Updateable)
 		    {
 		    	((Updateable) item).update(TIME_STEP);
+		    }
+		}
+		
+		// Update areas
+		for(Area area : areaMap.values()) 
+		{
+		    if(area instanceof Updateable)
+		    {
+		    	((Updateable) area).update(TIME_STEP);
 		    }
 		}
 		
@@ -53,17 +63,25 @@ public class VillageSimulator
 	
 	public void logResources()
 	{
-		FileHandler.logResourcesToFile(objectSet);
+		FileHandler.logResourcesToFile(areaMap);
 	}
 	
 	public void drawAllObjects(Graphics bbg)
 	{
-		for(Iterator<Object> i = objectSet.iterator(); i.hasNext(); ) 
+		for(Iterator<Person> i = personList.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
 		    if(item instanceof Drawable)
 		    {
 		    	((Drawable) item).draw(bbg);
+		    }
+		}
+		
+		for(Area area : areaMap.values()) 
+		{
+		    if(area instanceof Drawable)
+		    {
+		    	((Drawable) area).draw(bbg);
 		    }
 		}
 	}
@@ -75,15 +93,11 @@ public class VillageSimulator
 	
 	public double getLifeTimeDays(double[][][] basicWeights, double[][][] gatherWeights, double[][][] moveWeights, double[][][] workWeights)
 	{
-		for(Object obj : objectSet)
+		for(Person person : personList)
 		{
-			if(obj instanceof Person)
+			if(person.isWeightsEqual(basicWeights, gatherWeights, moveWeights, workWeights))
 			{
-				Person person = (Person)obj;
-				if(person.isWeightsEqual(basicWeights, gatherWeights, moveWeights, workWeights))
-				{
-					return person.getLifetime();
-				}
+				return person.getLifetime();
 			}
 		}
 		return -1;
@@ -110,51 +124,43 @@ public class VillageSimulator
 	public void addPerson(double[][][] basicWeights, double[][][] gatherWeights, double[][][] moveWeights, double[][][] workWeights)
 	{
 		clearPeople();
-		objectSet.add(new Person(basicWeights, gatherWeights, moveWeights, workWeights));
+		personList.add(new Person(basicWeights, gatherWeights, moveWeights, workWeights));
 		sensorUpdater.resetAliveState();
 	}
 	
 	private void createWater()
 	{
 		for (int i = 0; i < WATER_AREAS; i++) {
-			objectSet.add(new Lake(20, 20));
+			Area newArea = new Lake(20, 20);
+			areaMap.put(newArea.getId(), newArea);
         }
 	}
 	
 	private void createFood()
 	{
 		for (int i = 0; i < FOOD_AREAS; i++) {
-			objectSet.add(new Wood(20, 20));
+			Area newArea = new Wood(20, 20);
+			areaMap.put(newArea.getId(), newArea);
         }
 	}
 	
 	private void createPeople()
 	{
 		for (int i = 0; i < POPULATION; i++) {
-			objectSet.add(new Person());
+			personList.add(new Person());
         }
 	}
 	
 	private void clearPeople()
 	{
-		Iterator<Object> it = objectSet.iterator(); 
-		while(it.hasNext()){
-		    Object obj = it.next();
-		    if(obj instanceof Person){
-		        it.remove();
-		    }
-		}
+		personList.clear();
 	}
 	
 	public void resetState()
 	{
-		for(Object obj : objectSet)
+		for(Area area : areaMap.values())
 		{
-			if(obj instanceof Area)
-			{
-				Area area = (Area) obj;
-				area.reset();
-			}
+			area.reset();
 		}
 	}
 

@@ -2,9 +2,8 @@ package com.villagesim.sensors;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import com.villagesim.areas.Area;
 import com.villagesim.areas.Lake;
@@ -21,49 +20,32 @@ import com.villagesim.resources.Water;
 
 public class SensorUpdater {
 	
-	private Set<Object> stateObjects;
+	private List<Person> personList;
+	private Map<Integer, Area> areaMap;
 	private boolean aliveState = true;
 	
-	public SensorUpdater(Set<Object> objects)
+	public SensorUpdater(List<Person> personList, Map<Integer, Area> areaMap)
 	{
-		this.stateObjects = objects;
+		this.personList = personList;
+		this.areaMap = areaMap;
 	}
 	
 	public void updateSensorReadingsAll()
 	{
 		aliveState = false;
-		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
+		for(Person person : personList) 
 		{
-		    Object item = i.next();
-		    if(item instanceof Person)
-		    {
-		    	Person person = ((Person) item);
-		    	
-		    	if(person.isAlive())
-		    	{
-		    		updateSensorReadings(person);
-		    		aliveState = true;
-		    	}
-		    }
+	    	if(person.isAlive())
+	    	{
+	    		updateSensorReadings(person);
+	    		aliveState = true;
+	    	}
 		}
 	}
 	
 	public Area getAreaFromId(int id)
 	{
-		for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
-		{
-		    Object item = i.next();
-		    if(item instanceof Area)
-		    {
-		    	Area area = ((Area) item);
-		    	
-		    	if(id == area.getId())
-		    	{
-		    		return area;
-		    	}
-		    }
-		}
-		return null;
+		return areaMap.get(id);
 	}
 	
 	public boolean getAliveState()
@@ -170,12 +152,11 @@ public class SensorUpdater {
 			Point2D personCoordinate = person.getCoordinate(Water.class);
 			double closestDist = SensorHelper.getNormalizedMaxDistance();
 			Area closestArea = null;
-			for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
+			for(Area area : areaMap.values()) 
 			{
-			    Object item = i.next();
-			    if(item instanceof Lake)
+			    if(area instanceof Lake)
 			    {
-			    	Lake lake = ((Lake) item);
+			    	Lake lake = ((Lake) area);
 			    	
 			    	if(!lake.containsResource(Water.class)) continue;
 			    	
@@ -207,12 +188,11 @@ public class SensorUpdater {
 			Point2D personCoordinate = person.getCoordinate(Food.class);
 			double closestDist = SensorHelper.getNormalizedMaxDistance();
 			Area closestArea = null;
-			for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
+			for(Area area : areaMap.values())
 			{
-			    Object item = i.next();
-			    if(item instanceof Storage)
+			    if(area instanceof Storage)
 			    {
-			    	Storage storage = ((Storage) item);
+			    	Storage storage = ((Storage) area);
 			    	
 			    	if(!storage.containsResource(Food.class) && !storage.containsResource(Water.class)) continue;
 			    	
@@ -243,12 +223,11 @@ public class SensorUpdater {
 			Point2D personCoordinate = person.getCoordinate(Nuts.class);
 			double closestDist = SensorHelper.getNormalizedMaxDistance();
 			Area closestArea = null;
-			for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
+			for(Area area : areaMap.values())
 			{
-			    Object item = i.next();
-			    if(item instanceof Wood)
+			    if(area instanceof Wood)
 			    {
-			    	Wood wood = ((Wood) item);
+			    	Wood wood = ((Wood) area);
 			    	
 			    	if(!wood.containsResource(Nuts.class) && !wood.containsResource(Berries.class)) continue;
 			    	
@@ -279,12 +258,11 @@ public class SensorUpdater {
 			Point2D personCoordinate = person.getCoordinate(Game.class);
 			double closestDist = SensorHelper.getNormalizedMaxDistance();
 			Area closestArea = null;
-			for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
+			for(Area area : areaMap.values())
 			{
-			    Object item = i.next();
-			    if(item instanceof Wood)
+			    if(area instanceof Wood)
 			    {
-			    	Wood wood = ((Wood) item);
+			    	Wood wood = ((Wood) area);
 			    	
 			    	if(!wood.containsResource(Game.class)) continue;
 			    	
@@ -315,12 +293,11 @@ public class SensorUpdater {
 			Point2D personCoordinate = person.getCoordinate(Fish.class);
 			double closestDist = SensorHelper.getNormalizedMaxDistance();
 			Area closestArea = null;
-			for(Iterator<Object> i = stateObjects.iterator(); i.hasNext(); ) 
+			for(Area area : areaMap.values()) 
 			{
-			    Object item = i.next();
-			    if(item instanceof Lake)
+			    if(area instanceof Lake)
 			    {
-			    	Lake lake = ((Lake) item);
+			    	Lake lake = ((Lake) area);
 			    	
 			    	if(!lake.containsResource(Fish.class)) continue;
 			    	

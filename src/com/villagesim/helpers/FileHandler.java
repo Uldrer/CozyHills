@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.Set;
+import java.util.Map;
 
 import com.villagesim.areas.Area;
 import com.villagesim.optimizer.ArtificialNeuralNetwork;
@@ -59,21 +59,17 @@ public class FileHandler {
 		}
 	}
 	
-	public static void logResourcesToFile(Set<Object> objectSet)
+	public static void logResourcesToFile(Map<Integer, Area> areaMap)
 	{
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter("resources.txt", "UTF-8");
 			
-			for (Object obj : objectSet)
+			for (Area area : areaMap.values())
             {
-				if(obj instanceof Area)
+				for(Resource resource : area.getResourceList())
 				{
-					Area area = (Area) obj;
-					for(Resource resource : area.getResourceList())
-					{
-						writer.println(resource.getDebugString());
-					}
+					writer.println(resource.getDebugString());
 				}
             }
 			writer.close();
