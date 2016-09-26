@@ -52,6 +52,7 @@ public class Person implements Drawable, Updateable {
 	private boolean logDebug = true;
 	private List<Action> lastActionList;
 	private DeathReason reasonOfDeath;
+	private List<Point2D> lifePath;
 	
 	// Neural network
 	private ArtificialNeuralNetwork basicNeuralNetwork;
@@ -72,6 +73,7 @@ public class Person implements Drawable, Updateable {
 	private final double AQUA_DECLINE_TIME_S = 259200; // Assumption, death after 3 days without water
 	private final double OLD_AGE_LIMIT_DAYS = 14600; // Everyone dies at 40 for now, hunter/gather was harsch!
 	private final int PERSON_SIZE = 3;
+	private final int PATH_SIZE = 2;
 	private final int BASIC_ACTION_SIZE = BasicAction.values().length;
 	private final int NUTRITION_INCREASE_TIME_S = 3600; // Assumption, eating for one hour restores 3 weeks of starvation, kinda crude
 	private final int AQUA_INCREASE_TIME_S = 900; // Assumption, drinking for 15 min restores 3 days of dehydration, kinda crude
@@ -133,6 +135,10 @@ public class Person implements Drawable, Updateable {
 		// Personal storage can hold just so much
 		personalStorage.setRestrictionActive(true);
 		personalStorage.setRestrictionWeightLimit(PERSONAL_STORAGE_LIMIT);
+		
+		// Path list
+		lifePath = new ArrayList<Point2D>();
+		lifePath.add((Point2D)coordinate.clone());
 		
 		// Init default list
 		sensorInputs = new ArrayList<Double>();
@@ -197,12 +203,31 @@ public class Person implements Drawable, Updateable {
 		if(isAlive())
 		{
 			bbg.setColor(Color.BLACK);
+			bbg.fillOval((int)(coordinate.getX()+0.5), (int)(coordinate.getY()+0.5), PERSON_SIZE, PERSON_SIZE);
 		}
 		else
 		{
+			bbg.setColor(Color.BLACK);
+			int lastX = -1;
+			int lastY = -1;
+			for(Point2D pt : lifePath)
+			{
+				int currentX = (int)(pt.getX()+0.5);
+				int currentY = (int)(pt.getY()+0.5);
+				
+				if(lastX != -1 && lastY != -1)
+				{
+					bbg.drawLine(currentX, currentY, lastX, lastY);
+				}
+				bbg.fillOval(currentX, currentY, PATH_SIZE, PATH_SIZE);
+				lastX = currentX;
+				lastY = currentY;
+			}
+			// Draw death spot in red
 			bbg.setColor(Color.RED);
+			bbg.fillOval((int)(coordinate.getX()+0.5), (int)(coordinate.getY()+0.5), PERSON_SIZE, PERSON_SIZE);
 		}
-		bbg.fillOval((int)(coordinate.getX()+0.5), (int)(coordinate.getY()+0.5), PERSON_SIZE, PERSON_SIZE);
+		
 	}
 	
 	public double getThirstValue()
@@ -436,6 +461,7 @@ public class Person implements Drawable, Updateable {
 		if(y > Const.WINDOW_HEIGHT) y = Const.WINDOW_HEIGHT;
 		
 		coordinate.setLocation(x, y);
+		lifePath.add((Point2D)coordinate.clone());
 		hasChangedCoordinateMap.replaceAll((k, v) -> true);
 	}
 	

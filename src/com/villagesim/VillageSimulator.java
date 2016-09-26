@@ -68,6 +68,14 @@ public class VillageSimulator
 	
 	public void drawAllObjects(Graphics bbg)
 	{
+		for(Area area : areaMap.values()) 
+		{
+		    if(area instanceof Drawable)
+		    {
+		    	((Drawable) area).draw(bbg);
+		    }
+		}
+		
 		for(Iterator<Person> i = personList.iterator(); i.hasNext(); ) 
 		{
 		    Object item = i.next();
@@ -77,13 +85,6 @@ public class VillageSimulator
 		    }
 		}
 		
-		for(Area area : areaMap.values()) 
-		{
-		    if(area instanceof Drawable)
-		    {
-		    	((Drawable) area).draw(bbg);
-		    }
-		}
 	}
 	
 	public boolean isAlive()
