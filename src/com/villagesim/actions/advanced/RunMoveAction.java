@@ -11,7 +11,7 @@ public class RunMoveAction implements Action, Printable  {
 
 	private Person person;
 	private Random rand = new Random();
-	private final double RUNNING_SPEED = 3.3; // m/s
+	private final double RUNNING_SPEED = 2.78; // m/s
 	
 	public RunMoveAction(Person person)
 	{
