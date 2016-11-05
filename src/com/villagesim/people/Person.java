@@ -417,14 +417,22 @@ public class Person implements Drawable, Updateable {
         	
 	}
 	
+	private boolean lifetimeDebugginWritten = false;
+	
 	private void updateLifeStatus(int seconds) {
 
 		nutrition -= nutrition_decline_rate*seconds;
 		aqua -= aqua_decline_rate*seconds;
 		lifetime_days += seconds/Const.SECONDS_PER_DAY;
-		if(lifetime_days > 1 && (int)(lifetime_days) % 365 == 0) 
+		if(lifetime_days > 1 && (int)(lifetime_days) % 365 == 0 && !lifetimeDebugginWritten) 
 		{
 			System.out.println("Person: " + id + " has age: " + lifetime_days/365);
+			lifetimeDebugginWritten = true;	
+		}
+		
+		if((int)(lifetime_days) % 365 != 0)
+		{
+			lifetimeDebugginWritten = false;
 		}
 	}
 	
