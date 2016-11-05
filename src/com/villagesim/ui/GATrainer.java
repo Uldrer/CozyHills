@@ -1,6 +1,7 @@
 package com.villagesim.ui;
 
 import com.villagesim.helpers.FileHandler;
+import com.villagesim.helpers.FileHeader.WeightType;
 import com.villagesim.optimizer.GeneticAlgorithm;
 
 public class GATrainer {
@@ -32,10 +33,10 @@ public class GATrainer {
              if(bestLifeTime > bestTotalLifeTime)
              {
             	 bestTotalLifeTime = bestLifeTime;
-            	 FileHandler.writeWeightsToFile(weights[0], "weights.txt");
-            	 FileHandler.writeWeightsToFile(weights[1], "gatherWeights.txt");
-            	 FileHandler.writeWeightsToFile(weights[2], "moveWeights.txt");
-            	 FileHandler.writeWeightsToFile(weights[3], "workWeights.txt");
+            	 FileHandler.writeWeightsToFile(weights[0], "weights.txt", WeightType.MAIN);
+            	 FileHandler.writeWeightsToFile(weights[1], "gatherWeights.txt", WeightType.GATHER);
+            	 FileHandler.writeWeightsToFile(weights[2], "moveWeights.txt", WeightType.MOVE);
+            	 FileHandler.writeWeightsToFile(weights[3], "workWeights.txt", WeightType.WORK);
              }
          }
 	}

@@ -9,16 +9,22 @@ import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import com.villagesim.areas.Area;
+import com.villagesim.helpers.FileHeader.WeightType;
 import com.villagesim.optimizer.ArtificialNeuralNetwork;
 import com.villagesim.resources.Resource;
 
 public class FileHandler {
 	
-	public static void writeWeightsToFile(double[][][] weights, String path)
+	public static void writeWeightsToFile(double[][][] weights, String path, WeightType type)
 	{
+		FileHeader currentHeader = new FileHeader(type);
+		
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(path, "UTF-8");
+			
+			// Write FileHeader to file
+			writer.print(currentHeader.toString());
 			
 			for (int i = 0; i < weights.length; i++)
             {
@@ -84,19 +90,32 @@ public class FileHandler {
 	{
 		double[][][][] theWeights = new double[4][][][];
 		
-		theWeights[0] = retrieveWeights(basicPath, basicNetwork);
-		theWeights[1] = retrieveWeights(gatherPath, gatherNetwork);
-		theWeights[2] = retrieveWeights(movePath, moveNetwork);
-		theWeights[3] = retrieveWeights(workPath, workNetwork);
+		theWeights[0] = retrieveWeights(basicPath, basicNetwork, WeightType.MAIN);
+		theWeights[1] = retrieveWeights(gatherPath, gatherNetwork, WeightType.GATHER);
+		theWeights[2] = retrieveWeights(movePath, moveNetwork, WeightType.MOVE);
+		theWeights[3] = retrieveWeights(workPath, workNetwork, WeightType.WORK);
 		
 		return theWeights;
 	}
 	
-	public static double[][][] retrieveWeights(String path, ArtificialNeuralNetwork network)
+	public static double[][][] retrieveWeights(String path, ArtificialNeuralNetwork network, WeightType type)
     {
 		double[][][] theWeights = null;
 		
+		FileHeader currentHeader = new FileHeader(type);
+		
 		try(BufferedReader br = new BufferedReader(new FileReader(path))) {
+			
+			// Read header
+			FileHeader readHeader = new FileHeader();
+			readHeader = readHeader.parseHeader(br);
+			
+			// Validate
+			if(!currentHeader.equals(readHeader)) 
+			{
+				System.out.println("Invalid header detected");
+				System.exit(0);
+			}
  
 	        int[] nodes = network.getNodes();
 	

@@ -1,5 +1,6 @@
 package com.villagesim.sensors;
 
+// Only add sensors, don't edit or remove, affects weight headers
 public enum Sensor {
 	
 	DIST_TO_WATER(0), 					// #1 Distance to nearest drinking water
@@ -28,4 +29,6 @@ public enum Sensor {
 	{
 		return index;
 	}
+	
+	public static final int size = Sensor.values().length;
 }

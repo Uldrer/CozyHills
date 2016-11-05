@@ -28,4 +28,6 @@ public enum BasicAction implements ActionInterface{
 	public int getIndex() {
 		return index;
 	}
+	
+	public static final int size = BasicAction.values().length;
 }

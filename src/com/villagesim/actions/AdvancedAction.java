@@ -52,4 +52,18 @@ public enum AdvancedAction implements ActionInterface{
 		return rank;
 	}
 	
+	public static int getSize(BasicAction bAction)
+	{
+		int count = 0;
+		for(AdvancedAction a : AdvancedAction.values())
+		{
+			if(a.getActionType() == bAction.getActionType())
+			{
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	
 }

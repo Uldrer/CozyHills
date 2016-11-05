@@ -20,6 +20,7 @@ import com.villagesim.areas.Area;
 import com.villagesim.areas.Storage;
 import com.villagesim.helpers.ArrayIndexComparator;
 import com.villagesim.helpers.FileHandler;
+import com.villagesim.helpers.FileHeader.WeightType;
 import com.villagesim.interfaces.Action;
 import com.villagesim.interfaces.Drawable;
 import com.villagesim.interfaces.Printable;
@@ -86,16 +87,16 @@ public class Person implements Drawable, Updateable {
 	{
 		init();
 		
-		basicWeights = FileHandler.retrieveWeights("weights.txt", basicNeuralNetwork);
+		basicWeights = FileHandler.retrieveWeights("weights.txt", basicNeuralNetwork, WeightType.MAIN);
 		basicNeuralNetwork.setWeights(basicWeights);
 
-		gatherWeights = FileHandler.retrieveWeights("gatherWeights.txt", gatherNeuralNetwork);
+		gatherWeights = FileHandler.retrieveWeights("gatherWeights.txt", gatherNeuralNetwork, WeightType.GATHER);
 		gatherNeuralNetwork.setWeights(gatherWeights);
 		
-		moveWeights = FileHandler.retrieveWeights("moveWeights.txt", moveNeuralNetwork);
+		moveWeights = FileHandler.retrieveWeights("moveWeights.txt", moveNeuralNetwork, WeightType.MOVE);
 		moveNeuralNetwork.setWeights(moveWeights);
 		
-		workWeights = FileHandler.retrieveWeights("workWeights.txt", workNeuralNetwork);
+		workWeights = FileHandler.retrieveWeights("workWeights.txt", workNeuralNetwork, WeightType.WORK);
 		workNeuralNetwork.setWeights(workWeights);
 
 		logDebug = false;
