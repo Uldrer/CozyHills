@@ -18,9 +18,9 @@ public class VillageSimulator
 	
 	private List<Person> personList = new ArrayList<Person>();
 	private Map<Integer, Area> areaMap = new HashMap<Integer, Area>();
-	private final int WATER_AREAS = 40;
-	private final int FOOD_AREAS = 40;
-	private final int POPULATION = 1;
+	private final int WATER_AREAS = 10;
+	private final int FOOD_AREAS = 10;
+	private final int POPULATION = 2;
 	private final int TIME_STEP = 60;
 	private SensorUpdater sensorUpdater;
 	

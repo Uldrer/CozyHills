@@ -113,6 +113,7 @@ public class FileHandler {
 			// Validate
 			if(!currentHeader.equals(readHeader)) 
 			{
+				// TODO fix so that it does validate if only missing actions or sensors.
 				System.out.println("Invalid header detected");
 				System.exit(0);
 			}
