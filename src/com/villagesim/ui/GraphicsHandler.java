@@ -2,7 +2,7 @@ package com.villagesim.ui;
 
 import javax.swing.*;
 
-import com.cozyhills.ui.InputHandler;
+import com.villagesim.ui.InputHandler;
 import com.villagesim.Const;
 import com.villagesim.VillageSimulator;
 import com.villagesim.helpers.FileHandler;
