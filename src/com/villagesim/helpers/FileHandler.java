@@ -160,7 +160,6 @@ public class FileHandler {
 			{
 				if(current_action.equals(read_action))
 				{
-					//theWeights[0][current_action_counter] = theReadWeights[0][read_action_counter];
 					theWeights[0][current_action_counter] = new double[currentSensorList.size()];
 					break;
 				}
