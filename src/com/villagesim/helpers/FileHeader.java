@@ -2,6 +2,7 @@ package com.villagesim.helpers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.villagesim.actions.AdvancedAction;
 import com.villagesim.actions.BasicAction;
@@ -10,6 +11,9 @@ import com.villagesim.sensors.Sensor;
 public class FileHeader {
 	
 	private WeightType weightType;
+	private int[] neuralNetworkNodes;
+	private ArrayList<String> sensorList = new ArrayList<String>();
+	private ArrayList<String> actionList = new ArrayList<String>();
 	
 	public enum WeightType {
 		UNDEFINED, WORK, MAIN, MOVE, GATHER
@@ -24,39 +28,78 @@ public class FileHeader {
 	public FileHeader(WeightType wType)
 	{
 		weightType = wType;
-		
 		neuralNetworkNodes = new int[2];
-		neuralNetworkNodes[0] = Sensor.size;
 		
-		int actions = 0;
-		switch(wType)
+		// Setup Sensors and Actions
+		init();
+		
+		neuralNetworkNodes[0] = sensorList.size();
+		neuralNetworkNodes[1] = actionList.size();
+	}
+	
+	public ArrayList<String> getSensorList()
+	{
+		return sensorList;
+	}
+	
+	public ArrayList<String> getActionList()
+	{
+		return actionList;
+	}
+	
+	private void init()
+	{
+		// Add sensors
+		for(Sensor s : Sensor.values())
 		{
-		case GATHER:
-			actions = AdvancedAction.getSize(BasicAction.GATHER);
-			break;
-		case MAIN:
-			actions = BasicAction.size;
-			break;
-		case MOVE:
-			actions = AdvancedAction.getSize(BasicAction.MOVE);
-			break;
-		case WORK:
-			actions = AdvancedAction.getSize(BasicAction.WORK);
-			break;
-		default:
-			actions = 0;
-			break;
+			sensorList.add(s.toString());
 		}
 		
-		neuralNetworkNodes[1] = actions;
+		// Add actions
+		switch(weightType)
+		{
+		case GATHER:
+			for(AdvancedAction a : AdvancedAction.values())
+			{
+				if(a.getActionType() == BasicAction.GATHER.getActionType())
+				{
+					actionList.add(a.toString());
+				}	
+			}
+			break;
+		case MAIN:
+			for(BasicAction a : BasicAction.values())
+			{
+				actionList.add(a.toString());
+			}
+			break;
+		case MOVE:
+			for(AdvancedAction a : AdvancedAction.values())
+			{
+				if(a.getActionType() == BasicAction.MOVE.getActionType())
+				{
+					actionList.add(a.toString());
+				}	
+			}
+			break;
+		case WORK:
+			for(AdvancedAction a : AdvancedAction.values())
+			{
+				if(a.getActionType() == BasicAction.WORK.getActionType())
+				{
+					actionList.add(a.toString());
+				}	
+			}
+			break;
+		default:
+			break;
+		}
 	}
 	
 	public int[] getNodes()
 	{
 		return neuralNetworkNodes.clone();
 	}
-	
-	private int[] neuralNetworkNodes;
 	
 	public FileHeader parseHeader(BufferedReader br)
 	{
@@ -87,7 +130,23 @@ public class FileHeader {
 			    	continue;
 			    }
 			    
-			    // TODO check order?
+			    if(lineSplit[0].equals("SensorNames:"))
+			    {
+			    	for(int i = 1; i < lineSplit.length; i++)
+			    	{
+			    		sensorList.add(lineSplit[i]);
+			    	}
+			    	continue;
+			    }
+			    
+			    if(lineSplit[0].equals("ActionNames:"))
+			    {
+			    	for(int i = 1; i < lineSplit.length; i++)
+			    	{
+			    		actionList.add(lineSplit[i]);
+			    	}
+			    	continue;
+			    }
 			    
 			    // Exit parsing
 			    if(lineSplit[0].equals("EndHeader"))
@@ -120,6 +179,21 @@ public class FileHeader {
 		return true;
 	}
 	
+	public boolean validateInput(Object obj)
+	{
+		if(obj == null) return false;
+		
+		if(!FileHeader.class.isAssignableFrom(obj.getClass())) return false;
+		
+		final FileHeader other = (FileHeader) obj;
+		
+		if(this.weightType != other.weightType) return false;
+		if(other.getNodes() == null) return false;
+		if(other.getNodes().length != 2) return false;
+		
+		return true;
+	}
+	
 	public String toString()
 	{
 		String output = "";
@@ -130,49 +204,15 @@ public class FileHeader {
 		output += "Sensors: " + neuralNetworkNodes[0] + "\r\n";
 		output += "Actions: " + neuralNetworkNodes[1] + "\r\n";
 		output += "SensorNames:";
-		for(Sensor s : Sensor.values())
+		for(String s : sensorList)
 		{
 			output += " " + s.toString();
 		}
 		output += "\r\n";
 		output += "ActionNames:";
-		switch(weightType)
+		for(String a : actionList)
 		{
-		case GATHER:
-			for(AdvancedAction a : AdvancedAction.values())
-			{
-				if(a.getActionType() == BasicAction.GATHER.getActionType())
-				{
-					output += " " + a.toString();
-				}	
-			}
-			break;
-		case MAIN:
-			for(BasicAction a : BasicAction.values())
-			{
-				output += " " + a.toString();
-			}
-			break;
-		case MOVE:
-			for(AdvancedAction a : AdvancedAction.values())
-			{
-				if(a.getActionType() == BasicAction.MOVE.getActionType())
-				{
-					output += " " + a.toString();
-				}	
-			}
-			break;
-		case WORK:
-			for(AdvancedAction a : AdvancedAction.values())
-			{
-				if(a.getActionType() == BasicAction.WORK.getActionType())
-				{
-					output += " " + a.toString();
-				}	
-			}
-			break;
-		default:
-			break;
+			output += " " + a.toString();
 		}
 		output += "\r\n";
 		output += "EndHeader" + "\r\n";

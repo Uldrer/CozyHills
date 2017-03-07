@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Map;
 
 import com.villagesim.areas.Area;
@@ -113,56 +114,130 @@ public class FileHandler {
 			// Validate
 			if(!currentHeader.equals(readHeader)) 
 			{
-				// TODO fix so that it does validate if only missing actions or sensors.
-				System.out.println("Invalid header detected");
-				System.exit(0);
+				// It does validate if only missing actions or sensors.
+				if(!currentHeader.validateInput(readHeader))
+				{
+					// Nothing we can do, probably error in header
+					System.out.println("Invalid header detected");
+					System.exit(0);
+				}
 			}
+	        int[] read_nodes = readHeader.getNodes();
+	        double[][][] theReadWeights = parseWeights(br, read_nodes);
+	        
+	        // Fix, re-order and add wights according to read header and current valid header
+	        theWeights = reorderWeights(readHeader, currentHeader, theReadWeights);
  
-	        int[] nodes = network.getNodes();
-	
-	        int theColumn = 0;
-	        int theRow = 0;
-	        int theDepth = 0;
-	        double[][][] temp1 = new double[nodes.length - 1][][];
-	        double[][] temp2 = new double[nodes[1]][];
-	
-	        while (br.ready())
-	        {
-	            if (theRow == temp2.length)
-	            {
-	                theRow = 0;
-	                temp1[theDepth] = temp2;
-	                theDepth++;
-	                temp2 = new double[nodes[1 + theDepth]][];
-	            }
-	            String lineString = br.readLine();
-	            String[] dataNumbers;
-	
-	            dataNumbers = lineString.split(" ");
-	
-	            double[] temp3 = new double[dataNumbers.length];
-	
-	            for(String dataNr : dataNumbers)
-	            {
-	                double number = Double.parseDouble(dataNr);
-	                temp3[theColumn] = number;
-	                theColumn++;
-	            }
-	            theColumn = 0;
-	            temp2[theRow] = temp3;
-	            theRow++;
-	        }
-	        temp1[theDepth] = temp2;
-	        theWeights = temp1;
 		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			theWeights = network.initiateRandomWeights();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			theWeights = network.initiateRandomWeights();
 		}
-        return theWeights;
+		return theWeights;
     }
+	
+	private static double[][][] reorderWeights(FileHeader readHeader, FileHeader currentHeader, double[][][] theReadWeights)
+	{
+		int[] currentNodes = currentHeader.getNodes();
+		
+		double[][][] theWeights = new double[currentNodes.length - 1][][];
+	    
+	    // Add Sensorlist and Actionlist
+		theWeights[0] = new double[currentHeader.getActionList().size()][];
+		List<String> currentSensorList = currentHeader.getSensorList();
+		List<String> currentActionList = currentHeader.getActionList();
+		List<String> readSensorList = readHeader.getSensorList();
+		List<String> readActionList = readHeader.getActionList();
+		
+		// Sort actions
+		int current_action_counter = 0;
+		for(String current_action : currentActionList)
+		{
+			int read_action_counter = 0;
+			for(String read_action : readActionList)
+			{
+				if(current_action.equals(read_action))
+				{
+					//theWeights[0][current_action_counter] = theReadWeights[0][read_action_counter];
+					theWeights[0][current_action_counter] = new double[currentSensorList.size()];
+					break;
+				}
+				read_action_counter++;
+			}
+			if(read_action_counter == readActionList.size())
+			{
+				theWeights[0][current_action_counter] = new double[currentSensorList.size()];
+			}
+			else
+			{
+				int current_sensor_counter = 0;
+				for(String current_sensor : currentSensorList)
+				{
+					int read_sensor_counter = 0;
+					for(String read_sensor : readSensorList)
+					{
+						if(current_sensor.equals(read_sensor))
+						{
+							theWeights[0][current_action_counter][current_sensor_counter] = theReadWeights[0][read_action_counter][read_sensor_counter];
+							break;
+						}
+						read_sensor_counter++;
+					}
+					if(read_sensor_counter == readSensorList.size())
+					{
+						theWeights[0][current_action_counter][current_sensor_counter] = 0;
+					}
+					current_sensor_counter++;
+				}
+			}
+			current_action_counter++;
+		}
+	    
+	    return theWeights;
+		
+	}
+	
+	private static double[][][] parseWeights(BufferedReader br, int[] nodes) throws NumberFormatException, IOException
+	{
+		double[][][] theWeights = null;
+		
+		int theColumn = 0;
+	    int theRow = 0;
+	    int theDepth = 0;
+	    double[][][] temp1 = new double[nodes.length - 1][][];
+	    double[][] temp2 = new double[nodes[1]][];
+	
+	    while (br.ready())
+	    {
+	        if (theRow == temp2.length)
+	        {
+	            theRow = 0;
+	            temp1[theDepth] = temp2;
+	            theDepth++;
+	            temp2 = new double[nodes[1 + theDepth]][];
+	        }
+	        String lineString = br.readLine();
+	        String[] dataNumbers;
+	
+	        dataNumbers = lineString.split(" ");
+	
+	        double[] temp3 = new double[dataNumbers.length];
+	
+	        for(String dataNr : dataNumbers)
+	        {
+	            double number = Double.parseDouble(dataNr);
+	            temp3[theColumn] = number;
+	            theColumn++;
+	        }
+	        theColumn = 0;
+	        temp2[theRow] = temp3;
+	        theRow++;
+	    }
+	    temp1[theDepth] = temp2;
+	    theWeights = temp1;
+	
+	    return theWeights;
+	}
 }

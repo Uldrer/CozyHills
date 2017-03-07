@@ -5,7 +5,6 @@ import javax.swing.*;
 import com.villagesim.ui.InputHandler;
 import com.villagesim.Const;
 import com.villagesim.VillageSimulator;
-import com.villagesim.helpers.FileHandler;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
