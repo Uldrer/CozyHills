@@ -21,6 +21,7 @@ import com.villagesim.areas.Storage;
 import com.villagesim.helpers.ArrayIndexComparator;
 import com.villagesim.helpers.FileHandler;
 import com.villagesim.helpers.FileHeader.WeightType;
+import com.villagesim.helpers.LimitedQueue;
 import com.villagesim.interfaces.Action;
 import com.villagesim.interfaces.Drawable;
 import com.villagesim.interfaces.Printable;
@@ -51,7 +52,7 @@ public class Person implements Drawable, Updateable {
 	// Debugging
 	private boolean logDeath = true;
 	private boolean logDebug = true;
-	private List<Action> lastActionList;
+	private LimitedQueue<Action> lastActionQueue = new LimitedQueue<Action>(30); // Save latest 30 actions
 	private DeathReason reasonOfDeath;
 	private List<Point2D> lifePath;
 	
@@ -345,7 +346,7 @@ public class Person implements Drawable, Updateable {
 		
 		// Send action package in priority order
 		ActionMediator.addActionList(actionList);
-		lastActionList = actionList;
+		lastActionQueue.add(actionList.get(0));
 	}
 	
 	public List<Action> makeAdvancedActionDecision(BasicAction basicAction) 
@@ -397,7 +398,7 @@ public class Person implements Drawable, Updateable {
 	private void printLastActionList()
 	{
 		System.out.print("[");
-		for(Action action : lastActionList)
+		for(Action action : lastActionQueue)
 		{
 			if(action instanceof Printable)
 			{
@@ -406,6 +407,7 @@ public class Person implements Drawable, Updateable {
 			}
 		}
 		System.out.println("]");
+		System.out.println(lastActionQueue.printCounter());
 	}
 	
 	private Integer[] determineAction(double[] output)
