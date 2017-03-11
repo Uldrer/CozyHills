@@ -88,7 +88,9 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 	public void draw(Graphics bbg)
 	{
 		bbg.setColor(color);
-		bbg.fillRect((int)(coordinate.getX()+0.5), (int)(coordinate.getY()+0.5), width, height);
+		double x_mid = coordinate.getX() - width/2;
+		double y_mid = coordinate.getY() - height/2;
+		bbg.fillRect((int)(x_mid+0.5), (int)(y_mid+0.5), width, height);
 		// TODO change appearance depending on content
 	}
 	
