@@ -11,7 +11,6 @@ public class WalkWaterMoveAction implements Action, Printable  {
 
 	private Person person;
 	private Sensor directionSensor;
-	private final double WALKING_SPEED = 1.4; // m/s
 	
 	public WalkWaterMoveAction(Person person)
 	{
@@ -28,8 +27,8 @@ public class WalkWaterMoveAction implements Action, Printable  {
 		double vx = Math.cos(angle_radians);
 		double vy = Math.sin(angle_radians);
 		
-		double dx = WALKING_SPEED/Const.METER_PER_PIXEL * seconds * vx;
-		double dy = WALKING_SPEED/Const.METER_PER_PIXEL * seconds * vy;
+		double dx = Const.WALKING_SPEED/Const.METER_PER_PIXEL * seconds * vx;
+		double dy = Const.WALKING_SPEED/Const.METER_PER_PIXEL * seconds * vy;
 		
 		person.move(dx, dy, AdvancedAction.WALK_DIRECTION_WATER);
 		

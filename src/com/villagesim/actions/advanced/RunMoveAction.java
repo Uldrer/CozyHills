@@ -12,7 +12,6 @@ public class RunMoveAction implements Action, Printable  {
 
 	private Person person;
 	private Random rand = new Random();
-	private final double RUNNING_SPEED = 2.78; // m/s
 	
 	public RunMoveAction(Person person)
 	{
@@ -28,8 +27,8 @@ public class RunMoveAction implements Action, Printable  {
 		double vx = Math.cos(angle_radians);
 		double vy = Math.sin(angle_radians);
 		
-		double dx = RUNNING_SPEED/Const.METER_PER_PIXEL * seconds * vx;
-		double dy = RUNNING_SPEED/Const.METER_PER_PIXEL * seconds * vy;
+		double dx = Const.RUNNING_SPEED/Const.METER_PER_PIXEL * seconds * vx;
+		double dy = Const.RUNNING_SPEED/Const.METER_PER_PIXEL * seconds * vy;
 		
 		person.move(dx, dy, AdvancedAction.RUN);		
 				
