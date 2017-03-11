@@ -3,6 +3,7 @@ package com.villagesim.actions.advanced;
 import java.util.Random;
 
 import com.villagesim.Const;
+import com.villagesim.actions.AdvancedAction;
 import com.villagesim.interfaces.Action;
 import com.villagesim.interfaces.Printable;
 import com.villagesim.people.Person;
@@ -32,7 +33,7 @@ public class WalkRandomMoveAction implements Action, Printable  {
 		double dx = WALKING_SPEED/Const.METER_PER_PIXEL * seconds * vx;
 		double dy = WALKING_SPEED/Const.METER_PER_PIXEL * seconds * vy;
 		
-		person.move(dx, dy);
+		person.move(dx, dy, AdvancedAction.WALK_RANDOM);
 		
 		if(person.printDebug())
 		{

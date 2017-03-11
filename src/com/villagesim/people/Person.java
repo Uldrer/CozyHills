@@ -15,6 +15,7 @@ import com.villagesim.Const;
 import com.villagesim.actions.ActionFactory;
 import com.villagesim.actions.ActionHelper;
 import com.villagesim.actions.ActionMediator;
+import com.villagesim.actions.AdvancedAction;
 import com.villagesim.actions.BasicAction;
 import com.villagesim.areas.Area;
 import com.villagesim.areas.Storage;
@@ -56,6 +57,7 @@ public class Person implements Drawable, Updateable {
 	private LimitedQueue<Action> lastActionQueue = new LimitedQueue<Action>(30); // Save latest 30 actions
 	private DeathReason reasonOfDeath;
 	private List<Point2D> lifePath;
+	private List<AdvancedAction> lifePathType;
 	
 	// Neural network
 	private ArtificialNeuralNetwork basicNeuralNetwork;
@@ -145,6 +147,7 @@ public class Person implements Drawable, Updateable {
 		// Path list
 		lifePath = new ArrayList<Point2D>();
 		lifePath.add((Point2D)coordinate.clone());
+		lifePathType = new ArrayList<AdvancedAction>();
 		
 		// Init default list
 		sensorInputs = new ArrayList<Double>();
@@ -202,7 +205,7 @@ public class Person implements Drawable, Updateable {
 	{
 		return id;
 	}
-	
+	private boolean hasLoggedPath = false;
 	@Override
 	public void draw(Graphics bbg) 
 	{
@@ -216,6 +219,7 @@ public class Person implements Drawable, Updateable {
 			bbg.setColor(Color.BLACK);
 			int lastX = -1;
 			int lastY = -1;
+			int counter = 0;
 			for(Point2D pt : lifePath)
 			{
 				int currentX = (int)(pt.getX()+0.5);
@@ -223,11 +227,26 @@ public class Person implements Drawable, Updateable {
 				
 				if(lastX != -1 && lastY != -1)
 				{
+					if(lifePathType.get(counter) == AdvancedAction.WALK_DIRECTION_WATER)
+					{
+						bbg.setColor(Color.BLUE);
+					}
+					else if(lifePathType.get(counter) == AdvancedAction.WALK_DIRECTION_WOOD)
+					{
+						bbg.setColor(Color.GREEN);
+					}
 					bbg.drawLine(currentX, currentY, lastX, lastY);
+					counter++;
+					bbg.setColor(Color.BLACK);
 				}
 				bbg.fillOval(currentX, currentY, PATH_SIZE, PATH_SIZE);
 				lastX = currentX;
 				lastY = currentY;
+			}
+			if(!hasLoggedPath)
+			{
+				System.out.println("Lifepath size: " + lifePath.size());
+				hasLoggedPath = true;
 			}
 			// Draw death spot in red
 			bbg.setColor(Color.RED);
@@ -479,7 +498,7 @@ public class Person implements Drawable, Updateable {
 		if(aqua > MAX_AQUA_POINTS) aqua = MAX_AQUA_POINTS;
 	}
 	
-	public void move(double dx, double dy)
+	public void move(double dx, double dy, AdvancedAction actionType)
 	{
 		int x = (int) (coordinate.getX() + dx + 0.5);
 		int y = (int) (coordinate.getY() + dy + 0.5);
@@ -489,6 +508,8 @@ public class Person implements Drawable, Updateable {
 		
 		coordinate.setLocation(x, y);
 		lifePath.add((Point2D)coordinate.clone());
+		lifePathType.add(actionType);
+		
 		hasChangedCoordinateMap.replaceAll((k, v) -> true);
 	}
 	
