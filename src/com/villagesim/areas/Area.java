@@ -40,6 +40,35 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 		id = ++id_counter;
 	}
 	
+	public void reGenerateCoordinate()
+	{
+		this.coordinate = generateCoordinate();
+	}
+	
+	public boolean overlaps(Area other)
+	{
+		double x_other_min = other.getCoordinate().getX() - other.width;
+		double x_other_max = other.getCoordinate().getX() + other.width;
+		double x_this_min = this.coordinate.getX() - this.width;
+		double x_this_max = this.coordinate.getX() + this.width;
+		
+		// No overlap in x so no overlap
+		if(x_other_max < x_this_min) return false;
+		if(x_other_min > x_this_max) return false;
+		
+		double y_other_min = other.getCoordinate().getY() - other.height;
+		double y_other_max = other.getCoordinate().getY() + other.height;
+		double y_this_min = this.coordinate.getY() - this.height;
+		double y_this_max = this.coordinate.getY() + this.height;
+		
+		// No overlap in y so no overlap
+		if(y_other_max < y_this_min) return false;
+		if(y_other_min > y_this_max) return false;
+		
+		// Else we have overlap
+		return true;
+	}
+	
 	public int getId()
 	{
 		return id;

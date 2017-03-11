@@ -133,6 +133,10 @@ public class VillageSimulator
 	{
 		for (int i = 0; i < WATER_AREAS; i++) {
 			Area newArea = new Lake(20, 20, 10);
+			while(isAreaOverlappingExisting(areaMap, newArea))
+			{
+				newArea.reGenerateCoordinate();
+			}
 			areaMap.put(newArea.getId(), newArea);
         }
 	}
@@ -141,6 +145,10 @@ public class VillageSimulator
 	{
 		for (int i = 0; i < FOOD_AREAS; i++) {
 			Area newArea = new Wood(20, 20);
+			while(isAreaOverlappingExisting(areaMap, newArea))
+			{
+				newArea.reGenerateCoordinate();
+			}
 			areaMap.put(newArea.getId(), newArea);
         }
 	}
@@ -163,6 +171,15 @@ public class VillageSimulator
 		{
 			area.reset();
 		}
+	}
+	
+	private boolean isAreaOverlappingExisting(Map<Integer, Area> areas, Area newArea)
+	{
+		for(Area existingArea : areas.values())
+		{
+			if(newArea.overlaps(existingArea)) return true;
+		}
+		return false;
 	}
 
 }
