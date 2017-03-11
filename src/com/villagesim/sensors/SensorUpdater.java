@@ -68,7 +68,6 @@ public class SensorUpdater {
 		// Create list of closest areas
 		List<Area> closestAreas = new ArrayList<Area>();
 
-		// The order of these inputs should not be altered lightly when weights have been produced to the ANN
 		// If more are added change in SensoreHelper.SENSOR_INPUTS
 		
 		// #1 Distance to nearest drinking water
@@ -137,6 +136,14 @@ public class SensorUpdater {
 		
 		// #15 Amount of aqua in nearest storage
 		sensorInputs.add(getAmountOfAquaInArea(getAreaFromId(storageArea.getAreaId()), Water.class));
+		closestAreas.add(null);
+		
+		// #16 Direction in radians to nearest water
+		sensorInputs.add(getDirectionInRadians(person, getAreaFromId(drinkingArea.getAreaId())));
+		closestAreas.add(null);
+				
+		// #17 Direction in radians to nearest wood
+		sensorInputs.add(getDirectionInRadians(person, getAreaFromId(wildFoodArea.getAreaId())));
 		closestAreas.add(null);
 		
 		// Set new sensor inputs
@@ -329,6 +336,16 @@ public class SensorUpdater {
 	private double getPersonHunger(Person person)
 	{
 		return person.getHungerValue();
+	}
+	
+	private double getDirectionInRadians(Person person, Area area)
+	{
+		double direction_radians = 0;
+		if(area != null)
+		{
+			direction_radians = SensorHelper.computeDirectionToArea(person.getCoordinate(), area);
+		}
+		return direction_radians;
 	}
 	
 	private double getAmountOfAquaInArea(Area area, Class<? extends Resource> resourceClass)

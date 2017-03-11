@@ -26,6 +26,17 @@ public final class SensorHelper {
 		// TODO Use squared distance to avoid square root
 		return Math.sqrt(dx * dx + dy * dy);
 	}
+	
+	public static double computeDirectionToArea(Point2D coordinate, Area area)
+	{
+		Point2D areaCoordinate = area.getCoordinate();
+		
+		double xDiff = coordinate.getX() - areaCoordinate.getX();
+		double yDiff = coordinate.getY() - areaCoordinate.getY();
+		
+		return Math.atan2(yDiff, xDiff);
+	}
+
 
 	public static double computeNormalizedDistanceToArea(Point2D coordinate, Area area)
 	{

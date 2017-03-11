@@ -8,13 +8,14 @@ import com.villagesim.actions.advanced.FishGatherAction;
 import com.villagesim.actions.advanced.HuntGatherAction;
 import com.villagesim.actions.advanced.NutsGatherAction;
 import com.villagesim.actions.advanced.RunMoveAction;
-import com.villagesim.actions.advanced.WalkMoveAction;
+import com.villagesim.actions.advanced.WalkRandomMoveAction;
+import com.villagesim.actions.advanced.WalkWaterMoveAction;
+import com.villagesim.actions.advanced.WalkWoodMoveAction;
 import com.villagesim.actions.advanced.WaterGatherAction;
 import com.villagesim.actions.advanced.WoodGatherAction;
 import com.villagesim.actions.basic.DrinkAction;
 import com.villagesim.actions.basic.EatAction;
 import com.villagesim.actions.basic.NullAction;
-import com.villagesim.helpers.AdvancedActionComparator;
 import com.villagesim.interfaces.Action;
 import com.villagesim.people.Person;
 
@@ -118,8 +119,14 @@ public class ActionFactory {
 			// TODO Implement
 			newAction = new NullAction(person);
 			break;
-		case WALK:
-			newAction = new WalkMoveAction(person);
+		case WALK_RANDOM:
+			newAction = new WalkRandomMoveAction(person);
+			break;
+		case WALK_DIRECTION_WATER:
+			newAction = new WalkWaterMoveAction(person);
+			break;
+		case WALK_DIRECTION_WOOD:
+			newAction = new WalkWoodMoveAction(person);
 			break;
 		case WATER:
 			newAction = new WaterGatherAction(person);

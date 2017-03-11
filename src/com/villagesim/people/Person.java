@@ -261,6 +261,11 @@ public class Person implements Drawable, Updateable {
 		return coordinate;
 	}
 	
+	public Point2D getCoordinate()
+	{
+		return coordinate;
+	}
+	
 	private Point2D generateCoordinate()
 	{
 		Point2D coord = new Point2D.Double();

@@ -11,10 +11,12 @@ public enum AdvancedAction implements ActionInterface{
 	WOOD("Gather wood", BasicAction.GATHER, 5),
 	
 	// Movement, add more when needed
-	WALK("Walk", BasicAction.MOVE, 0),
+	WALK_RANDOM("Walk_random", BasicAction.MOVE, 0),
 	RUN("Run", BasicAction.MOVE, 1),
 	SWIM("Swim", BasicAction.MOVE, 2),
 	CLIMB("Climb", BasicAction.MOVE, 3),
+	WALK_DIRECTION_WATER("Walk_water", BasicAction.MOVE, 4),
+	WALK_DIRECTION_WOOD("Walk_wood", BasicAction.MOVE, 5),
 	
 	// Work, add more when needed
 	TRANSPORT_GOODS("Transport goods", BasicAction.WORK, 0),

@@ -17,7 +17,9 @@ public enum Sensor {
 	NUTRITION_IN_FISH(11),				// #12 Amount of nutrition in nearest fishing ground
 	NUTRITION_IN_PERSONAL_STORAGE(12),	// #13 Amount of nutrition in personal storage
 	AQUA_IN_PERSONAL_STORAGE(13),		// #14 Amount of aqua in personal storage
-	AQUA_IN_STORAGE(14);				// #15 Amount of aqua in nearest storage
+	AQUA_IN_STORAGE(14),				// #15 Amount of aqua in nearest storage
+	DIRECTION_TO_NEAREST_WATER(15),		// #16 Direction to nearest drinking water
+	DIRECTION_TO_NEAREST_WOOD(16);		// #17 Direction to nearest wood
 
 	private final int index;
 	
