@@ -23,7 +23,7 @@ public class GATrainer {
          //GA
          for (int i = 0; i < trainingIter; i++)
          {
-             GA.trainNetwork();
+             GA.trainNetwork(i);
 
              double[][][][] weights = GA.getBestWeights();
              double bestLifeTime = GA.getBestScore();

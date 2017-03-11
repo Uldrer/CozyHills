@@ -49,12 +49,13 @@ public class FileHandler {
 		}
 	}
 	
-	public static void logScoreToFile(double[] score)
+	public static void logScoreToFile(double[] score, int iteration)
 	{
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter("score.txt", "UTF-8");
 			
+			writer.println("Iteration: " + iteration);
 			for (int i = 0; i < score.length; i++)
             {
                 writer.println(String.valueOf(score[i]));

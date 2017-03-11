@@ -116,7 +116,7 @@ public class GeneticAlgorithm {
     /// Method for training the network. Trains one generation each time using mutation, crossover and
     /// elitism. The best individual in the population is always compared to the best so far and saved 
     /// if it has a better fitness score. Crossover is done among individuals chosen by <see cref="tournamentSelect"/>
-    public void trainNetwork()
+    public void trainNetwork(int iteration)
     {
         
         for (int i = 0; i < populationSize; i++)
@@ -182,7 +182,7 @@ public class GeneticAlgorithm {
             }
         }
         
-        FileHandler.logScoreToFile(score);
+        FileHandler.logScoreToFile(score, iteration);
 
         double[][][][][] tempPopulation = copyPopulation(population);
 
