@@ -123,6 +123,7 @@ public class Person implements Drawable, Updateable {
 		
 		logDebug = false;
 		logActions = false;
+		logDeath = false;
 	}
 	
 	private void init()
