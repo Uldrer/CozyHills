@@ -52,6 +52,7 @@ public class Person implements Drawable, Updateable {
 	// Debugging
 	private boolean logDeath = true;
 	private boolean logDebug = true;
+	private boolean logActions = true;
 	private LimitedQueue<Action> lastActionQueue = new LimitedQueue<Action>(30); // Save latest 30 actions
 	private DeathReason reasonOfDeath;
 	private List<Point2D> lifePath;
@@ -101,6 +102,7 @@ public class Person implements Drawable, Updateable {
 		workNeuralNetwork.setWeights(workWeights);
 
 		logDebug = false;
+		logActions = true;
 	}
 	
 	public Person(double[][][] basicWeights, double[][][] gatherWeights, double[][][] moveWeights, double[][][] workWeights)
@@ -120,6 +122,7 @@ public class Person implements Drawable, Updateable {
 		workNeuralNetwork.setWeights(workWeights);
 		
 		logDebug = false;
+		logActions = false;
 	}
 	
 	private void init()
@@ -279,7 +282,10 @@ public class Person implements Drawable, Updateable {
 			if(logDeath)
 			{
 				System.out.println("Person id: " + id + " died of " + reasonOfDeath.getName() + " after " + lifetime_days + " days.");
-				printLastActionList();
+				if(logActions)
+				{
+					printLastActionList();
+				}
 				logDeath = false;
 			}
 			return;
@@ -344,9 +350,13 @@ public class Person implements Drawable, Updateable {
 			}
 		}
 		
+		
 		// Send action package in priority order
 		ActionMediator.addActionList(actionList);
-		lastActionQueue.add(actionList.get(0));
+		if(logActions)
+		{
+			lastActionQueue.add(actionList.get(0));
+		}
 	}
 	
 	public List<Action> makeAdvancedActionDecision(BasicAction basicAction) 
