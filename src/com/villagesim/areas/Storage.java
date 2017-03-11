@@ -17,6 +17,8 @@ public class Storage extends Area {
 
 	public Storage() {
 		super(Color.MAGENTA, STORAGE_SIZE, STORAGE_SIZE);
+		
+		populateResourceList();
 	}
 
 	@Override

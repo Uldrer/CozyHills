@@ -17,6 +17,8 @@ public class Wood extends Area {
 	
 	public Wood(int width, int height) {
 		super(Color.GREEN, width, height);
+		
+		populateResourceList();
 	}
 
 	@Override

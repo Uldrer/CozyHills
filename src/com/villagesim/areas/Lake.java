@@ -13,9 +13,22 @@ public class Lake extends Area {
 	private final double LITERS_PER_CUBIC_METER = 1000;
 	private boolean waterDepleted = false;
 	private boolean fishDepleted = false;
+	private double fishAmount = 0;
 
 	public Lake(int width, int height) {
 		super(Color.BLUE, width, height);
+		
+		this.fishAmount = width*height;
+		
+		populateResourceList();
+	}
+	
+	public Lake(int width, int height, double fishAmount)  {
+		super(Color.BLUE, width, height);
+		
+		this.fishAmount = fishAmount;
+		
+		populateResourceList();
 	}
 
 	@Override
@@ -29,7 +42,7 @@ public class Lake extends Area {
 		water.addDepletedListener(this);
 		resourceList.add(water);
 		
-		Resource fish = new Fish(getSize());
+		Resource fish = new Fish(fishAmount);
 		fish.setIncreaseRate(0.5);
 		fish.addDepletedListener(this);
 		resourceList.add(fish);

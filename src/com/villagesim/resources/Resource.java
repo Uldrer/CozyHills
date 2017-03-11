@@ -87,14 +87,14 @@ public abstract class Resource implements Updateable, Depletable {
 	@Override
 	public void update(int seconds) 
 	{
-		// Hysteres function that nonly fires once
+		// Hysteres function that only fires once
 		if(!depleted && this.amount <= 0) 
 		{
 			depleted = true;
 			fireDepletedEvent(true);
 			if(printDebug)
 			{
-				System.out.println("Resource " + id + ": " + name + " depleted after lifetime: " + lifetime_days);
+				System.out.println("Resource " + id + ": " + name + " depleted after lifetime: " + lifetime_days + " days.");
 			}
 		}
 		if(depleted && this.amount > initialAmount*0.1) 
@@ -103,7 +103,7 @@ public abstract class Resource implements Updateable, Depletable {
 			fireDepletedEvent(false);
 			if(printDebug)
 			{
-				System.out.println("Resource: " + id + ": " + name + " un-depleted after lifetime: " + lifetime_days);
+				System.out.println("Resource: " + id + ": " + name + " un-depleted after lifetime: " + lifetime_days + " days.");
 			}
 		}
 		

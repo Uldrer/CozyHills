@@ -38,8 +38,6 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 		this.height = height;
 		this.coordinate = generateCoordinate();
 		id = ++id_counter;
-		
-		populateResourceList();
 	}
 	
 	public int getId()
