@@ -31,8 +31,8 @@ public final class SensorHelper {
 	{
 		Point2D areaCoordinate = area.getCoordinate();
 		
-		double xDiff = coordinate.getX() - areaCoordinate.getX();
-		double yDiff = coordinate.getY() - areaCoordinate.getY();
+		double xDiff = areaCoordinate.getX() - coordinate.getX();
+		double yDiff = areaCoordinate.getY() - coordinate.getY();
 		
 		return Math.atan2(yDiff, xDiff);
 	}
