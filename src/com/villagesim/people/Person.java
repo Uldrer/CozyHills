@@ -246,6 +246,7 @@ public class Person implements Drawable, Updateable {
 			if(!hasLoggedPath)
 			{
 				System.out.println("Lifepath size: " + lifePath.size());
+				System.out.println("LifePathType size: " + lifePathType.size());
 				hasLoggedPath = true;
 			}
 			// Draw death spot in red

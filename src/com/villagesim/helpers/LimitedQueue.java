@@ -1,4 +1,5 @@
 package com.villagesim.helpers;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -21,20 +22,49 @@ public class LimitedQueue<E> extends LinkedList<E> {
     @Override
     public boolean add(E o) {
         super.add(o);
+        
+        if(o instanceof Printable)
+    	{
+    		String key = ((Printable)o).getDebugPrint();
+    		if(actionCounter.containsKey(key))
+    		{
+    			actionCounter.put(key, actionCounter.get(key) + 1);
+    		}
+    		else
+    		{
+    			actionCounter.put(key, 1);
+    		}
+    	}
+        
         while (size() > limit) 
         {
-        	if(o instanceof Printable)
-        	{
-        		String key = ((Printable)o).getDebugPrint();
-        		if(actionCounter.containsKey(key))
-        		{
-        			actionCounter.put(key, actionCounter.get(key) + 1);
-        		}
-        		else
-        		{
-        			actionCounter.put(key, 1);
-        		}
-        	}
+        	super.remove(); 
+        }
+        return true;
+    }
+    
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        super.addAll(c);
+        
+        for(E o : c)
+        {
+	        if(o instanceof Printable)
+	    	{
+	    		String key = ((Printable)o).getDebugPrint();
+	    		if(actionCounter.containsKey(key))
+	    		{
+	    			actionCounter.put(key, actionCounter.get(key) + 1);
+	    		}
+	    		else
+	    		{
+	    			actionCounter.put(key, 1);
+	    		}
+	    	}
+	    }
+        
+        while (size() > limit) 
+        {
         	super.remove(); 
         }
         return true;
