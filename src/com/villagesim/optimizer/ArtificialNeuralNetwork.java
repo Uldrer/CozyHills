@@ -32,6 +32,8 @@ public class ArtificialNeuralNetwork {
     /// The threshold is removed from the input to a node before the value is propagated 
     /// forward in the network.
     private double[][] thresholds;
+    
+    private boolean useTanh = true;
 	
 	// Constructor
 	public ArtificialNeuralNetwork(int theInputNodes, int[] theHiddenLayers, int theOutputNodes)
@@ -209,12 +211,15 @@ public class ArtificialNeuralNetwork {
         output[2] -= thresholds[0][2];
         
         /*
-         * Not using Tanh in the fast functions, we hope that it converges fast anyway during training
-        // Tanh (-1:1)	
-        output[0] = Math.tanh(output[0]);
-        output[1] = Math.tanh(output[1]);
-        output[2] = Math.tanh(output[2]);
-        */
+         * When not using Tanh in the fast functions, we hope that it converges fast anyway during training
+         */
+        if(useTanh)
+        {
+	        // Tanh (-1:1)	
+	        output[0] = Math.tanh(output[0]);
+	        output[1] = Math.tanh(output[1]);
+	        output[2] = Math.tanh(output[2]);
+        }
         
         return output;
     }
@@ -238,13 +243,16 @@ public class ArtificialNeuralNetwork {
         output[3] -= thresholds[0][3];
         
         /*
-         * Not using Tanh in the fast functions, we hope that it converges fast anyway during training
-        // Tanh (-1:1)	
-        output[0] = Math.tanh(output[0]);
-        output[1] = Math.tanh(output[1]);
-        output[2] = Math.tanh(output[2]);
-        output[3] = Math.tanh(output[3]);
-        */
+         * When not using Tanh in the fast functions, we hope that it converges fast anyway during training
+         */
+        if(useTanh)
+        {
+	        // Tanh (-1:1)	
+	        output[0] = Math.tanh(output[0]);
+	        output[1] = Math.tanh(output[1]);
+	        output[2] = Math.tanh(output[2]);
+	        output[3] = Math.tanh(output[3]);
+        }
         
         return output;
     }
@@ -270,14 +278,17 @@ public class ArtificialNeuralNetwork {
         output[4] -= thresholds[0][4];
         
         /*
-         * Not using Tanh in the fast functions, we hope that it converges fast anyway during training
-        // Tanh (-1:1)	
-        output[0] = Math.tanh(output[0]);
-        output[1] = Math.tanh(output[1]);
-        output[2] = Math.tanh(output[2]);
-        output[3] = Math.tanh(output[3]);
-        output[4] = Math.tanh(output[4]);
-        */
+         * When not using Tanh in the fast functions, we hope that it converges fast anyway during training
+         */
+        if(useTanh)
+        {
+	        // Tanh (-1:1)	
+	        output[0] = Math.tanh(output[0]);
+	        output[1] = Math.tanh(output[1]);
+	        output[2] = Math.tanh(output[2]);
+	        output[3] = Math.tanh(output[3]);
+	        output[4] = Math.tanh(output[4]);
+        }
         
         return output;
     }
@@ -304,16 +315,21 @@ public class ArtificialNeuralNetwork {
         output[4] -= thresholds[0][4];
         output[5] -= thresholds[0][5];
         
+        
         /*
-         * Not using Tanh in the fast functions, we hope that it converges fast anyway during training
-        // Tanh (-1:1)	
-        output[0] = Math.tanh(output[0]);
-        output[1] = Math.tanh(output[1]);
-        output[2] = Math.tanh(output[2]);
-        output[3] = Math.tanh(output[3]);
-        output[4] = Math.tanh(output[4]);
-        output[5] = Math.tanh(output[5]);
-        */
+         * When not using Tanh in the fast functions, we hope that it converges fast anyway during training
+         */
+        if(useTanh)
+        {
+	        // Tanh (-1:1)	
+	        output[0] = Math.tanh(output[0]);
+	        output[1] = Math.tanh(output[1]);
+	        output[2] = Math.tanh(output[2]);
+	        output[3] = Math.tanh(output[3]);
+	        output[4] = Math.tanh(output[4]);
+	        output[5] = Math.tanh(output[5]);
+        }
+        
         return output;
     }
     
@@ -342,16 +358,19 @@ public class ArtificialNeuralNetwork {
         output[6] -= thresholds[0][6];
         
         /*
-         * Not using Tanh in the fast functions, we hope that it converges fast anyway during training
-        // Tanh (-1:1)	
-        output[0] = Math.tanh(output[0]);
-        output[1] = Math.tanh(output[1]);
-        output[2] = Math.tanh(output[2]);
-        output[3] = Math.tanh(output[3]);
-        output[4] = Math.tanh(output[4]);
-        output[5] = Math.tanh(output[5]);
-        output[6] = Math.tanh(output[6]);
-        */
+         * When not using Tanh in the fast functions, we hope that it converges fast anyway during training
+         */
+        if(useTanh)
+        {
+	        // Tanh (-1:1)	
+	        output[0] = Math.tanh(output[0]);
+	        output[1] = Math.tanh(output[1]);
+	        output[2] = Math.tanh(output[2]);
+	        output[3] = Math.tanh(output[3]);
+	        output[4] = Math.tanh(output[4]);
+	        output[5] = Math.tanh(output[5]);
+	        output[6] = Math.tanh(output[6]);
+        }
         return output;
     }
     
