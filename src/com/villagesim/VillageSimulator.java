@@ -22,6 +22,7 @@ public class VillageSimulator
 	private final int FOOD_AREAS = 20;
 	private final int POPULATION = 1;
 	private final int TIME_STEP = 60;
+	private final int FISH_AMOUNT = 100;
 	private SensorUpdater sensorUpdater;
 	
 	public VillageSimulator()
@@ -132,7 +133,7 @@ public class VillageSimulator
 	private void createWater()
 	{
 		for (int i = 0; i < WATER_AREAS; i++) {
-			Area newArea = new Lake(20, 20, 10);
+			Area newArea = new Lake(20, 20, FISH_AMOUNT);
 			while(isAreaOverlappingExisting(areaMap, newArea))
 			{
 				newArea.reGenerateCoordinate();

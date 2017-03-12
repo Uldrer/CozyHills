@@ -376,7 +376,6 @@ public class Person implements Drawable, Updateable {
 			}
 		}
 		
-		
 		// Send action package in priority order
 		ActionMediator.addActionList(actionList);
 		if(logActions)
