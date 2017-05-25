@@ -12,7 +12,7 @@ public class GATrainer {
 	
 	public GATrainer()
 	{
-		 trainingIter = 1000;
+		 trainingIter = 10000;
 	}
 	
 	public void run()
@@ -34,9 +34,6 @@ public class GATrainer {
              {
             	 bestTotalLifeTime = bestLifeTime;
             	 FileHandler.writeWeightsToFile(weights[0], "weights.txt", WeightType.MAIN);
-            	 FileHandler.writeWeightsToFile(weights[1], "gatherWeights.txt", WeightType.GATHER);
-            	 FileHandler.writeWeightsToFile(weights[2], "moveWeights.txt", WeightType.MOVE);
-            	 FileHandler.writeWeightsToFile(weights[3], "workWeights.txt", WeightType.WORK);
              }
          }
 	}

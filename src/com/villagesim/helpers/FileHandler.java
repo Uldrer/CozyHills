@@ -16,6 +16,8 @@ import com.villagesim.resources.Resource;
 
 public class FileHandler {
 	
+	private static int NUMBER_OF_NETWORKS = 1;
+	
 	public static void writeWeightsToFile(double[][][] weights, String path, WeightType type)
 	{
 		FileHeader currentHeader = new FileHeader(type);
@@ -87,15 +89,11 @@ public class FileHandler {
 		}
 	}
 	
-	public static double[][][][] retrieveWeights(String basicPath, ArtificialNeuralNetwork basicNetwork, String gatherPath, ArtificialNeuralNetwork gatherNetwork,
-			String movePath, ArtificialNeuralNetwork moveNetwork, String workPath, ArtificialNeuralNetwork workNetwork)
+	public static double[][][][] retrieveWeights(String basicPath, ArtificialNeuralNetwork basicNetwork)
 	{
-		double[][][][] theWeights = new double[4][][][];
+		double[][][][] theWeights = new double[NUMBER_OF_NETWORKS][][][];
 		
 		theWeights[0] = retrieveWeights(basicPath, basicNetwork, WeightType.MAIN);
-		theWeights[1] = retrieveWeights(gatherPath, gatherNetwork, WeightType.GATHER);
-		theWeights[2] = retrieveWeights(movePath, moveNetwork, WeightType.MOVE);
-		theWeights[3] = retrieveWeights(workPath, workNetwork, WeightType.WORK);
 		
 		return theWeights;
 	}

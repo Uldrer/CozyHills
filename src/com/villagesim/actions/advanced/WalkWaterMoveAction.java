@@ -1,7 +1,7 @@
 package com.villagesim.actions.advanced;
 
 import com.villagesim.Const;
-import com.villagesim.actions.AdvancedAction;
+import com.villagesim.actions.BasicAction;
 import com.villagesim.interfaces.Action;
 import com.villagesim.interfaces.Printable;
 import com.villagesim.people.Person;
@@ -30,7 +30,7 @@ public class WalkWaterMoveAction implements Action, Printable  {
 		double dx = Const.WALKING_SPEED/Const.METER_PER_PIXEL * seconds * vx;
 		double dy = Const.WALKING_SPEED/Const.METER_PER_PIXEL * seconds * vy;
 		
-		person.move(dx, dy, AdvancedAction.WALK_DIRECTION_WATER);
+		person.move(dx, dy, BasicAction.WALK_DIRECTION_WATER);
 		
 		if(person.printDebug())
 		{

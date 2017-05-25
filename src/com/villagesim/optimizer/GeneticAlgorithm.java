@@ -57,7 +57,7 @@ public class GeneticAlgorithm {
     private ArtificialNeuralNetwork workNetwork;
     
     // Change if adding or removing networks
-    private final int NUMBER_OF_NETWORKS = 4;
+    private final int NUMBER_OF_NETWORKS = 1;
     
     /// The current best fitness score. The score of <see cref="bestWeights"/>.
     private double bestScore;
@@ -85,10 +85,8 @@ public class GeneticAlgorithm {
     /// [mutation rate,crossover probability, poplation size, tournament select param, elitism, mutate width]</param>
     public GeneticAlgorithm(double[] gAParameters, boolean addBestWeights)
     {
-        basicNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, BasicAction.values().length);
-        gatherNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, ActionHelper.getAdvancedActionSize("Gather"));
-        moveNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, ActionHelper.getAdvancedActionSize("Move"));
-        workNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, ActionHelper.getAdvancedActionSize("Work"));
+    	int networkSize = BasicAction.values().length; 
+        basicNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, networkSize);
 
         mutationRate = gAParameters[0];
         crossoverProb = gAParameters[1];
@@ -105,8 +103,7 @@ public class GeneticAlgorithm {
         	addBestWeights();
         }
         
-        bestWeights = FileHandler.retrieveWeights("weights.txt", basicNetwork, "gatherWeights.txt", gatherNetwork,
-        		"moveWeights.txt", moveNetwork, "workWeights.txt", workNetwork);
+        bestWeights = FileHandler.retrieveWeights("weights.txt", basicNetwork);
 
         bestScore = 0;
         
@@ -135,13 +132,13 @@ public class GeneticAlgorithm {
             	else
             	{
             		// Check best again and make sure they are really better the the last over several runs
-            		score[i] = evaluateIndividual(weights[0], weights[1], weights[2], weights[3]);
+            		score[i] = evaluateIndividual(weights[0]);
             		System.out.println("Bestscore reevaluated: " + score[i]);
             	}
             }
             else 
             {
-            	score[i] = evaluateIndividual(weights[0], weights[1], weights[2], weights[3]);
+            	score[i] = evaluateIndividual(weights[0]);
             	if(bestEvaluated && !bestEvalChecked)
             	{
             		System.out.println("In not bestEvalChecked");
@@ -247,10 +244,10 @@ public class GeneticAlgorithm {
     /// The fitness is the inverse of this energy with respect to number of data points.
     /// <param name="weights">The weights to evaluate.</param>
     /// <returns>Returns the fitness of these weights.</returns>
-    private double evaluateIndividual(double[][][] basicWeights, double[][][] gatherWeights, double[][][] moveWeights, double[][][] workWeights)
+    private double evaluateIndividual(double[][][] basicWeights)
     {
         // Add a person with this weight to simulator
-        villageSimulator.addPerson(basicWeights, gatherWeights, moveWeights, workWeights);
+        villageSimulator.addPerson(basicWeights);
         
         // Let his life play out
         while(villageSimulator.isAlive())
@@ -259,7 +256,7 @@ public class GeneticAlgorithm {
         }
         
         // For now, give fitness score according to long life
-        double score = villageSimulator.getLifeTimeDays(basicWeights, gatherWeights, moveWeights, workWeights);
+        double score = villageSimulator.getLifeTimeDays(basicWeights);
         
         // Reset state for next individual
         villageSimulator.resetState();
@@ -474,17 +471,13 @@ public class GeneticAlgorithm {
         for (int i = 0; i < populationSize; i++)
         {
         	weightsArray[0] = basicNetwork.initiateRandomWeights();
-        	weightsArray[1] = gatherNetwork.initiateRandomWeights();
-        	weightsArray[2] = moveNetwork.initiateRandomWeights();
-        	weightsArray[3] = workNetwork.initiateRandomWeights();
         	population[i] = weightsArray;
         }
     }
     
     private void addBestWeights()
     {
-    	double[][][][] bestWeights = FileHandler.retrieveWeights("weights.txt", basicNetwork, "gatherWeights.txt", gatherNetwork,
-        		"moveWeights.txt", moveNetwork, "workWeights.txt", workNetwork);
+    	double[][][][] bestWeights = FileHandler.retrieveWeights("weights.txt", basicNetwork);
     	
     	// Add old best weights to initial population
     	for(int i = 0; i < numberOfBestToInsert; i++)

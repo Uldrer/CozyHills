@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.villagesim.actions.AdvancedAction;
 import com.villagesim.actions.BasicAction;
 import com.villagesim.sensors.Sensor;
 
@@ -16,7 +15,7 @@ public class FileHeader {
 	private ArrayList<String> actionList = new ArrayList<String>();
 	
 	public enum WeightType {
-		UNDEFINED, WORK, MAIN, MOVE, GATHER
+		UNDEFINED, MAIN
     }
 	
 	public FileHeader()
@@ -58,37 +57,10 @@ public class FileHeader {
 		// Add actions
 		switch(weightType)
 		{
-		case GATHER:
-			for(AdvancedAction a : AdvancedAction.values())
-			{
-				if(a.getActionType() == BasicAction.GATHER.getActionType())
-				{
-					actionList.add(a.toString());
-				}	
-			}
-			break;
 		case MAIN:
 			for(BasicAction a : BasicAction.values())
 			{
 				actionList.add(a.toString());
-			}
-			break;
-		case MOVE:
-			for(AdvancedAction a : AdvancedAction.values())
-			{
-				if(a.getActionType() == BasicAction.MOVE.getActionType())
-				{
-					actionList.add(a.toString());
-				}	
-			}
-			break;
-		case WORK:
-			for(AdvancedAction a : AdvancedAction.values())
-			{
-				if(a.getActionType() == BasicAction.WORK.getActionType())
-				{
-					actionList.add(a.toString());
-				}	
 			}
 			break;
 		default:

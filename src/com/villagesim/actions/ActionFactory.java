@@ -27,64 +27,43 @@ public class ActionFactory {
 		this.person = person;
 	}
 	
-	public List<Action> getActions(int index)
+	public List<Action> getAction(int index)
 	{
-		// TODO make this nicer
+		// Determine action
 		List<Action> returnList = new ArrayList<Action>();
-		List<AdvancedAction> actionList = new ArrayList<AdvancedAction>();
-		for (AdvancedAction action : AdvancedAction.values()) 
+		for (BasicAction action : BasicAction.values()) 
 		{
 			if(index == action.getIndex())
 			{
-				actionList.add(action);
+				returnList.add(createBasicAction(action));
+				return returnList;
 			}
 		}
-		
-		if(actionList.isEmpty())
-		{
-			for (BasicAction action : BasicAction.values()) 
-			{
-				if(index == action.getIndex())
-				{
-					returnList.add(createBasicAction(action));
-					return returnList;
-				}
-			}
 			
-		}
-		else
-		{
-			for (BasicAction action : BasicAction.values()) 
-			{
-				if(index == action.getIndex())
-				{
-					List<Action> advancedActions = person.makeAdvancedActionDecision(action);
-					return advancedActions;
-				}
-			}
-		}
 		returnList.add(new NullAction(person));
 		return returnList;
 	}
 	
-	public Action getAdvancedAction(int index, BasicAction basicAction)
-	{
-		for (AdvancedAction action : AdvancedAction.values()) 
-		{
-			if(index == action.getRank() && basicAction.getActionType().equals(action.getActionType()))
-			{
-				return createAdvancedAction(action);
-			}
-		}
-		return new NullAction(person);
-	}
-	
-	private Action createAdvancedAction(AdvancedAction actionType)
+	private Action createBasicAction(BasicAction actionType)
 	{
 		Action newAction;
 		switch(actionType)
 		{
-		case BERRIES:
+		case EAT:
+			newAction = new EatAction(person);
+			break;
+		case DRINK:
+			newAction = new DrinkAction(person);
+			break;
+		case SLEEP:
+			// TODO Implement
+			newAction = new NullAction(person);
+			break;
+		case SOCIALIZE:
+			// TODO Implement
+			newAction = new NullAction(person);
+			break;
+		case GATHER_BERRIES:
 			newAction = new BerriesGatherAction(person);
 			break;
 		case BUILD:
@@ -99,13 +78,13 @@ public class ActionFactory {
 			// TODO Implement
 			newAction = new NullAction(person);
 			break;
-		case FISH:
+		case GATHER_FISH:
 			newAction = new FishGatherAction(person);
 			break;
 		case HUNT:
 			newAction = new HuntGatherAction(person);
 			break;
-		case NUTS:
+		case GATHER_NUTS:
 			newAction = new NutsGatherAction(person);
 			break;
 		case RUN:
@@ -128,53 +107,11 @@ public class ActionFactory {
 		case WALK_DIRECTION_WOOD:
 			newAction = new WalkWoodMoveAction(person);
 			break;
-		case WATER:
+		case GATHER_WATER:
 			newAction = new WaterGatherAction(person);
 			break;
-		case WOOD:
+		case GATHER_WOOD:
 			newAction = new WoodGatherAction(person);
-			break;
-		default:
-			newAction = new NullAction(person);
-			break;
-			
-		}
-		return newAction;
-	}
-	
-	private Action createBasicAction(BasicAction actionType)
-	{
-		Action newAction;
-		switch(actionType)
-		{
-		case EAT:
-			newAction = new EatAction(person);
-			break;
-		case DRINK:
-			newAction = new DrinkAction(person);
-			break;
-		case GATHER:
-			// Should never happen as it has advanced actions
-			System.out.println("Trying to create basic GATHER action. Should not happen.");
-			newAction = new NullAction(person);
-			break;
-		case MOVE:
-			// Should never happen as it has advanced actions
-			System.out.println("Trying to create basic MOVE action. Should not happen.");
-			newAction = new NullAction(person);
-			break;
-		case WORK:
-			// Should never happen as it has advanced actions
-			System.out.println("Trying to create basic WORK action. Should not happen.");
-			newAction = new NullAction(person);
-			break;
-		case SLEEP:
-			// TODO Implement
-			newAction = new NullAction(person);
-			break;
-		case SOCIALIZE:
-			// TODO Implement
-			newAction = new NullAction(person);
 			break;
 		default:
 			newAction = new NullAction(person);
