@@ -2,7 +2,6 @@ package com.villagesim.optimizer;
 import java.util.Random;
 
 import com.villagesim.VillageSimulator;
-import com.villagesim.actions.ActionHelper;
 import com.villagesim.actions.BasicAction;
 import com.villagesim.helpers.FileHandler;
 import com.villagesim.sensors.SensorHelper;
@@ -59,6 +58,7 @@ public class GeneticAlgorithm {
     /// The simulator to use for evaluation
     private VillageSimulator villageSimulator;
     
+    private boolean evaluateAllIndividuals = true;
     private boolean bestEvaluated = false;
     private boolean bestEvalChecked = false;
     private boolean newBestInPopulation = false;
@@ -106,67 +106,83 @@ public class GeneticAlgorithm {
     /// if it has a better fitness score. Crossover is done among individuals chosen by <see cref="tournamentSelect"/>
     public void trainNetwork(int iteration)
     {
-        
-        for (int i = 0; i < populationSize; i++)
+        if(evaluateAllIndividuals)
         {
-            double[][][][] weights = population[i];
-
-            if(i < numberOfBestToInsert && bestEvaluated)
+        	for (int i = 0; i < populationSize; i++)
             {
-            	System.out.println("In best evaluated. bestEvalChecked: " + bestEvalChecked);
-            	if(bestEvalChecked)
-            	{
-	            	// Don't re-evaluate for best weights, as that takes the longest,
-	            	// we are interested in new combinations that come from these.
-	            	score[i] = bestScore;
-            	}
-            	else
-            	{
-            		// Check best again and make sure they are really better the the last over several runs
-            		score[i] = evaluateIndividual(weights[0]);
-            		System.out.println("Bestscore reevaluated: " + score[i]);
-            	}
-            }
-            else 
-            {
-            	score[i] = evaluateIndividual(weights[0]);
-            	if(bestEvaluated && !bestEvalChecked)
-            	{
-            		System.out.println("In not bestEvalChecked");
-            		// Check if average of new best is better than last best
-            		double average = 0;
-            		for(int j = 0; j < numberOfBestToInsert; j++)
-            		{
-            			average += score[j]/numberOfBestToInsert;
-            		}
-            		
-            		System.out.println("In not bestEvalChecked i: "+ i + " average: " + average);
-            		
-            		if(average > lastBestScore)
-            		{
-            			bestScore = average;
-            		}
-            		else
-            		{
-            			// Go back to last weights, the new ones were a lucky hit
-            			bestWeights = copy(lastBestWeights);
-            			bestScore = lastBestScore;
-            		}
-            		bestEvalChecked = true;
-            	}
-            }
-            
+                double[][][][] weights = population[i];
+                
+                score[i] = evaluateIndividual(weights[0]);
 
-            if (score[i] > bestScore)
-            { 
-                if(!newBestInPopulation)
-                {
-                	lastBestScore = bestScore;
-                	lastBestWeights = copy(bestWeights);
+                if (score[i] > bestScore)
+                { 
+                    bestScore = score[i];
+                    bestWeights = copy(weights);
                 }
-                bestScore = score[i];
-                bestWeights = copy(weights);
-                newBestInPopulation = true;
+            }
+        }
+        else
+        {
+        	for (int i = 0; i < populationSize; i++)
+            {
+                double[][][][] weights = population[i];
+
+                if(i < numberOfBestToInsert && bestEvaluated)
+                {
+                	if(bestEvalChecked)
+                	{
+    	            	// Don't re-evaluate for best weights, as that takes the longest,
+    	            	// we are interested in new combinations that come from these.
+    	            	score[i] = bestScore;
+                	}
+                	else
+                	{
+                		// Check best again and make sure they are really better the the last over several runs
+                		score[i] = evaluateIndividual(weights[0]);
+                		System.out.println("Bestscore reevaluated: " + score[i]);
+                	}
+                }
+                else 
+                {
+                	score[i] = evaluateIndividual(weights[0]);
+                	if(bestEvaluated && !bestEvalChecked)
+                	{
+                		System.out.println("In not bestEvalChecked");
+                		// Check if average of new best is better than last best
+                		double average = 0;
+                		for(int j = 0; j < numberOfBestToInsert; j++)
+                		{
+                			average += score[j]/numberOfBestToInsert;
+                		}
+                		
+                		System.out.println("In not bestEvalChecked i: "+ i + " average: " + average);
+                		
+                		if(average > lastBestScore)
+                		{
+                			bestScore = average;
+                		}
+                		else
+                		{
+                			// Go back to last weights, the new ones were a lucky hit
+                			bestWeights = copy(lastBestWeights);
+                			bestScore = lastBestScore;
+                		}
+                		bestEvalChecked = true;
+                	}
+                }
+                
+
+                if (score[i] > bestScore)
+                { 
+                    if(!newBestInPopulation)
+                    {
+                    	lastBestScore = bestScore;
+                    	lastBestWeights = copy(bestWeights);
+                    }
+                    bestScore = score[i];
+                    bestWeights = copy(weights);
+                    newBestInPopulation = true;
+                }
             }
         }
         
@@ -176,7 +192,7 @@ public class GeneticAlgorithm {
 
         if (populationSize == 1)
         {
-            tempPopulation[0] = bestWeights;
+            tempPopulation[0] = copy(bestWeights);
         }
 
         //Crossover among the population.
@@ -191,13 +207,13 @@ public class GeneticAlgorithm {
                 if (r < crossoverProb)
                 {
                     double[][][][][] newPair = cross(index1, index2);
-                    tempPopulation[i] = newPair[0];
-                    tempPopulation[i + 1] = newPair[1];
+                    tempPopulation[i] = copy(newPair[0]);
+                    tempPopulation[i + 1] = copy(newPair[1]);
                 }
                 else
                 {
-                    tempPopulation[i] = population[index1];
-                    tempPopulation[i + 1] = population[index2];
+                    tempPopulation[i] = copy(population[index1]);
+                    tempPopulation[i + 1] = copy(population[index2]);
                 }
             }
         }
@@ -462,7 +478,7 @@ public class GeneticAlgorithm {
         for (int i = 0; i < populationSize; i++)
         {
         	weightsArray[0] = basicNetwork.initiateRandomWeights();
-        	population[i] = weightsArray;
+        	population[i] = copy(weightsArray);
         }
     }
     
@@ -473,7 +489,7 @@ public class GeneticAlgorithm {
     	// Add old best weights to initial population
     	for(int i = 0; i < numberOfBestToInsert; i++)
     	{
-    		population[i] = bestWeights;
+    		population[i] = copy(bestWeights);
     	}
     }
     
