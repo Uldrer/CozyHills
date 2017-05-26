@@ -2,36 +2,36 @@ package com.villagesim.actions;
 
 // No index should be the same
 public enum BasicAction implements ActionInterface{
-	EAT("Eat", 0),
-	DRINK("Drink", 1),
-	SLEEP("Sleep", 2),
-	SOCIALIZE("Socialize", 3),
+	EAT("Eat"),
+	DRINK("Drink"),
+	SLEEP("Sleep"),
+	SOCIALIZE("Socialize"),
 	
 	// Gathering, add more when needed
-	GATHER_WATER("Gather water", 4),
-	GATHER_FISH("Fish", 5),
-	GATHER_NUTS("Gather nuts", 6),
-	GATHER_BERRIES("Gather berries", 7),
-	HUNT("Hunt", 8),
-	GATHER_WOOD("Gather wood", 9),
+	GATHER_WATER("Gather water"),
+	GATHER_FISH("Fish"),
+	GATHER_NUTS("Gather nuts"),
+	GATHER_BERRIES("Gather berries"),
+	HUNT("Hunt"),
+	GATHER_WOOD("Gather wood"),
 	
 	// Movement, add more when needed
-	WALK_RANDOM("Walk_random", 10),
-	RUN("Run", 11),
-	SWIM("Swim", 12),
-	CLIMB("Climb", 13),
-	WALK_DIRECTION_WATER("Walk_water", 14),
-	WALK_DIRECTION_WOOD("Walk_wood", 15),
+	WALK_RANDOM("Walk_random"),
+	RUN("Run"),
+	SWIM("Swim"),
+	CLIMB("Climb"),
+	WALK_DIRECTION_WATER("Walk_water"),
+	WALK_DIRECTION_WOOD("Walk_wood"),
 	
 	// Work, add more when needed
-	TRANSPORT_GOODS("Transport goods", 16),
-	CUT_TREES("Cut trees", 17),
-	BUILD("Build", 18);
+	TRANSPORT_GOODS("Transport goods"),
+	CUT_TREES("Cut trees"),
+	BUILD("Build"),;
 	
 	private final String type;
 	private int index;
 	
-	private BasicAction(final String type, final int index) {
+	private BasicAction(final String type) {
         this.type = type;
     }
 
