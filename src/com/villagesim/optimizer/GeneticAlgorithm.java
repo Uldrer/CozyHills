@@ -58,7 +58,7 @@ public class GeneticAlgorithm {
     /// The simulator to use for evaluation
     private VillageSimulator villageSimulator;
     
-    private boolean evaluateAllIndividuals = true;
+    private boolean evaluateAllIndividuals = false;
     private boolean bestEvaluated = false;
     private boolean bestEvalChecked = false;
     private boolean newBestInPopulation = false;
@@ -281,8 +281,8 @@ public class GeneticAlgorithm {
     {
         double[][][][][] newPair = new double[2][][][][];
 
-        newPair[0] = population[individ1];
-        newPair[1] = population[individ2];
+        newPair[0] = copy(population[individ1]);
+        newPair[1] = copy(population[individ2]);
 
         for (int i = 0; i < newPair[0].length; i++)
         {
@@ -335,7 +335,7 @@ public class GeneticAlgorithm {
 	                    {
 	                        randomNr = getRandomNumber(-1, 1);
 	
-	                        individP3[l] = individP3[l] + randomNr * mutateWidth;
+	                        individP3[l] = individual[i][j][k][l] + randomNr * mutateWidth;
 	                    }
 	                    else
 	                    {
