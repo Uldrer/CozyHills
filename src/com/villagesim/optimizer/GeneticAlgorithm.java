@@ -47,15 +47,6 @@ public class GeneticAlgorithm {
     /// The basic artificial neural network for which the basic weights are trained.
     private ArtificialNeuralNetwork basicNetwork;
     
- 	/// The gather artificial neural network for which the gather weights are trained.
-    private ArtificialNeuralNetwork gatherNetwork;
-    
-    /// The gather artificial neural network for which the move weights are trained.
-    private ArtificialNeuralNetwork moveNetwork;
-    
-    /// The gather artificial neural network for which the work weights are trained.
-    private ArtificialNeuralNetwork workNetwork;
-    
     // Change if adding or removing networks
     private final int NUMBER_OF_NETWORKS = 1;
     

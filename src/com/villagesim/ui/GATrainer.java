@@ -12,7 +12,7 @@ public class GATrainer {
 	
 	public GATrainer()
 	{
-		 trainingIter = 10000;
+		 trainingIter = 100;
 	}
 	
 	public void run()
