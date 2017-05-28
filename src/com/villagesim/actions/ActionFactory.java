@@ -56,17 +56,18 @@ public class ActionFactory {
 			newAction = new DrinkAction(person);
 			break;
 		case SLEEP:
-			// TODO Implement
+			// TODO Implement, use as do nothing for now
 			newAction = new NullAction(person);
 			break;
+			/*
 		case SOCIALIZE:
 			// TODO Implement
 			newAction = new NullAction(person);
-			break;
+			break;*/
 		case GATHER_BERRIES:
 			newAction = new BerriesGatherAction(person);
 			break;
-		case BUILD:
+		/*case BUILD:
 			// TODO Implement
 			newAction = new NullAction(person);
 			break;
@@ -77,7 +78,7 @@ public class ActionFactory {
 		case CUT_TREES:
 			// TODO Implement
 			newAction = new NullAction(person);
-			break;
+			break;*/
 		case GATHER_FISH:
 			newAction = new FishGatherAction(person);
 			break;
@@ -90,14 +91,14 @@ public class ActionFactory {
 		case RUN:
 			newAction = new RunMoveAction(person);
 			break;
-		case SWIM:
+		/*case SWIM:
 			// TODO Implement
 			newAction = new NullAction(person);
 			break;
 		case TRANSPORT_GOODS:
 			// TODO Implement
 			newAction = new NullAction(person);
-			break;
+			break;*/
 		case WALK_RANDOM:
 			newAction = new WalkRandomMoveAction(person);
 			break;

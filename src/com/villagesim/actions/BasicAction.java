@@ -5,8 +5,9 @@ public enum BasicAction implements ActionInterface{
 	EAT("Eat"),
 	DRINK("Drink"),
 	SLEEP("Sleep"),
+	/*
 	SOCIALIZE("Socialize"),
-	
+	*/
 	// Gathering, add more when needed
 	GATHER_WATER("Gather water"),
 	GATHER_FISH("Fish"),
@@ -18,16 +19,19 @@ public enum BasicAction implements ActionInterface{
 	// Movement, add more when needed
 	WALK_RANDOM("Walk_random"),
 	RUN("Run"),
+/*
 	SWIM("Swim"),
-	CLIMB("Climb"),
+	CLIMB("Climb"),*/
 	WALK_DIRECTION_WATER("Walk_water"),
 	WALK_DIRECTION_WOOD("Walk_wood"),
-	WALK_DIRECTION_FISH("Walk_fish"),
+	WALK_DIRECTION_FISH("Walk_fish");
 	
+/*
 	// Work, add more when needed
 	TRANSPORT_GOODS("Transport goods"),
 	CUT_TREES("Cut trees"),
-	BUILD("Build"),;
+	BUILD("Build");
+*/
 	
 	private final String type;
 	private int index;
