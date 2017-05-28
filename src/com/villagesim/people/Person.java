@@ -46,7 +46,8 @@ public class Person implements Drawable, Updateable {
 	private ActionFactory actionFactory;
 	private Storage personalStorage;
 	private Map<Class<? extends Resource>, SensorArea> lastAreaMap = new HashMap<Class<? extends Resource>, SensorArea>();
-	private Map<Class<? extends Resource>, Boolean> hasChangedCoordinateMap = new HashMap<Class<? extends Resource>, Boolean>();// boolean for knowing if movement has occured
+	private Map<Class<? extends Resource>, Double> lastDirectionMap = new HashMap<Class<? extends Resource>, Double>();
+	private boolean hasChangedCoordinate = true;
 	
 	// Debugging
 	private boolean logDeath = true;
@@ -60,9 +61,6 @@ public class Person implements Drawable, Updateable {
 	// Neural network
 	private ArtificialNeuralNetwork basicNeuralNetwork;
 	private double [][][] basicWeights;
-	private double [][][] gatherWeights;
-	private double [][][] moveWeights;
-	private double [][][] workWeights;
 	
 	// Constants
 	private final double MAX_NUTRITION_POINTS = 1000;
@@ -238,19 +236,14 @@ public class Person implements Drawable, Updateable {
 		return 1 - nutrition/MAX_NUTRITION_POINTS;
 	}
 	
-	public boolean hasNewCoordinate(Class<? extends Resource> resourceClass)
+	public boolean hasNewCoordinate()
 	{
-		if(hasChangedCoordinateMap.containsKey(resourceClass))
-		{
-			return hasChangedCoordinateMap.get(resourceClass);
-		}
-		return true;
+		return hasChangedCoordinate;
 	}
 	
-	public Point2D getCoordinate(Class<? extends Resource> resourceClass)
+	private void resetHasChangedCoordinate()
 	{
-		hasChangedCoordinateMap.put(resourceClass, false);
-		return coordinate;
+		hasChangedCoordinate = false;
 	}
 	
 	public Point2D getCoordinate()
@@ -299,6 +292,8 @@ public class Person implements Drawable, Updateable {
 		
 		this.sensorInputs = sensorInputs;
 		this.closestAreas = closestAreas;
+		
+		resetHasChangedCoordinate();
 	}
 	
 	public double getSensorReading(int index)
@@ -436,12 +431,17 @@ public class Person implements Drawable, Updateable {
 		lifePath.add((Point2D)coordinate.clone());
 		lifePathType.add(actionType);
 		
-		hasChangedCoordinateMap.replaceAll((k, v) -> true);
+		hasChangedCoordinate = true;
 	}
 	
 	public void setLastSensorArea(Class<? extends Resource> resourceClass, SensorArea newArea)
 	{
 		lastAreaMap.put(resourceClass, newArea);
+	}
+	
+	public void setLastSensorDirection(Class<? extends Resource> resourceClass, double direction)
+	{
+		lastDirectionMap.put(resourceClass, direction);
 	}
 	
 	public SensorArea getLastSensorArea(Class<? extends Resource> resourceClass)
@@ -451,6 +451,15 @@ public class Person implements Drawable, Updateable {
 			return new SensorArea(-1, 1);
 		}
 		return lastAreaMap.get(resourceClass);
+	}
+	
+	public double getLastDirection(Class<? extends Resource> resourceClass)
+	{
+		if(!lastDirectionMap.containsKey(resourceClass))
+		{
+			return 0.0;
+		}
+		return lastDirectionMap.get(resourceClass);
 	}
 	
 	public Storage getPersonalStorage()

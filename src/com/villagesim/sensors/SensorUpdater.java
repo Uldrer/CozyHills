@@ -139,16 +139,16 @@ public class SensorUpdater {
 		closestAreas.add(null);
 		
 		// #16 Direction in radians to nearest water
-		sensorInputs.add(getDirectionInRadians(person, getAreaFromId(drinkingArea.getAreaId())));
+		sensorInputs.add(getDirectionInRadians(person, getAreaFromId(drinkingArea.getAreaId()), Water.class));
 		closestAreas.add(null);
 				
 		// #17 Direction in radians to nearest wood
-		sensorInputs.add(getDirectionInRadians(person, getAreaFromId(wildFoodArea.getAreaId())));
+		sensorInputs.add(getDirectionInRadians(person, getAreaFromId(wildFoodArea.getAreaId()), Game.class));
 		closestAreas.add(null);
 		
 		// #18 Direction in radians to nearest non-empty fishing ground
 		SensorArea nonDepletedfishingArea = getNearestNonDepletedFishingGround(person);
-		sensorInputs.add(getDirectionInRadians(person, getAreaFromId(nonDepletedfishingArea.getAreaId())));
+		sensorInputs.add(getDirectionInRadians(person, getAreaFromId(nonDepletedfishingArea.getAreaId()), Fish.class));
 		closestAreas.add(null);
 		
 		// Set new sensor inputs
@@ -158,10 +158,10 @@ public class SensorUpdater {
 	
 	private SensorArea getNearestDrinkingWater(Person person)
 	{
-		boolean hasNewCoordinate = person.hasNewCoordinate(Water.class);
+		boolean hasNewCoordinate = person.hasNewCoordinate();
 		if(hasNewCoordinate)
 		{
-			Point2D personCoordinate = person.getCoordinate(Water.class);
+			Point2D personCoordinate = person.getCoordinate();
 			double closestDist = SensorHelper.getNormalizedMaxDistance();
 			Area closestArea = null;
 			for(Area area : areaMap.values()) 
@@ -193,11 +193,11 @@ public class SensorUpdater {
 	
 	private SensorArea getNearestStorage(Person person)
 	{
-		boolean hasNewCoordinate = person.hasNewCoordinate(Food.class);
+		boolean hasNewCoordinate = person.hasNewCoordinate();
 		if(hasNewCoordinate)
 		{
 			// TODO maybe redo to building
-			Point2D personCoordinate = person.getCoordinate(Food.class);
+			Point2D personCoordinate = person.getCoordinate();
 			double closestDist = SensorHelper.getNormalizedMaxDistance();
 			Area closestArea = null;
 			for(Area area : areaMap.values())
@@ -229,10 +229,10 @@ public class SensorUpdater {
 	
 	private SensorArea getNearestWildFood(Person person)
 	{
-		boolean hasNewCoordinate = person.hasNewCoordinate(Nuts.class);
+		boolean hasNewCoordinate = person.hasNewCoordinate();
 		if(hasNewCoordinate)
 		{
-			Point2D personCoordinate = person.getCoordinate(Nuts.class);
+			Point2D personCoordinate = person.getCoordinate();
 			double closestDist = SensorHelper.getNormalizedMaxDistance();
 			Area closestArea = null;
 			for(Area area : areaMap.values())
@@ -265,10 +265,10 @@ public class SensorUpdater {
 	
 	private SensorArea getNearestGameHerd(Person person)
 	{
-		boolean hasNewCoordinate = person.hasNewCoordinate(Game.class);
+		boolean hasNewCoordinate = person.hasNewCoordinate();
 		if(hasNewCoordinate)
 		{
-			Point2D personCoordinate = person.getCoordinate(Game.class);
+			Point2D personCoordinate = person.getCoordinate();
 			double closestDist = SensorHelper.getNormalizedMaxDistance();
 			Area closestArea = null;
 			for(Area area : areaMap.values())
@@ -310,10 +310,10 @@ public class SensorUpdater {
 	
 	private SensorArea getGeneralNearestFishingGround(Person person, boolean allowEmpty)
 	{
-		boolean hasNewCoordinate = person.hasNewCoordinate(Fish.class);
+		boolean hasNewCoordinate = person.hasNewCoordinate();
 		if(hasNewCoordinate || !allowEmpty)
 		{
-			Point2D personCoordinate = person.getCoordinate(Fish.class);
+			Point2D personCoordinate = person.getCoordinate();
 			double closestDist = SensorHelper.getNormalizedMaxDistance();
 			Area closestArea = null;
 			for(Area area : areaMap.values()) 
@@ -340,7 +340,10 @@ public class SensorUpdater {
 			    }
 			}
 			SensorArea newFishArea = new SensorArea(closestArea != null ? closestArea.getId() : -1, closestDist);
-			person.setLastSensorArea(Fish.class,newFishArea);
+			if(allowEmpty)
+			{
+				person.setLastSensorArea(Fish.class,newFishArea);
+			}
 			return newFishArea;
 		}
 		else
@@ -359,12 +362,22 @@ public class SensorUpdater {
 		return person.getHungerValue();
 	}
 	
-	private double getDirectionInRadians(Person person, Area area)
+	private double getDirectionInRadians(Person person, Area area, Class<? extends Resource> resourceClass)
 	{
 		double direction_radians = 0;
 		if(area != null)
 		{
-			direction_radians = SensorHelper.computeDirectionToArea(person.getCoordinate(), area);
+			boolean hasNewCoordinate = person.hasNewCoordinate();
+			if(hasNewCoordinate)
+			{
+				direction_radians = SensorHelper.computeDirectionToArea(person.getCoordinate(), area);
+				person.setLastSensorDirection(resourceClass, direction_radians);
+			}
+			else
+			{
+				direction_radians = person.getLastDirection(resourceClass);
+			}
+			
 		}
 		return direction_radians;
 	}
