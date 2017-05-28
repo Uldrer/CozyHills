@@ -41,10 +41,6 @@ public abstract class Resource implements Updateable, Depletable {
 	// Normal constructor
 	public Resource(String name, double amount, double weightPerAmount, double nutritionPerAmount, double aquaPerAmount, boolean printDebug)
 	{
-		if(printDebug)
-		{
-			System.out.println("Constructing resource " + name);
-		}
 		this.name = name;
 		this.amount = amount;
 		this.initialAmount = amount;

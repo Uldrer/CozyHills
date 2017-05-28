@@ -16,6 +16,7 @@ import com.villagesim.actions.advanced.WoodGatherAction;
 import com.villagesim.actions.basic.DrinkAction;
 import com.villagesim.actions.basic.EatAction;
 import com.villagesim.actions.basic.NullAction;
+import com.villagesim.actions.basic.SleepAction;
 import com.villagesim.interfaces.Action;
 import com.villagesim.people.Person;
 
@@ -56,8 +57,7 @@ public class ActionFactory {
 			newAction = new DrinkAction(person);
 			break;
 		case SLEEP:
-			// TODO Implement, use as do nothing for now
-			newAction = new NullAction(person);
+			newAction = new SleepAction(person);
 			break;
 			/*
 		case SOCIALIZE:

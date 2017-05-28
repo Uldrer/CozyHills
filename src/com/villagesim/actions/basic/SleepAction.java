@@ -1,0 +1,38 @@
+package com.villagesim.actions.basic;
+
+import com.villagesim.interfaces.Action;
+import com.villagesim.interfaces.Printable;
+import com.villagesim.people.Person;
+
+public class SleepAction implements Action, Printable  {
+	
+	private Person person;
+	
+	public SleepAction(Person person)
+	{
+		this.person = person;
+	}
+
+	@Override
+	public void execute(int seconds) {
+		
+		if(person.printDebug())
+		{
+			//System.out.println("Person id: " + person.getId() + " doing no action.");
+			System.out.print(".");
+		}
+	}
+
+	@Override
+	public boolean isValid() {
+		// It is always valid to sleep
+		return true;
+	}
+
+	@Override
+	public String getDebugPrint() {
+		String str = "S"; 
+		return str;
+	}
+
+}

@@ -276,6 +276,7 @@ public class Person implements Drawable, Updateable {
 				if(logActions)
 				{
 					printLastActionList();
+					printLastSensorValues();
 				}
 				logDeath = false;
 			}
@@ -364,6 +365,18 @@ public class Person implements Drawable, Updateable {
 		}
 		System.out.println("]");
 		System.out.println(lastActionQueue.printCounter());
+	}
+	
+	private void printLastSensorValues()
+	{
+		System.out.print("SensorInputs[");
+		int counter = 0;
+		for(double val : sensorInputs)
+		{
+			System.out.print("("+ counter + ":" + val + ")");
+			counter++;
+		}
+		System.out.println("]");
 	}
 	
 	private Integer[] determineAction(double[] output)
