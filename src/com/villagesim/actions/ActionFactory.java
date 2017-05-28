@@ -54,7 +54,7 @@ public class ActionFactory {
 		case EAT:
 			newAction = new EatAction(person);
 			break;
-		case DRINK:
+		case DRINK_STORAGE:
 			newAction = new DrinkStorageAction(person);
 			break;
 		case DRINK_LAKE:

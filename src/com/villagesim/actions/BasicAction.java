@@ -3,7 +3,7 @@ package com.villagesim.actions;
 // No index should be the same
 public enum BasicAction implements ActionInterface{
 	EAT("Eat"),
-	DRINK("Drink storage"),
+	DRINK_STORAGE("Drink storage"),
 	DRINK_LAKE("Drink lake"),
 	SLEEP("Sleep"),
 	/*
