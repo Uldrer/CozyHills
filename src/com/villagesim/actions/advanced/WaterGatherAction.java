@@ -42,7 +42,8 @@ public class WaterGatherAction implements Action, Printable  {
 				
 		if(person.printDebug())
 		{
-			System.out.println("Person id: " + person.getId() + " is gathering water.");
+			double val = personalStorage.getResourceAmountValue(Water.class);
+			System.out.println("Person id: " + person.getId() + " is gathering water. Water in storage: " + val);
 		}
 	}
 

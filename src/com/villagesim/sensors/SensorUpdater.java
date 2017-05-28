@@ -387,7 +387,7 @@ public class SensorUpdater {
 		double aqua = 0;
 		if(area != null)
 		{
-			aqua = SensorHelper.normalizeAqua(area.getResourceAquaValue(resourceClass));
+			aqua = area.getNormalizedResourceValue(resourceClass);
 		}
 		return aqua;
 	}
@@ -397,7 +397,7 @@ public class SensorUpdater {
 		double nutrition = 0;
 		if(area != null)
 		{
-			nutrition = SensorHelper.normalizeNutrition(area.getResourceNutritionValue(resourceClass));
+			nutrition = area.getNormalizedResourceValue(resourceClass);
 		}
 		return nutrition;
 	}
@@ -407,11 +407,8 @@ public class SensorUpdater {
 		double nutrition = 0;
 		if(area != null)
 		{
-			for(Class<? extends Resource> resourceClass : resourceClasses)
-			{
-				nutrition += area.getResourceNutritionValue(resourceClass);
-			}
+			nutrition += area.getNormalizedResourceValue(resourceClasses);
 		}
-		return SensorHelper.normalizeNutrition(nutrition);
+		return nutrition;
 	}
 }

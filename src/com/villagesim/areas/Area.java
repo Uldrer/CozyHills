@@ -15,6 +15,7 @@ import com.villagesim.interfaces.DepletedListener;
 import com.villagesim.interfaces.Drawable;
 import com.villagesim.interfaces.Updateable;
 import com.villagesim.resources.Resource;
+import com.villagesim.resources.Water;
 
 public abstract class Area implements Drawable, Updateable, DepletedListener {
 	
@@ -29,6 +30,8 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 	private int id; // unique area id
 	private Map<Class<? extends Resource>, Boolean> containsMap = new HashMap<Class<? extends Resource>, Boolean>();
 	
+	private static final int MAX_RELEVANT_NUTRITION = 1000; // TODO correlate with one year food needed for a person
+	private static final int MAX_RELEVANT_AQUA = 1000; // TODO correlate with one year water needed for a person
 	private static int id_counter = 0;
 	
 	public Area(Color color, int width, int height)
@@ -161,6 +164,65 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 	public double getResourceAquaValue(Class<? extends Resource> resourceClass)
 	{
 		return getResourceValue(resourceClass, false, false);
+	}
+	
+	public double getNormalizedResourceValue(Class<? extends Resource> resourceClass)
+	{
+		double value = getResourceWeight(resourceClass);
+		
+		if(restrictionActive)
+		{
+			value = value/restrictionWeightLimit;
+		}
+		else
+		{
+			if(resourceClass == Water.class)
+			{
+				value = value/MAX_RELEVANT_AQUA;
+			}
+			else
+			{
+				value = value/MAX_RELEVANT_NUTRITION;
+			}
+		}
+		if(value > 1) value = 1;
+		return value;
+	}
+	
+	public double getNormalizedResourceValue(List<Class<? extends Resource>> resourceClasses)
+	{
+		double value = 0;
+		
+		for(Class<? extends Resource> resourceClass : resourceClasses)
+		{
+			value += getResourceWeight(resourceClass);
+		}
+		
+		if(restrictionActive)
+		{
+			value = value/restrictionWeightLimit;
+		}
+		else
+		{
+			value = value/MAX_RELEVANT_NUTRITION;
+		}
+		if(value > 1) value = 1;
+		return value;
+	}
+	
+	private double getResourceWeight(Class<? extends Resource> resourceClass)
+	{
+		double value = 0;
+		for(Iterator<Resource> i = resourceList.iterator(); i.hasNext(); ) 
+		{
+			Resource item = i.next();
+			
+			if(resourceClass.isAssignableFrom(item.getClass()))
+			{
+				value += item.getAmount()*item.getWeightPerAmount();
+			}
+		}
+		return value;
 	}
 	
 	private double getResourceValue(Class<? extends Resource> resourceClass, boolean nutrition, boolean useAmount)

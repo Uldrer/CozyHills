@@ -10,8 +10,6 @@ public final class SensorHelper {
 	public static int SENSOR_INPUTS = Sensor.size;
 	private static boolean max_computed = false;
 	private static double maxValue = 0;
-	private static final int MAX_RELEVANT_NUTRITION = 1000; // TODO correlate with one year food needed for a person
-	private static final int MAX_RELEVANT_AQUA = 1000; // TODO correlate with one year water needed for a person
 
 	public static double computeDistanceToArea(Point2D coordinate, Area area)
 	{
@@ -66,20 +64,6 @@ public final class SensorHelper {
 	{
 		double dist = normalizedDist * getMaxDistance();
 		return (dist <= Const.MIN_DISTANCE_FOR_ACTION_METER/Const.METER_PER_PIXEL);
-	}
-	
-	public static double normalizeNutrition(double  nutrition)
-	{
-		nutrition = nutrition/MAX_RELEVANT_NUTRITION;
-		if(nutrition > 1) nutrition = 1;
-		return nutrition;
-	}
-	
-	public static double normalizeAqua(double aqua)
-	{
-		aqua = aqua/MAX_RELEVANT_AQUA;
-		if(aqua > 1) aqua = 1;
-		return aqua;
 	}
 
 }
