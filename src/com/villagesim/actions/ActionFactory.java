@@ -13,8 +13,8 @@ import com.villagesim.actions.advanced.WalkRandomMoveAction;
 import com.villagesim.actions.advanced.WalkWaterMoveAction;
 import com.villagesim.actions.advanced.WalkWoodMoveAction;
 import com.villagesim.actions.advanced.WaterGatherAction;
-import com.villagesim.actions.basic.DrinkActionLake;
-import com.villagesim.actions.basic.DrinkActionStorage;
+import com.villagesim.actions.basic.DrinkStorageAction;
+import com.villagesim.actions.basic.DrinkLakeAction;
 import com.villagesim.actions.basic.EatAction;
 import com.villagesim.actions.basic.NullAction;
 import com.villagesim.actions.basic.SleepAction;
@@ -55,10 +55,10 @@ public class ActionFactory {
 			newAction = new EatAction(person);
 			break;
 		case DRINK:
-			newAction = new DrinkActionStorage(person);
+			newAction = new DrinkStorageAction(person);
 			break;
 		case DRINK_LAKE:
-			newAction = new DrinkActionLake(person);
+			newAction = new DrinkLakeAction(person);
 			break;
 		case SLEEP:
 			newAction = new SleepAction(person);

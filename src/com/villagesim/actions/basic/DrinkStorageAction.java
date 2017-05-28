@@ -10,13 +10,13 @@ import com.villagesim.resources.Water;
 import com.villagesim.sensors.Sensor;
 import com.villagesim.sensors.SensorHelper;
 
-public class DrinkActionStorage implements Action, Printable  {
+public class DrinkStorageAction implements Action, Printable  {
 
 	private Person person;
 	private Sensor distSensor;
 	private Class<? extends Resource> resource;
 	
-	public DrinkActionStorage(Person person)
+	public DrinkStorageAction(Person person)
 	{
 		this.person = person;
 		this.distSensor = Sensor.DIST_TO_STORAGE;
