@@ -8,12 +8,13 @@ import com.villagesim.actions.advanced.FishGatherAction;
 import com.villagesim.actions.advanced.HuntGatherAction;
 import com.villagesim.actions.advanced.NutsGatherAction;
 import com.villagesim.actions.advanced.RunMoveAction;
+import com.villagesim.actions.advanced.WalkFishMoveAction;
 import com.villagesim.actions.advanced.WalkRandomMoveAction;
 import com.villagesim.actions.advanced.WalkWaterMoveAction;
 import com.villagesim.actions.advanced.WalkWoodMoveAction;
 import com.villagesim.actions.advanced.WaterGatherAction;
-import com.villagesim.actions.advanced.WoodGatherAction;
-import com.villagesim.actions.basic.DrinkAction;
+import com.villagesim.actions.basic.DrinkActionLake;
+import com.villagesim.actions.basic.DrinkActionStorage;
 import com.villagesim.actions.basic.EatAction;
 import com.villagesim.actions.basic.NullAction;
 import com.villagesim.actions.basic.SleepAction;
@@ -54,7 +55,10 @@ public class ActionFactory {
 			newAction = new EatAction(person);
 			break;
 		case DRINK:
-			newAction = new DrinkAction(person);
+			newAction = new DrinkActionStorage(person);
+			break;
+		case DRINK_LAKE:
+			newAction = new DrinkActionLake(person);
 			break;
 		case SLEEP:
 			newAction = new SleepAction(person);
@@ -107,6 +111,9 @@ public class ActionFactory {
 			break;
 		case WALK_DIRECTION_WOOD:
 			newAction = new WalkWoodMoveAction(person);
+			break;
+		case WALK_DIRECTION_FISH:
+			newAction = new WalkFishMoveAction(person);
 			break;
 		case GATHER_WATER:
 			newAction = new WaterGatherAction(person);

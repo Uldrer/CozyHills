@@ -10,13 +10,13 @@ import com.villagesim.resources.Water;
 import com.villagesim.sensors.Sensor;
 import com.villagesim.sensors.SensorHelper;
 
-public class DrinkAction implements Action, Printable  {
+public class DrinkActionStorage implements Action, Printable  {
 
 	private Person person;
 	private Sensor distSensor;
 	private Class<? extends Resource> resource;
 	
-	public DrinkAction(Person person)
+	public DrinkActionStorage(Person person)
 	{
 		this.person = person;
 		this.distSensor = Sensor.DIST_TO_STORAGE;
@@ -98,7 +98,7 @@ public class DrinkAction implements Action, Printable  {
 	
 	@Override
 	public String getDebugPrint() {
-		String str = "D"; 
+		String str = "D_S"; 
 		return str;
 	}
 
