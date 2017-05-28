@@ -40,6 +40,9 @@ public class GeneticAlgorithm {
     /// to preserve some of the best individuals in the population. This is called elitism.
     private int numberOfBestToInsert;
     
+    /// The average number of runs to compute score over
+    private int averageRuns;
+    
     /// The current score vector that holds the fitness values of the current population.
     private double[] score;
     
@@ -85,6 +88,7 @@ public class GeneticAlgorithm {
         tournamentSelectParam = gAParameters[3];
         numberOfBestToInsert = (int) gAParameters[4];
         mutateWidth = gAParameters[5];
+        averageRuns = (int) gAParameters[6];
 
         initiateRandomPopulation();
         score = new double[populationSize];
@@ -253,22 +257,26 @@ public class GeneticAlgorithm {
     /// <returns>Returns the fitness of these weights.</returns>
     private double evaluateIndividual(double[][][] basicWeights)
     {
-        // Add a person with this weight to simulator
-        villageSimulator.addPerson(basicWeights);
-        
-        // Let his life play out
-        while(villageSimulator.isAlive())
-        {
-        	villageSimulator.update();
-        }
-        
-        // For now, give fitness score according to long life
-        double score = villageSimulator.getLifeTimeDays(basicWeights);
-        
-        // Reset state for next individual
-        villageSimulator.resetState();
+    	double score = 0;
+    	for(int i = 0; i < averageRuns; i++)
+    	{
+	        // Add a person with this weight to simulator
+	        villageSimulator.addPerson(basicWeights);
+	        
+	        // Let his life play out
+	        while(villageSimulator.isAlive())
+	        {
+	        	villageSimulator.update();
+	        }
+	        
+	        // For now, give fitness score according to long life
+	        score += villageSimulator.getLifeTimeDays(basicWeights);
+	        
+	        // Reset state for next individual
+	        villageSimulator.resetState();
+    	}
 
-        return score;
+        return score/averageRuns;
     }
     
     /// Crossover method that returns a new pair of individuals out of two original.
