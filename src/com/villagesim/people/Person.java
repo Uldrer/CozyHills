@@ -203,6 +203,10 @@ public class Person implements Drawable, Updateable {
 					{
 						bbg.setColor(Color.GREEN);
 					}
+					else if(lifePathType.get(counter) == BasicAction.WALK_DIRECTION_FISH)
+					{
+						bbg.setColor(Color.YELLOW);
+					}
 					bbg.drawLine(currentX, currentY, lastX, lastY);
 					counter++;
 					bbg.setColor(Color.BLACK);

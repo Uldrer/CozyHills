@@ -146,6 +146,11 @@ public class SensorUpdater {
 		sensorInputs.add(getDirectionInRadians(person, getAreaFromId(wildFoodArea.getAreaId())));
 		closestAreas.add(null);
 		
+		// #18 Direction in radians to nearest non-empty fishing ground
+		SensorArea nonDepletedfishingArea = getNearestNonDepletedFishingGround(person);
+		sensorInputs.add(getDirectionInRadians(person, getAreaFromId(nonDepletedfishingArea.getAreaId())));
+		closestAreas.add(null);
+		
 		// Set new sensor inputs
 		person.updateSensorReadings(sensorInputs, closestAreas);
 		
@@ -293,10 +298,20 @@ public class SensorUpdater {
 		}
 	}
 	
+	private SensorArea getNearestNonDepletedFishingGround(Person person)
+	{
+		return getGeneralNearestFishingGround(person, false);
+	}
+	
 	private SensorArea getNearestFishingGround(Person person)
 	{
+		return getGeneralNearestFishingGround(person, true);
+	}
+	
+	private SensorArea getGeneralNearestFishingGround(Person person, boolean allowEmpty)
+	{
 		boolean hasNewCoordinate = person.hasNewCoordinate(Fish.class);
-		if(hasNewCoordinate)
+		if(hasNewCoordinate || !allowEmpty)
 		{
 			Point2D personCoordinate = person.getCoordinate(Fish.class);
 			double closestDist = SensorHelper.getNormalizedMaxDistance();
@@ -308,6 +323,12 @@ public class SensorUpdater {
 			    	Lake lake = ((Lake) area);
 			    	
 			    	if(!lake.containsResource(Fish.class)) continue;
+			    	
+			    	// Check amount of fish
+			    	if(!allowEmpty && getAmountOfNutritionInArea(lake, Fish.class) == 0) 
+			    	{
+			    		continue;
+			    	}
 			    	
 			    	double dist = SensorHelper.computeNormalizedDistanceToArea(personCoordinate, lake);
 			    	

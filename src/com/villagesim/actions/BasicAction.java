@@ -22,6 +22,7 @@ public enum BasicAction implements ActionInterface{
 	CLIMB("Climb"),
 	WALK_DIRECTION_WATER("Walk_water"),
 	WALK_DIRECTION_WOOD("Walk_wood"),
+	WALK_DIRECTION_FISH("Walk_fish"),
 	
 	// Work, add more when needed
 	TRANSPORT_GOODS("Transport goods"),
