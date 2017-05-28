@@ -184,6 +184,10 @@ public class ArtificialNeuralNetwork {
     	{
     		return computePatternNetwork_fast_7out(patternData);
     	}
+    	else if(nodes[nodes.length-1] == 13)
+    	{
+    		return computePatternNetwork_fast_13out(patternData);
+    	}
     	else if(nodes[nodes.length-1] == 14)
     	{
     		return computePatternNetwork_fast_14out(patternData);
@@ -382,6 +386,65 @@ public class ArtificialNeuralNetwork {
 	        output[4] = Math.tanh(output[4]);
 	        output[5] = Math.tanh(output[5]);
 	        output[6] = Math.tanh(output[6]);
+        }
+        return output;
+    }
+    
+    private double[] computePatternNetwork_fast_13out(double[] patternData)
+    {
+        double[] output = new double[nodes[nodes.length-1]];
+        
+        for(int i = 0; i < nodes[0]; i++)
+        {
+        	output[0] += weights[0][0][i] * patternData[i];
+        	output[1] += weights[0][1][i] * patternData[i];
+        	output[2] += weights[0][2][i] * patternData[i];
+        	output[3] += weights[0][3][i] * patternData[i];
+        	output[4] += weights[0][4][i] * patternData[i];
+        	output[5] += weights[0][5][i] * patternData[i];
+        	output[6] += weights[0][6][i] * patternData[i];
+        	output[7] += weights[0][7][i] * patternData[i];
+        	output[8] += weights[0][8][i] * patternData[i];
+        	output[9] += weights[0][9][i] * patternData[i];
+        	output[10] += weights[0][10][i] * patternData[i];
+        	output[11] += weights[0][11][i] * patternData[i];
+        	output[12] += weights[0][12][i] * patternData[i];
+        }
+        
+        // Thresholds
+        output[0] -= thresholds[0][0];
+        output[1] -= thresholds[0][1];
+        output[2] -= thresholds[0][2];
+        output[3] -= thresholds[0][3];
+        output[4] -= thresholds[0][4];
+        output[5] -= thresholds[0][5];
+        output[6] -= thresholds[0][6];
+        output[7] -= thresholds[0][7];
+        output[8] -= thresholds[0][8];
+        output[9] -= thresholds[0][9];
+        output[10] -= thresholds[0][10];
+        output[11] -= thresholds[0][11];
+        output[12] -= thresholds[0][12];
+        
+        /*
+         * When not using Tanh in the fast functions, we hope that it converges fast anyway during training
+         */
+        if(useTanh)
+        {
+	        // Tanh (-1:1)	
+	        output[0] = Math.tanh(output[0]);
+	        output[1] = Math.tanh(output[1]);
+	        output[2] = Math.tanh(output[2]);
+	        output[3] = Math.tanh(output[3]);
+	        output[4] = Math.tanh(output[4]);
+	        output[5] = Math.tanh(output[5]);
+	        output[6] = Math.tanh(output[6]);
+	        output[7] = Math.tanh(output[7]);
+	        output[8] = Math.tanh(output[8]);
+	        output[9] = Math.tanh(output[9]);
+	        output[10] = Math.tanh(output[10]);
+	        output[11] = Math.tanh(output[11]);
+	        output[12] = Math.tanh(output[12]);
         }
         return output;
     }
