@@ -54,6 +54,7 @@ public class Person implements Drawable, Updateable {
 	private boolean logDebug = true;
 	private boolean logActions = true;
 	private LimitedQueue<Action> lastActionQueue = new LimitedQueue<Action>(30); // Save latest 30 actions
+	private LimitedQueue<Integer> lastActionIndexQueue = new LimitedQueue<Integer>(BasicAction.size); // Save latest 30 actions
 	private DeathReason reasonOfDeath;
 	private List<Point2D> lifePath;
 	private List<BasicAction> lifePathType;
@@ -87,7 +88,7 @@ public class Person implements Drawable, Updateable {
 		basicWeights = FileHandler.retrieveWeights("weights.txt", basicNeuralNetwork, WeightType.MAIN);
 		basicNeuralNetwork.setWeights(basicWeights);
 
-		logDebug = false;
+		logDebug = true;
 		logActions = true;
 	}
 	
@@ -272,10 +273,12 @@ public class Person implements Drawable, Updateable {
 		{
 			if(logDeath)
 			{
+				System.out.println("END");
 				System.out.println("Person id: " + id + " died of " + reasonOfDeath.getName() + " after " + lifetime_days + " days.");
 				if(logActions)
 				{
 					printLastActionList();
+					printLastActionIndexList();
 					printLastSensorValues();
 				}
 				logDeath = false;
@@ -349,6 +352,7 @@ public class Person implements Drawable, Updateable {
 		if(logActions)
 		{
 			lastActionQueue.add(actionList.get(0));
+			lastActionIndexQueue.addAll(Arrays.asList(actionIndexList));
 		}
 	}
 	
@@ -365,6 +369,16 @@ public class Person implements Drawable, Updateable {
 		}
 		System.out.println("]");
 		System.out.println(lastActionQueue.printCounter());
+	}
+	
+	private void printLastActionIndexList()
+	{
+		System.out.print("[");
+		for(Integer action : lastActionIndexQueue)
+		{
+			System.out.print(BasicAction.getValueOfIndex(action)+ " ");
+		}
+		System.out.println("]");
 	}
 	
 	private void printLastSensorValues()

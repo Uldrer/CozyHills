@@ -111,9 +111,11 @@ public class ActionFactory {
 		case GATHER_WATER:
 			newAction = new WaterGatherAction(person);
 			break;
+			/*
 		case GATHER_WOOD:
 			newAction = new WoodGatherAction(person);
 			break;
+			*/
 		default:
 			newAction = new NullAction(person);
 			break;

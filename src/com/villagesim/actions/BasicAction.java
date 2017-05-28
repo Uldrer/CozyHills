@@ -14,7 +14,9 @@ public enum BasicAction implements ActionInterface{
 	GATHER_NUTS("Gather nuts"),
 	GATHER_BERRIES("Gather berries"),
 	HUNT("Hunt"),
+	/*
 	GATHER_WOOD("Gather wood"),
+	*/
 	
 	// Movement, add more when needed
 	WALK_RANDOM("Walk_random"),
@@ -50,6 +52,19 @@ public enum BasicAction implements ActionInterface{
 	public int getIndex() {
 		return index;
 	}
+	
+	public static BasicAction getValueOfIndex(int index)
+	{
+		for(BasicAction action : BasicAction.values())
+		{
+			if(action.getIndex() == index)
+			{
+				return action;
+			}
+		}
+		return null;
+	}
+
 	
 	private void setIndex(int index) {
 		this.index = index;

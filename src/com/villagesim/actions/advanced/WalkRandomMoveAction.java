@@ -36,7 +36,7 @@ public class WalkRandomMoveAction implements Action, Printable  {
 		
 		if(person.printDebug())
 		{
-			System.out.println("Person id: " + person.getId() + " is walking.");
+			System.out.println("Person id: " + person.getId() + " is walking randomly.");
 		}
 	}
 
