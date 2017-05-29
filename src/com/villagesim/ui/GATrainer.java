@@ -1,14 +1,16 @@
 package com.villagesim.ui;
 
+import com.villagesim.actions.BasicAction;
 import com.villagesim.helpers.FileHandler;
 import com.villagesim.helpers.FileHeader.WeightType;
 import com.villagesim.optimizer.GeneticAlgorithm;
+import com.villagesim.sensors.Sensor;
 
 public class GATrainer {
 	
 	int trainingIter;
-	// mutation-rate , crossover probability, population size, tournament select param, number of best to insert, mutate width
-	double[] gaParam = {0.4 , 0.7, 100, 0.75 , 5, 0.2, 5};
+	// mutation-rate (should be 1/genes), crossover probability (0.6-0.8), population size (100-10000), tournament select param, number of best to insert, mutate width, average for scoring
+	double[] gaParam = {1.0/(BasicAction.size*Sensor.size) , 0.7, 100, 0.75 , 5, 0.2, 5};
 	
 	public GATrainer()
 	{
