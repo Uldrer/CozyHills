@@ -97,8 +97,6 @@ public class GeneticAlgorithm {
         {
         	addBestWeights();
         }
-        
-        bestWeights = FileHandler.retrieveWeights("weights.txt", basicNetwork);
 
         bestScore = 0;
         
@@ -121,7 +119,7 @@ public class GeneticAlgorithm {
                 if (score[i] > bestScore)
                 { 
                     bestScore = score[i];
-                    bestWeights = copy(weights);
+                    bestWeights = OptimizationHelper.copy(weights);
                 }
             }
         }
@@ -168,7 +166,7 @@ public class GeneticAlgorithm {
                 		else
                 		{
                 			// Go back to last weights, the new ones were a lucky hit
-                			bestWeights = copy(lastBestWeights);
+                			bestWeights = OptimizationHelper.copy(lastBestWeights);
                 			bestScore = lastBestScore;
                 		}
                 		bestEvalChecked = true;
@@ -181,10 +179,10 @@ public class GeneticAlgorithm {
                     if(!newBestInPopulation)
                     {
                     	lastBestScore = bestScore;
-                    	lastBestWeights = copy(bestWeights);
+                    	lastBestWeights = OptimizationHelper.copy(bestWeights);
                     }
                     bestScore = score[i];
-                    bestWeights = copy(weights);
+                    bestWeights = OptimizationHelper.copy(weights);
                     newBestInPopulation = true;
                 }
             }
@@ -192,11 +190,11 @@ public class GeneticAlgorithm {
         
         FileHandler.logScoreToFile(score, iteration);
 
-        double[][][][][] tempPopulation = copyPopulation(population);
+        double[][][][][] tempPopulation = OptimizationHelper.copy(population);
 
         if (populationSize == 1)
         {
-            tempPopulation[0] = copy(bestWeights);
+            tempPopulation[0] = OptimizationHelper.copy(bestWeights);
         }
 
         //Crossover among the population.
@@ -211,13 +209,13 @@ public class GeneticAlgorithm {
                 if (r < crossoverProb)
                 {
                     double[][][][][] newPair = cross(index1, index2);
-                    tempPopulation[i] = copy(newPair[0]);
-                    tempPopulation[i + 1] = copy(newPair[1]);
+                    tempPopulation[i] = OptimizationHelper.copy(newPair[0]);
+                    tempPopulation[i + 1] = OptimizationHelper.copy(newPair[1]);
                 }
                 else
                 {
-                    tempPopulation[i] = copy(population[index1]);
-                    tempPopulation[i + 1] = copy(population[index2]);
+                    tempPopulation[i] = OptimizationHelper.copy(population[index1]);
+                    tempPopulation[i + 1] = OptimizationHelper.copy(population[index2]);
                 }
             }
         }
@@ -234,7 +232,7 @@ public class GeneticAlgorithm {
             for (int i = 0; i < numberOfBestToInsert; i++)
             {
             	// TODO FIX: could crash on populationSize <= numberOfBestToInsert
-                tempPopulation[i] = copy(bestWeights);
+                tempPopulation[i] = OptimizationHelper.copy(bestWeights);
             }
         }
         population = tempPopulation;
@@ -289,8 +287,8 @@ public class GeneticAlgorithm {
     {
         double[][][][][] newPair = new double[2][][][][];
 
-        newPair[0] = copy(population[individ1]);
-        newPair[1] = copy(population[individ2]);
+        newPair[0] = OptimizationHelper.copy(population[individ1]);
+        newPair[1] = OptimizationHelper.copy(population[individ2]);
 
         for (int i = 0; i < newPair[0].length; i++)
         {
@@ -397,76 +395,7 @@ public class GeneticAlgorithm {
         }
     }
     
-    /// Method to copy the population before applying crossover and mutation.
-    /// <param name="thePopulation">The population to copy.</param>
-    /// <returns>The copied population.</returns>
-    private double[][][][] copyPopulation(double[][][][] thePopulation)
-    {
-        double[][][][] copy = new double[thePopulation.length][][][];
-        for (int i = 0; i < thePopulation.length; i++)
-        {
-            double[][][] copy1 = new double[thePopulation[i].length][][];
-            for (int j = 0; j < thePopulation[i].length; j++)
-            {
-                double[][] copy2 = new double[thePopulation[i][j].length][];
-                for (int k = 0; k < thePopulation[i][j].length; k++)
-                {
-                    double[] copy3 = new double[thePopulation[i][j][k].length];
-                    for (int l = 0; l < thePopulation[i][j][k].length; l++)
-                    {
-                        copy3[l] = thePopulation[i][j][k][l];
-                    }
-                    copy2[k] = copy3;
-                }
-                copy1[j] = copy2;
-            }
-            copy[i] = copy1;
-        }
-        return copy;
-    }
     
-    private double[][][][][] copyPopulation(double[][][][][] thePopulation)
-    {
-        double[][][][][] copy = new double[thePopulation.length][][][][];
-        for (int i = 0; i < thePopulation.length; i++)
-        {
-            copy[i] = copyPopulation(thePopulation[i]);
-        }
-        return copy;
-    }
-    
-    /// Copy function for weights.
-    /// <param name="weights">The weights to copy.</param>
-    /// <returns>The copied weights.</returns>
-    private double[][][] copy(double[][][] weights)
-    {
-        double[][][] temp1 = new double[weights.length][][];
-        for (int i = 0; i < weights.length; i++)
-        {
-            double[][] temp2 = new double[weights[i].length][];
-            for (int j = 0; j < weights[i].length; j++)
-            {
-                double[] temp3 = new double[weights[i][j].length];
-                for (int k = 0; k < weights[i][j].length; k++)
-                {
-                    temp3[k] = weights[i][j][k];
-                }
-                temp2[j] = temp3;
-            }
-            temp1[i] = temp2;
-        }
-        return temp1;
-    }
-    
-    private double[][][][] copy(double[][][][] weights)
-    {
-        double[][][][] temp1 = new double[weights.length][][][];
-        for (int i = 0; i < weights.length; i++)
-        {
-        	temp1[i] = copy(weights[i]);
-        }
-        return temp1;
-    }
 
     /// Generates random double between to double values. 
     /// <param name="min">The minimum value.</param>
@@ -486,7 +415,7 @@ public class GeneticAlgorithm {
         for (int i = 0; i < populationSize; i++)
         {
         	weightsArray[0] = basicNetwork.initiateRandomWeights();
-        	population[i] = copy(weightsArray);
+        	population[i] = OptimizationHelper.copy(weightsArray);
         }
     }
     
@@ -497,8 +426,9 @@ public class GeneticAlgorithm {
     	// Add old best weights to initial population
     	for(int i = 0; i < numberOfBestToInsert; i++)
     	{
-    		population[i] = copy(bestWeights);
+    		population[i] = OptimizationHelper.copy(bestWeights);
     	}
+    	this.bestWeights = OptimizationHelper.copy(bestWeights);;
     }
     
     public double getBestScore()
