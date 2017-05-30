@@ -6,14 +6,13 @@ import com.villagesim.optimizer.ParticleSwarmOptimization;
 
 public class PSOTrainer {
 	
-	int trainingIter;
+	int trainingIter = 100;
 	
-	// c1 , c2, v_max, w, swarm size, score iterations
-	double[] psoParam = {1.5 , 1.5, 2, 1, 50 , 5};
+	// c1 , c2_start, c2_end, v_max, w_start, w_end, swarm size, score iterations, total training iterations
+	double[] psoParam = {1.5 , 0.1, 1.5, 2, 1.4, 0.4, 50 , 5, trainingIter};
 	
 	public PSOTrainer()
 	{
-		 trainingIter = 100;
 	}
 	
 	public void run()

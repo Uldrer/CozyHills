@@ -43,11 +43,29 @@ public class ParticleSwarmOptimization {
     /// c2, the social constant
     private double c2;
     
+    /// c2 start, the start value of c2
+    private double c2_start;
+    
+    /// c2 end, the end value of c2
+    private double c2_end;
+    
+    /// Computed from c2_start and c2_end, how much it should change per iteration
+    private double c2_change_rate;
+    
     /// v_max, the maximum allowed absolute velocity
     private double v_max;
     
     /// w, intertia weight
     private double w;
+    
+    /// w start, the start value of w
+    private double w_start;
+    
+    /// w end, the end value of w
+    private double w_end;
+    
+    /// Computed from w_start and w_end, how much it should change per iteration
+    private double w_change_rate;
     
     /// the swarm size
     private int swarmSize;
@@ -55,26 +73,38 @@ public class ParticleSwarmOptimization {
     /// the number of runs to average score over
     private int averageRuns;
     
+    /// The total number of iterations to apply
+    private int totalIterations;
+    
     /// The simulator to use for evaluation
     private VillageSimulator villageSimulator;
     
     /// The basic artificial neural network for which the basic weights are trained.
     private ArtificialNeuralNetwork basicNetwork;
     
-    // Parameters: c1 , c2, v_max, w, swarm size, score iterations
+    // c1 , c2_start, c2_end, v_max, w_start, w_end, swarm size, score iterations, total training iterations
     public ParticleSwarmOptimization(double[] psoParameters, boolean addBestToSwarm)
     {
     	// init
     	this.c1 = psoParameters[0];
     	this.c2 = psoParameters[1];
-    	this.v_max = psoParameters[2];
-    	this.w = psoParameters[3];
-    	this.swarmSize = (int)psoParameters[4];
-    	this.averageRuns = (int)psoParameters[5];
+    	this.c2_start = psoParameters[1];
+    	this.c2_end = psoParameters[2];
+    	this.v_max = psoParameters[3];
+    	this.w = psoParameters[4];
+    	this.w_start = psoParameters[4];
+    	this.w_end = psoParameters[5];
+    	this.swarmSize = (int)psoParameters[6];
+    	this.averageRuns = (int)psoParameters[7];
+    	this.totalIterations = (int)psoParameters[8];
     	
     	basicNetwork = new ArtificialNeuralNetwork(Sensor.size, new int[]{}, BasicAction.size);
     	
     	initiateRandomSwarm();
+    	
+    	// Compute increase/decrease rates of c2 and w
+    	c2_change_rate = computeChangeRate(c2_start, c2_end, totalIterations);
+    	w_change_rate = computeChangeRate(w_start, w_end, totalIterations);
     	
     	if(addBestToSwarm)
     	{
@@ -110,6 +140,8 @@ public class ParticleSwarmOptimization {
             	bestParticle = i;
             }
         }
+    	
+    	FileHandler.logScoreToFile(bestLocalScores, iteration);
     	
     	for (int i = 0; i < swarmSize; i++)
     	{
@@ -154,8 +186,13 @@ public class ParticleSwarmOptimization {
                 }
             }
     		
-    	}
+    	}	
     	
+    	// Update c2 and w
+    	c2 += c2_change_rate;
+    	w += w_change_rate;
+    	
+    	// Print result
     	System.out.println("Iteration PSO: " + iteration + " best lifetime: " + bestGlobalScore + " for particle: " + bestParticle);
     }
     
@@ -206,6 +243,12 @@ public class ParticleSwarmOptimization {
     	
     	// Add old best weights to initial population
     	swarmPositions[0] = OptimizationHelper.copy(bestWeights[0]);
+    }
+    
+    private double computeChangeRate(double c2_start, double c2_end, int totalIterations)
+    {
+    	double change_rate = (c2_end-c2_start)/totalIterations;
+    	return change_rate;
     }
     
     /// Evaluation function for an individual of weights. 
