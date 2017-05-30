@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.villagesim.VillageSimulator;
 import com.villagesim.actions.BasicAction;
+import com.villagesim.helpers.FileHandler;
 import com.villagesim.sensors.Sensor;
 
 public class ParticleSwarmOptimization {
@@ -61,7 +62,7 @@ public class ParticleSwarmOptimization {
     private ArtificialNeuralNetwork basicNetwork;
     
     // Parameters: c1 , c2, v_max, w, swarm size, score iterations
-    public ParticleSwarmOptimization(double[] psoParameters)
+    public ParticleSwarmOptimization(double[] psoParameters, boolean addBestToSwarm)
     {
     	// init
     	this.c1 = psoParameters[0];
@@ -74,6 +75,11 @@ public class ParticleSwarmOptimization {
     	basicNetwork = new ArtificialNeuralNetwork(Sensor.size, new int[]{}, BasicAction.size);
     	
     	initiateRandomSwarm();
+    	
+    	if(addBestToSwarm)
+    	{
+    		addBestWeights();
+    	}
         
         villageSimulator = new VillageSimulator(false);
     }
@@ -192,6 +198,14 @@ public class ParticleSwarmOptimization {
             }
     		swarmVelocities[i] = temp1;
     	}
+    }
+    
+    private void addBestWeights()
+    {
+    	double[][][][] bestWeights = FileHandler.retrieveWeights("weights.txt", basicNetwork);
+    	
+    	// Add old best weights to initial population
+    	swarmPositions[0] = OptimizationHelper.copy(bestWeights[0]);
     }
     
     /// Evaluation function for an individual of weights. 

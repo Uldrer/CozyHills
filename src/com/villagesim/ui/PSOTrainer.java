@@ -18,8 +18,8 @@ public class PSOTrainer {
 	
 	public void run()
 	{
-		
-		 ParticleSwarmOptimization PSO = new ParticleSwarmOptimization(psoParam);
+		 boolean addBestToSwarm = true;
+		 ParticleSwarmOptimization PSO = new ParticleSwarmOptimization(psoParam, addBestToSwarm);
 		 double bestTotalLifeTime = 3.1; // better than dehydration
          //PSO
          for (int i = 0; i < trainingIter; i++)
