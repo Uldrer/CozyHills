@@ -164,39 +164,39 @@ public class ArtificialNeuralNetwork {
     public double[] computePatternNetwork_fast(double[] patternData)
     {
     	// TODO set at initiation time which should be used
-    	if(nodes[nodes.length-1] == 3)
+    	if(nodes[nodes.length-1] == 3 && nodes.length == 2)
     	{
     		return computePatternNetwork_fast_3out(patternData);
     	}
-    	else if(nodes[nodes.length-1] == 4)
+    	else if(nodes[nodes.length-1] == 4 && nodes.length == 2)
     	{
     		return computePatternNetwork_fast_4out(patternData);
     	}
-    	else if(nodes[nodes.length-1] == 5)
+    	else if(nodes[nodes.length-1] == 5 && nodes.length == 2)
     	{
     		return computePatternNetwork_fast_5out(patternData);
     	}
-    	else if(nodes[nodes.length-1] == 6)
+    	else if(nodes[nodes.length-1] == 6 && nodes.length == 2)
     	{
     		return computePatternNetwork_fast_6out(patternData);
     	}
-    	else if(nodes[nodes.length-1] == 7)
+    	else if(nodes[nodes.length-1] == 7 && nodes.length == 2)
     	{
     		return computePatternNetwork_fast_7out(patternData);
     	}
-    	else if(nodes[nodes.length-1] == 13)
+    	else if(nodes[nodes.length-1] == 13 && nodes.length == 2)
     	{
     		return computePatternNetwork_fast_13out(patternData);
     	}
-    	else if(nodes[nodes.length-1] == 14)
+    	else if(nodes[nodes.length-1] == 14 && nodes.length == 2)
     	{
     		return computePatternNetwork_fast_14out(patternData);
     	}
-    	else if(nodes[nodes.length-1] == 19)
+    	else if(nodes[nodes.length-1] == 19 && nodes.length == 2)
     	{
     		return computePatternNetwork_fast_19out(patternData);
     	}
-    	else if(nodes[nodes.length-1] == 20)
+    	else if(nodes[nodes.length-1] == 20 && nodes.length == 2)
     	{
     		return computePatternNetwork_fast_20out(patternData);
     	}
