@@ -80,6 +80,14 @@ public abstract class Resource implements Updateable, Depletable {
 		this.amount += amount;
 	}
 	
+	public void enableLogging(boolean enableLogging)
+	{
+		if(!enableLogging)
+		{
+			printDebug = false;
+		}
+	}
+	
 	@Override
 	public void update(int seconds) 
 	{

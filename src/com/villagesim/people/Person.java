@@ -90,6 +90,7 @@ public class Person implements Drawable, Updateable {
 
 		logDebug = true;
 		logActions = true;
+		logDeath = true;
 	}
 	
 	public Person(double[][][] basicWeights)
@@ -135,6 +136,16 @@ public class Person implements Drawable, Updateable {
 		int networkSize = BASIC_ACTION_SIZE;
 		basicNeuralNetwork = new ArtificialNeuralNetwork(SensorHelper.SENSOR_INPUTS, new int[]{}, networkSize );
 		basicNeuralNetwork.inititateNullThresholds(); // TODO evaluate thresholds as well
+	}
+	
+	public void enableLogging(boolean enableLogging)
+	{
+		if(!enableLogging)
+		{
+			logDebug = false;
+			logActions = false;
+			logDeath = false;
+		}
 	}
 	
 	public boolean isAlive()
@@ -412,7 +423,10 @@ public class Person implements Drawable, Updateable {
 		lifetime_days += seconds/Const.SECONDS_PER_DAY;
 		if(lifetime_days > 1 && (int)(lifetime_days) % 365 == 0 && !lifetimeDebugginWritten) 
 		{
-			System.out.println("Person: " + id + " has age: " + lifetime_days/365);
+			if(logDebug)
+			{
+				System.out.println("Person: " + id + " has age: " + lifetime_days/365);
+			}
 			lifetimeDebugginWritten = true;	
 		}
 		

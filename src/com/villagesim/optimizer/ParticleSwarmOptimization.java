@@ -72,7 +72,7 @@ public class ParticleSwarmOptimization {
     	
     	initiateRandomSwarm();
         
-        villageSimulator = new VillageSimulator();
+        villageSimulator = new VillageSimulator(false);
     }
     
     public void trainNetwork(int iteration)

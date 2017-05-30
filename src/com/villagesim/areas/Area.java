@@ -43,6 +43,14 @@ public abstract class Area implements Drawable, Updateable, DepletedListener {
 		id = ++id_counter;
 	}
 	
+	public void enableLogging(boolean enableLogging)
+	{
+		for(Resource resource : resourceList)
+		{
+			resource.enableLogging(enableLogging);
+		}
+	}
+	
 	public void reGenerateCoordinate()
 	{
 		this.coordinate = generateCoordinate();

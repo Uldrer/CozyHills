@@ -27,11 +27,15 @@ public class VillageSimulator
 	
 	public VillageSimulator()
 	{
+		this(true);		
+	}
+	
+	public VillageSimulator(boolean enableLogging)
+	{
 		// Setup state
-		setupState();
+		setupState(enableLogging);
 		
 		sensorUpdater = new SensorUpdater(personList, areaMap);
-		
 	}
 
 	public void update() 
@@ -105,14 +109,14 @@ public class VillageSimulator
 		return -1;
 	}
 	
-	private void setupState()
+	private void setupState(boolean enableLogging)
 	{
 		// Create resources
-		createWater();
-		createFood();
+		createWater(enableLogging);
+		createFood(enableLogging);
 		
 		// Create people
-		createPeople();
+		createPeople(enableLogging);
 	}
 	
 	public void addPeople()
@@ -130,10 +134,11 @@ public class VillageSimulator
 		sensorUpdater.resetAliveState();
 	}
 	
-	private void createWater()
+	private void createWater(boolean enableLogging)
 	{
 		for (int i = 0; i < WATER_AREAS; i++) {
 			Area newArea = new Lake(20, 20, FISH_AMOUNT);
+			newArea.enableLogging(enableLogging);
 			while(isAreaOverlappingExisting(areaMap, newArea))
 			{
 				newArea.reGenerateCoordinate();
@@ -142,10 +147,11 @@ public class VillageSimulator
         }
 	}
 	
-	private void createFood()
+	private void createFood(boolean enableLogging)
 	{
 		for (int i = 0; i < FOOD_AREAS; i++) {
 			Area newArea = new Wood(20, 20);
+			newArea.enableLogging(enableLogging);
 			while(isAreaOverlappingExisting(areaMap, newArea))
 			{
 				newArea.reGenerateCoordinate();
@@ -154,10 +160,12 @@ public class VillageSimulator
         }
 	}
 	
-	private void createPeople()
+	private void createPeople(boolean enableLogging)
 	{
 		for (int i = 0; i < POPULATION; i++) {
-			personList.add(new Person());
+			Person newPerson = new Person();
+			newPerson.enableLogging(enableLogging);
+			personList.add(newPerson);
         }
 	}
 	

@@ -100,7 +100,7 @@ public class GeneticAlgorithm {
 
         bestScore = 0;
         
-        villageSimulator = new VillageSimulator();
+        villageSimulator = new VillageSimulator(false);
     }
     
     /// Method for training the network. Trains one generation each time using mutation, crossover and
