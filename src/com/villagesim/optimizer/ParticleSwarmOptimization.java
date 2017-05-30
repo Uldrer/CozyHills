@@ -18,7 +18,10 @@ public class ParticleSwarmOptimization {
     /// The current best fitness score for global best. 
     private double bestGlobalScore = 0;
     
-  /// The current best fitness score for local best of swarm. 
+    // The id of the best particle
+    private int bestParticle;
+    
+    /// The current best fitness score for local best of swarm. 
     private double[] bestLocalScores;
     
     /// The swarm positions (weights)
@@ -87,6 +90,7 @@ public class ParticleSwarmOptimization {
             // Update best local
             if (score > bestLocalScores[i])
             { 
+            	System.out.println("New best local score found. Score: " + score + " for particle: " + i);
             	bestLocalScores[i] = score;
             	swarmLocalBestPositions[i] = OptimizationHelper.copy(weights);
             }
@@ -94,11 +98,12 @@ public class ParticleSwarmOptimization {
             // Update best global
             if (score > bestGlobalScore)
             { 
+            	System.out.println("New best global score found. Score: " + score + " for particle: " + i);
             	bestGlobalScore = score;
             	swarmGlobalBestPosition = OptimizationHelper.copy(weights);
+            	bestParticle = i;
             }
         }
-    	
     	
     	for (int i = 0; i < swarmSize; i++)
     	{
@@ -144,6 +149,8 @@ public class ParticleSwarmOptimization {
             }
     		
     	}
+    	
+    	System.out.println("Iteration PSO: " + iteration + " best lifetime: " + bestGlobalScore + " for particle: " + bestParticle);
     }
     
     /// Initiates a swarm of random position and random velocities.

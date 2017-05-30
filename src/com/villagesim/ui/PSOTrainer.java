@@ -28,8 +28,6 @@ public class PSOTrainer {
 
              double[][][] weights = PSO.getBestWeights();
              double bestLifeTime = PSO.getBestScore();
-
-             System.out.println("Iteration PSO: " + i + " best lifetime: " + bestLifeTime);
              
              if(bestLifeTime > bestTotalLifeTime)
              {
