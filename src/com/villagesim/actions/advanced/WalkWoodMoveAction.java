@@ -6,17 +6,17 @@ import com.villagesim.actions.BasicAction;
 import com.villagesim.interfaces.Action;
 import com.villagesim.interfaces.Printable;
 import com.villagesim.people.Person;
-import com.villagesim.sensors.Sensor;
+import com.villagesim.sensors.Measurement;
 
 public class WalkWoodMoveAction implements Action, Printable  {
 
 	private Person person;
-	private Sensor directionSensor;
+	private Measurement directionMeasurement;
 	
 	public WalkWoodMoveAction(Person person)
 	{
 		this.person = person;
-		this.directionSensor = Sensor.DIRECTION_TO_NEAREST_WOOD;
+		this.directionMeasurement = Measurement.DIRECTION_TO_NEAREST_WOOD;
 	}
 
 	
@@ -24,7 +24,7 @@ public class WalkWoodMoveAction implements Action, Printable  {
 	public void execute(int seconds) {
 		
 		// Move in direction towards nearest water
-		double angle_radians = person.getSensorReading(directionSensor.getIndex());
+		double angle_radians = person.getSensorReading(directionMeasurement.getIndex());
 		double vx = Math.cos(angle_radians);
 		double vy = Math.sin(angle_radians);
 		

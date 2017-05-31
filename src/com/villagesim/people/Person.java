@@ -42,6 +42,7 @@ public class Person implements Drawable, Updateable {
 	private double aqua_increase_rate;
 	private double lifetime_days = 0;
 	private List<Double> sensorInputs;
+	private List<Double> measurementInputs;
 	private List<Area> closestAreas;
 	private ActionFactory actionFactory;
 	private Storage personalStorage;
@@ -131,6 +132,12 @@ public class Person implements Drawable, Updateable {
 		for(int i = 0; i < SensorHelper.SENSOR_INPUTS; i++)
 		{
 			sensorInputs.add(0.0);
+		}
+		
+		measurementInputs = new ArrayList<Double>();
+		for(int i = 0; i < SensorHelper.MEASUREMENT_INPUTS; i++)
+		{
+			measurementInputs.add(0.0);
 		}
 		
 		int networkSize = BASIC_ACTION_SIZE;
@@ -253,7 +260,7 @@ public class Person implements Drawable, Updateable {
 		return hasChangedCoordinate;
 	}
 	
-	private void resetHasChangedCoordinate()
+	public void resetHasChangedCoordinate()
 	{
 		hasChangedCoordinate = false;
 	}
@@ -307,8 +314,13 @@ public class Person implements Drawable, Updateable {
 		
 		this.sensorInputs = sensorInputs;
 		this.closestAreas = closestAreas;
+	}
+	
+	public void updateMeasurementReadings(List<Double> measurements)
+	{
+		if(!isAlive()) return;
 		
-		resetHasChangedCoordinate();
+		this.measurementInputs = measurements;
 	}
 	
 	public double getSensorReading(int index)
@@ -317,6 +329,14 @@ public class Person implements Drawable, Updateable {
 		if(index >= sensorInputs.size()) return 0;
 		
 		return sensorInputs.get(index);
+	}
+	
+	public double getMeasurementReading(int index)
+	{
+		if(index < 0) return 0;
+		if(index >= measurementInputs.size()) return 0;
+		
+		return measurementInputs.get(index);
 	}
 	
 	public Area getClosestArea(int index)

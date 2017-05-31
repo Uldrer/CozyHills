@@ -5,17 +5,17 @@ import com.villagesim.actions.BasicAction;
 import com.villagesim.interfaces.Action;
 import com.villagesim.interfaces.Printable;
 import com.villagesim.people.Person;
-import com.villagesim.sensors.Sensor;
+import com.villagesim.sensors.Measurement;
 
 public class WalkWaterMoveAction implements Action, Printable  {
 
 	private Person person;
-	private Sensor directionSensor;
+	private Measurement directionMeasurement;
 	
 	public WalkWaterMoveAction(Person person)
 	{
 		this.person = person;
-		this.directionSensor = Sensor.DIRECTION_TO_NEAREST_WATER;
+		this.directionMeasurement = Measurement.DIRECTION_TO_NEAREST_WATER;
 	}
 
 	
@@ -23,7 +23,7 @@ public class WalkWaterMoveAction implements Action, Printable  {
 	public void execute(int seconds) {
 		
 		// Move in direction towards nearest water
-		double angle_radians = person.getSensorReading(directionSensor.getIndex());
+		double angle_radians = person.getSensorReading(directionMeasurement.getIndex());
 		double vx = Math.cos(angle_radians);
 		double vy = Math.sin(angle_radians);
 		

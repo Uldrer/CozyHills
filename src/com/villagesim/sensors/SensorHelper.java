@@ -8,6 +8,7 @@ import com.villagesim.areas.Area;
 public final class SensorHelper {
 	
 	public static int SENSOR_INPUTS = Sensor.size;
+	public static int MEASUREMENT_INPUTS = Measurement.size;
 	private static boolean max_computed = false;
 	private static double maxValue = 0;
 

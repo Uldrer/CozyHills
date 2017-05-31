@@ -138,22 +138,28 @@ public class SensorUpdater {
 		sensorInputs.add(getAmountOfAquaInArea(getAreaFromId(storageArea.getAreaId()), Water.class));
 		closestAreas.add(null);
 		
-		// #16 Direction in radians to nearest water
-		sensorInputs.add(getDirectionInRadians(person, getAreaFromId(drinkingArea.getAreaId()), Water.class));
-		closestAreas.add(null);
-				
-		// #17 Direction in radians to nearest wood
-		sensorInputs.add(getDirectionInRadians(person, getAreaFromId(wildFoodArea.getAreaId()), Game.class));
-		closestAreas.add(null);
-		
-		// #18 Direction in radians to nearest non-empty fishing ground
-		SensorArea nonDepletedfishingArea = getNearestNonDepletedFishingGround(person);
-		sensorInputs.add(getDirectionInRadians(person, getAreaFromId(nonDepletedfishingArea.getAreaId()), Fish.class));
-		closestAreas.add(null);
-		
 		// Set new sensor inputs
 		person.updateSensorReadings(sensorInputs, closestAreas);
 		
+		
+		// Update measurements, that is sensors that are not used as inputs to the ANN
+		List<Double> meansurements = new ArrayList<Double>();
+	
+		// Direction in radians to nearest water
+		meansurements.add(getDirectionInRadians(person, getAreaFromId(drinkingArea.getAreaId()), Water.class));
+				
+		// Direction in radians to nearest wood
+		meansurements.add(getDirectionInRadians(person, getAreaFromId(wildFoodArea.getAreaId()), Game.class));
+		
+		// Direction in radians to nearest non-empty fishing ground
+		SensorArea nonDepletedfishingArea = getNearestNonDepletedFishingGround(person);
+		meansurements.add(getDirectionInRadians(person, getAreaFromId(nonDepletedfishingArea.getAreaId()), Fish.class));
+		
+		// Set new measurement inputs
+		person.updateMeasurementReadings(meansurements);
+		
+		// Make sure to reset changed coordinate when all sensors have been computed
+		person.resetHasChangedCoordinate();
 	}
 	
 	private SensorArea getNearestDrinkingWater(Person person)
