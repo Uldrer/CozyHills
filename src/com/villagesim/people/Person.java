@@ -89,7 +89,7 @@ public class Person implements Drawable, Updateable {
 		basicWeights = FileHandler.retrieveWeights("weights.txt", basicNeuralNetwork, WeightType.MAIN);
 		basicNeuralNetwork.setWeights(basicWeights);
 
-		logDebug = true;
+		logDebug = false;
 		logActions = true;
 		logDeath = true;
 	}
@@ -489,8 +489,11 @@ public class Person implements Drawable, Updateable {
 		if(y > Const.WINDOW_HEIGHT) y = Const.WINDOW_HEIGHT;
 		
 		coordinate.setLocation(x, y);
-		lifePath.add((Point2D)coordinate.clone());
-		lifePathType.add(actionType);
+		if(logActions)
+		{
+			lifePath.add((Point2D)coordinate.clone());
+			lifePathType.add(actionType);
+		}
 		
 		hasChangedCoordinate = true;
 	}
