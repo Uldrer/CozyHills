@@ -414,9 +414,20 @@ public class Person implements Drawable, Updateable {
 	
 	private void printLastSensorValues()
 	{
+		// Sensor inputs
 		System.out.print("SensorInputs[");
 		int counter = 0;
 		for(double val : sensorInputs)
+		{
+			System.out.print("("+ counter + ":" + val + ")");
+			counter++;
+		}
+		System.out.println("]");
+		
+		// Measurements
+		System.out.print("Measurements[");
+		counter = 0;
+		for(double val : measurementInputs)
 		{
 			System.out.print("("+ counter + ":" + val + ")");
 			counter++;
