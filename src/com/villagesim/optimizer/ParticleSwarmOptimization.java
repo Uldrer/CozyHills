@@ -139,6 +139,7 @@ public class ParticleSwarmOptimization {
             	swarmGlobalBestPosition = OptimizationHelper.copy(weights);
             	bestParticle = i;
             }
+            System.out.println("Done with particle: " + i);
         }
     	
     	FileHandler.logScoreToFile(bestLocalScores, iteration);
@@ -184,8 +185,7 @@ public class ParticleSwarmOptimization {
                 	}
 
                 }
-            }
-    		
+            }	
     	}	
     	
     	// Update c2 and w
