@@ -39,7 +39,7 @@ public class GraphicsHandler extends JFrame {
     public void run() {
         initialize();
         int character;
-        int intendedFps = 6;
+        int intendedFps = 60;
 
         while(isRunning) {
 
@@ -54,10 +54,6 @@ public class GraphicsHandler extends JFrame {
             	continue;
             
             draw();
-            
-            character = ThreadLocalRandom.current().nextInt(1, 3 + 1);
-            System.out.print(character == 1 ? " - " : character == 2 ? " + " : " * ");
-            System.out.println(System.currentTimeMillis() - time);
 
             //  delay for each frame  -   time it took for one frame
             time = (1000 / intendedFps) - (System.currentTimeMillis() - time);
