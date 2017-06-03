@@ -54,7 +54,7 @@ public class DrinkLakeAction implements Action, Printable {
 		
 		if(!valid && person.printDebug())
 		{
-			System.out.println("Person id: " + person.getId() + " can't drink. Distance to water: " + distanceToResource);
+			//System.out.println("Person id: " + person.getId() + " can't drink. Distance to water: " + distanceToResource);
 		}
 		return valid;
 	}
