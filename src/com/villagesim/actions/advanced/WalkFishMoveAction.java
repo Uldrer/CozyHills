@@ -11,6 +11,7 @@ public class WalkFishMoveAction implements Action, Printable  {
 
 	private Person person;
 	private Measurement directionMeasurement;
+	private boolean depletedFish = false;
 	
 	public WalkFishMoveAction(Person person)
 	{
@@ -24,6 +25,13 @@ public class WalkFishMoveAction implements Action, Printable  {
 		
 		// Move in direction towards nearest water
 		double angle_radians = person.getMeasurementReading(directionMeasurement.getIndex());
+		
+		if(angle_radians == -100) 
+		{
+			depletedFish =true;
+			return;
+		}
+
 		double vx = Math.cos(angle_radians);
 		double vy = Math.sin(angle_radians);
 		
@@ -41,8 +49,8 @@ public class WalkFishMoveAction implements Action, Printable  {
 
 	@Override
 	public boolean isValid() {
-		// For now always valid to walk
-		return true;
+		// Valid as long as there is some fish
+		return !depletedFish;
 	}
 	
 	@Override

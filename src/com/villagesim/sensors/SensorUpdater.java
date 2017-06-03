@@ -370,7 +370,7 @@ public class SensorUpdater {
 	
 	private double getDirectionInRadians(Person person, Area area, Class<? extends Resource> resourceClass)
 	{
-		double direction_radians = 0;
+		double direction_radians = -100;
 		if(area != null)
 		{
 			boolean hasNewCoordinate = person.hasNewCoordinate();
