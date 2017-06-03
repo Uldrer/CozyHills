@@ -24,7 +24,7 @@ public class WalkWoodMoveAction implements Action, Printable  {
 	public void execute(int seconds) {
 		
 		// Move in direction towards nearest water
-		double angle_radians = person.getSensorReading(directionMeasurement.getIndex());
+		double angle_radians = person.getMeasurementReading(directionMeasurement.getIndex());
 		double vx = Math.cos(angle_radians);
 		double vy = Math.sin(angle_radians);
 		
