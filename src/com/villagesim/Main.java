@@ -1,5 +1,6 @@
 package com.villagesim;
 
+import com.villagesim.ui.CityUpdater;
 import com.villagesim.ui.GATrainer;
 import com.villagesim.ui.GraphicsHandler;
 import com.villagesim.ui.PSOTrainer;
@@ -18,6 +19,11 @@ public class Main {
 			{
 				PSOTrainer psoTrainer = new PSOTrainer();
 				psoTrainer.run();
+			}
+			else if(args[0].toLowerCase().equals("org"))
+			{
+				CityUpdater cityUpdater = new CityUpdater();
+				cityUpdater.run();
 			}
 			else
 			{
