@@ -9,7 +9,6 @@ import com.villagesim.VillageSimulator;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by pere5 on 21/12/15.
@@ -38,7 +37,6 @@ public class GraphicsHandler extends JFrame {
      */
     public void run() {
         initialize();
-        int character;
         int intendedFps = 60;
 
         while(isRunning) {
